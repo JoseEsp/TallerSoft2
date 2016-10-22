@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jose.movilizateucn.MainActivity"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation = "vertical"
+            android:padding="@dimen/login_padding"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:background="@color/lightGray">
+
+            <TextView
+                android:id = "@+id/lblRut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "Rut"
+                android:textColor="@color/niceBlack"
+                android:textSize = "24sp"
+                android:layout_marginTop = "@dimen/login_margin"/>
+            <EditText
+                android:id = "@+id/txtRut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint = "@string/rut_hint"
+                android:textCursorDrawable="@color/colorPrimary"
+                android:backgroundTintMode="@color/colorPrimary"
+                android:drawableTint="@color/colorPrimary"
+                android:maxLength= "10"
+                android:layout_marginTop = "@dimen/login_margin"/>
+
+            <TextView
+                android:id = "@+id/lblPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "Contraseña"
+                android:textColor="@color/niceBlack"
+                android:textSize = "24sp"
+                android:layout_marginTop = "@dimen/login_long_margin"/>
+            <EditText
+                android:id = "@+id/txtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "@string/pass_hint"
+                android:textCursorDrawable="@color/colorPrimary"
+                android:backgroundTintMode="@color/colorPrimary"
+                android:drawableTint="@color/colorPrimary"
+                android:maxLength= "20"
+                android:inputType = "textPassword"
+                android:layout_marginTop = "@dimen/login_margin"/>
+
+            <Button
+                android:id = "@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "Login"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:layout_marginTop="@dimen/login_long_margin"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
