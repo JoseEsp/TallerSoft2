@@ -12,7 +12,6 @@
     android:weightSum="3"
     android:background="@color/lightGray">
 
-
     <TextView
         android:id="@+id/lblEscoger"
         android:layout_weight="1"
