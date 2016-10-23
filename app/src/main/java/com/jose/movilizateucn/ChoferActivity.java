@@ -1,49 +1,56 @@
 package com.jose.movilizateucn;
 
-import android.content.res.Configuration;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 public class ChoferActivity extends AppCompatActivity {
 
-    private ListView navMenu;
-    private ArrayAdapter<String> navMenuAdapter;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    private String mActivityTitle;
+    private RatingBar starBar;
+    private TextView lblScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chofer);
-        configureNavMenu();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mActivityTitle = getTitle().toString();
+        configureStarBar();
+        updateScore();
+        test(); //método para probar solamente (modifico el starBar y el lblScore
     }
 
-    private void configureNavMenu(){
-        navMenu = (ListView) findViewById(R.id.navMenu);
-        navMenuAdapter = new ArrayAdapter<String>(this,
-                R.layout.support_simple_spinner_dropdown_item ,menuOptions());
-        navMenu.setAdapter(navMenuAdapter);
+    private void configureStarBar(){
+        starBar = (RatingBar) findViewById(R.id.ratingBarChofer);
+        lblScore = (TextView) findViewById(R.id.lblStarScoreChofer);
+        lblScore.setTextColor(Color.BLACK);
     }
 
-    private String[] menuOptions(){
-        String[] menuOptions = {
-                "Perfil",
-                "Historial deh viajes",
-                "Ser Pasajero"
-        };
-        return menuOptions;
+    private void updateScore(){
+        float actualScore = starBar.getRating();
+        if (actualScore < 2f){
+            lblScore.setTextColor(Color.RED);
+        }else if (actualScore >= 2f && actualScore < 4.0f){
+            lblScore.setTextColor(Color.BLACK);
+        }else{
+            lblScore.setTextColor(Color.BLUE);
+        }
+    }
+
+    private void test(){
+        Button btnConfRuta = (Button) findViewById(R.id.btnConfigurarRuta);
+        btnConfRuta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float actualScore = (float) (Math.random() * (float) starBar.getNumStars());
+                String strScore = String.format("%.1f/%d", actualScore, starBar.getNumStars());
+                lblScore.setText(strScore);
+                starBar.setRating(actualScore);
+                updateScore();
+            }
+        });
     }
 
 }

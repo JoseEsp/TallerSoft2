@@ -6,6 +6,7 @@
     <dimen name="login_margin">10dp</dimen>
     <dimen name="login_long_margin">40dp</dimen>
     <dimen name="perfil_margin">12dp</dimen>
+    <dimen name="medium_size">22sp</dimen>
     <dimen name="big_size">36sp</dimen>
     <dimen name="really_big_size">44sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
