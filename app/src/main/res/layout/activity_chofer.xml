@@ -49,8 +49,9 @@
             <TextView
                 android:id="@+id/lblStarScoreChofer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="2.5/5"
+                android:paddingBottom="@dimen/perfil_margin"
                 android:gravity="center"
                 android:textSize="@dimen/medium_size"/>
         </LinearLayout>
