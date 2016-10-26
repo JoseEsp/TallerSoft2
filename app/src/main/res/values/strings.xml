@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MovilizateUCN</string>
-    <string name="rut_hint">16829758-0</string>
+    <string name="rut_hint">11111111-1</string>
     <string name="pass_hint">12345678</string>
     <string name="title_activity_escoger_perfil">EscogerPerfilActivity</string>
+    <string name="pass">Contraseña</string>
 </resources>
