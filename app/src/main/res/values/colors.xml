@@ -6,8 +6,13 @@
     <color name="blanco">#FFFFFF</color>
     <color name="lightGray">#F0F0F0</color>
     <color name="cinnabargreen">#61B329</color>
+    <color name="niceGreen">#2ECC40</color>
+    <color name="niceOlive">#3D9970</color>
+    <color name="niceLime">#01FF70</color>
     <color name="niceRed">#FF4136</color>
     <color name="niceRed2">#ff6236</color>
     <color name="niceBlack">#111111</color>
     <color name="niceYellow">#FFDC00</color>
+    <color name="niceSilver">#DDDDDD</color>
+    <color name="niceAqua">#7FDBFF</color>
 </resources>

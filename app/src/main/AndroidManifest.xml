@@ -8,7 +8,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,9 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EscogerPerfilActivity" />
-        <activity android:name=".ChoferActivity" />
-        <activity android:name=".PasajeroActivity"></activity>
+        <activity android:name=".EscogerPerfilActivity" android:label="Perfil"/>
+        <activity android:name=".ChoferActivity" android:label="Chofer"/>
+        <activity android:name=".PasajeroActivity" android:label="Pasajero"/>
+        <activity android:name=".RegistrarseActivity" android:label="Registro"/>
     </application>
 
 </manifest>

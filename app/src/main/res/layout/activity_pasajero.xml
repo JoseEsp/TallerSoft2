@@ -7,6 +7,78 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.jose.movilizateucn.PasajeroActivity">
+    tools:context="com.jose.movilizateucn.PasajeroActivity"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="top"
+        android:layout_marginTop="@dimen/perfil_margin">
+
+        <TextView
+            android:id="@+id/lblNombrePasajero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text = "Juan Pérez"
+            android:textColor="@color/niceBlack"
+            android:gravity="center"
+            android:textSize = "@dimen/big_size"
+            android:layout_marginBottom="@dimen/perfil_margin"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/perfil_margin">
+            <android.support.v7.widget.AppCompatRatingBar
+                android:id="@+id/ratingBarPasajero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusableInTouchMode="false"
+                android:focusable="false"
+                android:isIndicator="true"
+                android:rating="2.5"
+                android:numStars="5"
+                android:progressTint="@color/niceYellow"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_marginRight="@dimen/perfil_margin"
+                android:layout_marginBottom="@dimen/perfil_margin"/>
+            <TextView
+                android:id="@+id/lblStarScorePasajero"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="2.5/5"
+                android:paddingBottom="@dimen/perfil_margin"
+                android:gravity="center"
+                android:textSize="@dimen/medium_size"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
+        <Button
+            android:id="@+id/btnGenerarSolicitud"
+            android:text = "@string/generarSolicitud"
+            android:textColor="@color/blanco"
+            android:backgroundTint="@color/cinnabargreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/perfil_margin"/>
+
+        <Button
+            android:id="@+id/btnHistorialViajes"
+            android:text = "Historial de Viajes"
+            android:textColor="@color/blanco"
+            android:backgroundTint="@color/cinnabargreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/perfil_margin" />
+
+    </LinearLayout>
 </LinearLayout>

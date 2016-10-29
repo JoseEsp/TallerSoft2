@@ -1,7 +1,18 @@
 <resources>
     <string name="app_name">MovilizateUCN</string>
+    <string name="rut">Rut</string>
+    <string name="nombre">Nombre</string>
+    <string name="email">Email</string>
+    <string name="contra">Contraseña</string>
     <string name="rut_hint">11111111-1</string>
     <string name="pass_hint">12345678</string>
     <string name="title_activity_escoger_perfil">EscogerPerfilActivity</string>
     <string name="pass">Contraseña</string>
+
+    <string name="generarSolicitud">Generar Solicitud</string>
+    <string name="solicitudEnCurso">Solicitud en Curso</string>
+    <string name="solicitudAceptada">Solicitud Aceptada</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="nombre_hint">Juan Perez</string>
+
 </resources>

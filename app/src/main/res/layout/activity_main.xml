@@ -12,52 +12,57 @@
         android:layout_height="wrap_content"
         android:src="@drawable/icologin"/>
 
-            <TextView
-                android:id = "@+id/lblRut"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text = "Rut"
-                android:textColor="@color/niceBlack"
-                android:textSize = "20dp"
-                android:gravity="center"
-                />
-            <EditText
-                android:id = "@+id/txtRut"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint = "@string/rut_hint"
-                android:maxLength= "10"
-                android:layout_marginTop = "@dimen/login_margin"
-                android:gravity="center"/>
+    <TextView
+        android:id = "@+id/lblRut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "@string/rut"
+        android:textColor="@color/niceBlack"
+        android:textSize = "20dp"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/login_margin"
+        />
+    <EditText
+        android:id = "@+id/txtRut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint = "@string/rut_hint"
+        android:maxLength= "10"
+        android:gravity="center"/>
 
-            <TextView
-                android:id = "@+id/lblPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text = "@string/pass"
-                android:textColor="@color/niceBlack"
-                android:textSize = "20dp"
-                android:layout_marginTop = "@dimen/login_long_margin"
-                android:gravity="center"/>
-            <EditText
-                android:id = "@+id/txtPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength= "20"
-                android:inputType = "textPassword"
-                android:layout_marginTop = "@dimen/login_margin"
-                android:gravity="center"/>
+    <TextView
+        android:id = "@+id/lblPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "@string/pass"
+        android:textColor="@color/niceBlack"
+        android:textSize = "20dp"
+        android:gravity="center"/>
+    <EditText
+        android:id = "@+id/txtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength= "20"
+        android:inputType = "textPassword"
+        android:gravity="center"/>
 
-            <Button
-                android:id = "@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text = "Login"
-                android:textColor="@color/blanco"
-                android:textStyle="bold"
-                android:backgroundTint="@color/niceRed2"
-                android:layout_marginTop="@dimen/login_long_margin"/>
+    <Button
+        android:id = "@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "Login"
+        android:textColor="@color/blanco"
+        android:textStyle="bold"
+        android:backgroundTint="@color/cinnabargreen"
+        android:layout_marginTop="@dimen/login_margin"/>
 
-
+        <Button
+            android:id = "@+id/btnRegistrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text = "@string/registrarse"
+            android:textColor="@color/blanco"
+            android:textStyle="bold"
+            android:backgroundTint="@color/cinnabargreen" />
 
 </LinearLayout>
