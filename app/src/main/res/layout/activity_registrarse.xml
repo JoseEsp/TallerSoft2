@@ -12,28 +12,30 @@
     tools:context="com.jose.movilizateucn.RegistrarseActivity"
     android:layout_margin="@dimen/login_margin">
 
-    <EditText
+    <TextView
         android:id="@+id/lblRutReg"
         android:text="@string/rut"
         android:textSize="@dimen/medium_size"
+        android:textColor="@color/niceBlack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <EditText
         android:id="@+id/txtRutReg"
         android:hint="@string/rut_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLength="10"/>
 
-    <EditText
+    <TextView
         android:id="@+id/lblNombreReg"
         android:text="@string/nombre"
         android:textSize="@dimen/medium_size"
+        android:textColor="@color/niceBlack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <EditText
         android:id="@+id/txtNombreReg"
         android:hint="@string/nombre_hint"
         android:layout_width="match_parent"
@@ -41,27 +43,29 @@
         android:inputType="textPersonName"
         android:maxLength="20"/>
 
-    <EditText
+    <TextView
         android:id="@+id/lblEmailReg"
         android:text="@string/email"
         android:textSize="@dimen/medium_size"
+        android:textColor="@color/niceBlack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <EditText
         android:id="@+id/txtEmailReg"
         android:hint="ejemplo@alumnos.ucn.cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <EditText
+    <TextView
         android:id="@+id/lblContraReg"
         android:text="@string/contra"
         android:textSize="@dimen/medium_size"
+        android:textColor="@color/niceBlack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <EditText
         android:id="@+id/txtContralReg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
