@@ -27,7 +27,10 @@ public class Consulta {
 
         // Crear nuevo objeto Json basado en el mapa
         JSONObject jobject = new JSONObject(map);
-        ConsultasGenerales.insertarDatos(Constantes.INSERTUSUARIO, activity, jobject);
+        ConsultasGenerales.insertarDatos(Constantes.INSERTUSUARIO,
+                                         activity,
+                                         jobject,
+                                         "Rut ya existe.");
     }
 
     /**

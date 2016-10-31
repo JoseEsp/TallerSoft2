@@ -1,6 +1,9 @@
 package com.jose.movilizateucn.Consultas;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,7 +35,9 @@ public class ConsultasGenerales {
      * @param jobject Objeto Json con los datos.
      */
     public static void insertarDatos(String insertaDato,
-                                      final AppCompatActivity activity, JSONObject jobject){
+                                     final AppCompatActivity activity,
+                                     JSONObject jobject,
+                                     final String msjError){
         // inserta datos en el servidor
         VolleySingleton.getInstance(activity).addToRequestQueue(
                 new JsonObjectRequest(
@@ -49,7 +54,17 @@ public class ConsultasGenerales {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.d("Error Volley", error.getMessage());
+                                if (ConsultasGenerales.isNetworkAvailable(activity)) {
+                                    Toast.makeText(
+                                            activity,
+                                            msjError,
+                                            Toast.LENGTH_LONG).show();
+                                }else{
+                                    Toast.makeText(
+                                            activity,
+                                            "Error de conexión.",
+                                            Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
 
@@ -70,29 +85,39 @@ public class ConsultasGenerales {
         );
     }
 
+    public static void obtenerDato(String url,
+                                   final AppCompatActivity activity){
+        objeto = null;
+        ConsultasGenerales.fetchData(url, activity, new DataCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                ConsultasGenerales.procesarRespuestaDato(result, activity);
+            }
+        });
+    }
+
     /**
      * Función auxiliar para la obtención.
      * @param url La url
      * @param activity Activity actual
      */
-    public static void obtenerDato(String url,
-                                    final AppCompatActivity activity){
+    private static void fetchData(String url,
+                                   final AppCompatActivity activity,
+                                   final DataCallback callback){
         VolleySingleton.getInstance(activity).addToRequestQueue(
                 new JsonObjectRequest(
                         Request.Method.GET,
                         url,
                         new Response.Listener<JSONObject>() {
-
                             @Override
                             public void onResponse(JSONObject response) {
-                                // Procesar respuesta Json
-                                ConsultasGenerales.procesarRespuestaDato(response, activity);
+                                callback.onSuccess(response);
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.d("Error Volley", error.getMessage());
+                                //Log.d("Error Volley", error.getMessage());
                             }
                         }
                 )
@@ -105,8 +130,6 @@ public class ConsultasGenerales {
      */
     private static void procesarRespuestaDato(JSONObject response,
                                               final AppCompatActivity activity) {
-        //Inicialmente no hay ningún objeto. [NO BORRAR]
-        objeto = null;
         try {
             // Obtener atributo "mensaje"
             String estado = response.getString("estado");
@@ -178,6 +201,18 @@ public class ConsultasGenerales {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * No es 100% segura
+     * @return Si hay conexión
+     *
+     */
+    private static boolean isNetworkAvailable(Activity activity) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     /**
