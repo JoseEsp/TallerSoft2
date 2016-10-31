@@ -51,10 +51,7 @@ public class RegistrarseActivity extends AppCompatActivity {
                                                   txtContra.getText().toString());
                     //Inserta el usuario (Acá se debería checkear si el usuario existe)
                     //V1.0
-                    Consulta.insertarUsuario(usuario);
-                    //Cambia al Activity del login
-                    Toast.makeText(thisActivity, "Usuario Registrado!",
-                            Toast.LENGTH_LONG).show();
+                    Consulta.insertarUsuario(usuario, thisActivity);
                     startActivity(loginActivity);
 
                 }

@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusableInTouchMode="false"
+            android:stepSize="0.1"
             android:focusable="false"
             android:isIndicator="true"
             android:rating="2.5"
