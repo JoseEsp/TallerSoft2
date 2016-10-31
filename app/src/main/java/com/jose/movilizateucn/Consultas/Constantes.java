@@ -21,7 +21,7 @@ public class Constantes {
     /**
      * Dirección IP
      */
-    private static final String IP = "http://movilizate.webcindario.com/";
+    private static final String IP = "http://movilizate.webcindario.com";
     /**
      * URLs del Web Service
      */
@@ -30,6 +30,7 @@ public class Constantes {
     //public static final String UPDATE = IP + PUERTO_HOST + "/I%20Wish/actualizar_meta.php";
     //public static final String DELETE = IP + PUERTO_HOST + "/I%20Wish/borrar_meta.php";
     public static final String INSERTUSUARIO = IP + "/consultas/insertarUsuario.php";
+    public static final String GETUSUARIOBYRUT = IP + "/consultas/obtenerUsuario.php";
 
     /**
      * Clave para el valor extra que representa al identificador de una meta

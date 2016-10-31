@@ -1,7 +1,7 @@
 package com.jose.movilizateucn.Consultas;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,27 +9,26 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 import com.jose.movilizateucn.DiagramaClases.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 //Todas las consultas.
 public class Consulta {
 
-    //La Ip a conectarse
-    private static final String IP = "http://movilizate.webcindario.com";
+    //Variable auxiliar. Es el objeto retornado en cada 'obtener'
+    private static JSONObject objeto = null;
 
     /**
      * Inserta un usuario en la base de datos
      * @param usuario Usuario de la aplicación
      */
-    public static void insertarUsuario(Usuario usuario, final Activity activity){
+    public static void insertarUsuario(Usuario usuario, final AppCompatActivity activity){
         HashMap<String, String> map = new HashMap<>();// Mapeo previo
 
         map.put("rut", usuario.getRut());
@@ -42,24 +41,44 @@ public class Consulta {
         Consulta.insertarDatos("Usuario", Constantes.INSERTUSUARIO, activity, jobject);
         // Depurando objeto Json...
         Log.d("Usuario: ", jobject.toString());
-
-
     }
 
     /**
-     *
+     * Obtiene un Usuario del sistema dado un rut.
+     * Si el rut no está en el sistema, entonces retorna null.
+     * @return Usuario en el sistema.
+     */
+    public static Usuario obtenerUsuario(String rut, final AppCompatActivity activity){
+        String url = Constantes.GETUSUARIOBYRUT + "?rut=" + rut;
+        Consulta.obtenerDato("Usuario", url, activity);
+        //Parsear objeto
+        Gson gson = new Gson();
+        Usuario usuario = null;
+        if (objeto != null) {
+            usuario = gson.fromJson(objeto.toString(), Usuario.class);
+        }
+        return usuario;
+    }
+
+
+
+
+
+
+    /**
+     * Función auxiliar para la inserción
      * @param tag Tag para el Toast
-     * @param inserta Tipo de inserción definido en Constantes. Ejemeplo: INSERTUSUARIO
+     * @param insertaDato Tipo de inserción definido en Constantes. Ejemeplo: INSERTUSUARIO
      * @param activity Activity actual
      * @param jobject Objeto Json con los datos.
      */
-    private static void insertarDatos(String tag, String inserta, final Activity activity,
-                                      JSONObject jobject){
+    private static void insertarDatos(final String tag, String insertaDato,
+                                      final AppCompatActivity activity, JSONObject jobject){
         // inserta datos en el servidor
         VolleySingleton.getInstance(activity).addToRequestQueue(
                 new JsonObjectRequest(
                         Request.Method.POST,
-                        Constantes.INSERTUSUARIO,
+                        insertaDato,
                         jobject,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -71,7 +90,7 @@ public class Consulta {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.d("Usuario: ", "Error Volley: " + error.getMessage());
+                                Log.d(tag, "Error Volley: " + error.getMessage());
                             }
                         }
 
@@ -93,12 +112,81 @@ public class Consulta {
     }
 
     /**
+     * Función auxiliar para la obtención.
+     * @param tag
+     * @param url
+     * @param activity
+     */
+    private static void obtenerDato(final String tag, String url,
+                                    final AppCompatActivity activity){
+        VolleySingleton.getInstance(activity).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        url,
+                        new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // Procesar respuesta Json
+                                procesarRespuestaDato(response, activity);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(tag, "Error Volley: " + error.getMessage());
+                            }
+                        }
+                )
+        );
+    }
+
+    /**
+     * Procesa el dato
+     * @param response Objeto Json
+     */
+    private static void procesarRespuestaDato(JSONObject response,
+                                                    final AppCompatActivity activity) {
+
+        try {
+            // Obtener atributo "mensaje"
+            String mensaje = response.getString("estado");
+
+            switch (mensaje) {
+                case "1":
+                    // Obtener objeto
+                    objeto = response.getJSONObject("meta");
+                    break;
+                case "2":
+                    String mensaje2 = response.getString("mensaje");
+                    Toast.makeText(
+                            activity,
+                            mensaje2,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "3":
+                    String mensaje3 = response.getString("mensaje");
+                    Toast.makeText(
+                            activity,
+                            mensaje3,
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Procesa la respuesta obtenida desde el sevidor
      *
      * @param response Objeto Json
      * @param activity Activity actual
      */
-    private static void procesarRespuesta(JSONObject response, final Activity activity) {
+    private static void procesarRespuesta(JSONObject response, final AppCompatActivity activity) {
 
         try {
             // Obtener estado

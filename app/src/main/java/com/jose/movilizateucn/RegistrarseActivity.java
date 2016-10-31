@@ -36,7 +36,7 @@ public class RegistrarseActivity extends AppCompatActivity {
     }
 
     private void configureBtnRegistrarReg(){
-        final Activity thisActivity = this;
+        final AppCompatActivity thisActivity = this;
         final Intent loginActivity = new Intent(this, MainActivity.class);
         btnRegistrar = (Button) findViewById(R.id.btnRegistrarReg);
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
@@ -51,9 +51,16 @@ public class RegistrarseActivity extends AppCompatActivity {
                                                   txtContra.getText().toString());
                     //Inserta el usuario (Acá se debería checkear si el usuario existe)
                     //V1.0
-                    Consulta.insertarUsuario(usuario, thisActivity);
-                    startActivity(loginActivity);
-
+                    Usuario userReg = Consulta.obtenerUsuario(usuario.getRut(),thisActivity);
+                    if (userReg == null) {
+                        Consulta.insertarUsuario(usuario, thisActivity);
+                        Toast.makeText(thisActivity, "Usuario Registrado!",
+                                Toast.LENGTH_LONG).show();
+                        startActivity(loginActivity);
+                    }else{
+                        Toast.makeText(thisActivity, "El rut ya está en uso.",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
