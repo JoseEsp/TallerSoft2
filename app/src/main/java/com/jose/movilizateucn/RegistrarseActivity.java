@@ -51,15 +51,7 @@ public class RegistrarseActivity extends AppCompatActivity {
                                                   txtContra.getText().toString());
                     //Inserta el usuario (Acá se debería checkear si el usuario existe)
                     //V1.0
-                    //Usuario userReg = Consulta.obtenerUsuario(usuario.getRut(),thisActivity);
-
-                    //if (userReg == null) {
-                        Consulta.insertarUsuario(usuario, thisActivity);
-                    //}else{
-
-                      // Toast.makeText(thisActivity, "El rut ya está en uso.",
-                      //          Toast.LENGTH_LONG).show();
-                    //}
+                    Consulta.insertarUsuario(usuario, thisActivity);
                 }
             }
         });
