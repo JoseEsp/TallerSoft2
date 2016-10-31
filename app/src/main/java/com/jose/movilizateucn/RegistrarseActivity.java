@@ -54,9 +54,6 @@ public class RegistrarseActivity extends AppCompatActivity {
                     Usuario userReg = Consulta.obtenerUsuario(usuario.getRut(),thisActivity);
                     if (userReg == null) {
                         Consulta.insertarUsuario(usuario, thisActivity);
-                        Toast.makeText(thisActivity, "Usuario Registrado!",
-                                Toast.LENGTH_LONG).show();
-                        startActivity(loginActivity);
                     }else{
                         Toast.makeText(thisActivity, "El rut ya está en uso.",
                                 Toast.LENGTH_LONG).show();
