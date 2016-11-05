@@ -15,7 +15,6 @@ public class Constantes {
      * Puerto que utilizas para la conexión.
      * Dejalo en blanco si no has configurado esta característica.
      */
-    //private static final String PUERTO_HOST = "63343";
     private static final String PUERTO_HOST = "3306";
 
     /**
@@ -25,12 +24,13 @@ public class Constantes {
     /**
      * URLs del Web Service
      */
-    //public static final String GET = IP + PUERTO_HOST + "/I%20Wish/obtener_metas.php";
-    //public static final String GET_BY_ID = IP + PUERTO_HOST + "/I%20Wish/obtener_meta_por_id.php";
-    //public static final String UPDATE = IP + PUERTO_HOST + "/I%20Wish/actualizar_meta.php";
-    //public static final String DELETE = IP + PUERTO_HOST + "/I%20Wish/borrar_meta.php";
     public static final String INSERTUSUARIO = IP + "/consultas/insertarUsuario.php";
     public static final String GETUSUARIOBYRUT = IP + "/consultas/obtenerUsuario.php";
+    public static final String GETCHOFERBYRUT = IP + "/consultas/obtenerChofer.php";
+    public static final String GETPASAJEROBYRUT = IP + "/consultas/obtenerPasajero.php";
+    public static final String GETLOGIN = IP + "/consultas/obtenerUsuarioLogueado.php";
+    public static final String UPDATEFECHAINICIO = IP + "/consultas/actualizarFechaInicioConexion.php";
+    public static final String UPDATEFECHAFIN = IP + "/consultas/actualizarFechaFinConexion.php";
 
     /**
      * Clave para el valor extra que representa al identificador de una meta

@@ -12,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.jose.movilizateucn.DiagramaClases.Usuario;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,6 +95,33 @@ public class ConsultasGenerales {
                 ConsultasGenerales.procesarRespuestaDato(result, activity);
             }
         });
+    }
+
+    /**
+     * Actualiza fechas de inicio o fin de conexión, según llamado.
+     * @param usuario A quién está actualizando
+     * @param url Fecha de inicio o de conexión.
+     * @param activity La activity actual
+     */
+    public static void actualizarFecha(Usuario usuario, String url, final AppCompatActivity activity){
+        VolleySingleton.getInstance(activity).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        url,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                //Nada
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //Log.d("Error Volley", error.getMessage());
+                            }
+                        }
+                )
+        );
     }
 
     /**

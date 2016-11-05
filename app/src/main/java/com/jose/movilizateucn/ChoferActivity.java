@@ -11,8 +11,12 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.jose.movilizateucn.DiagramaClases.Login;
+import com.jose.movilizateucn.DiagramaClases.Usuario;
+
 public class ChoferActivity extends AppCompatActivity {
 
+    private TextView nameText;
     private RatingBar starBar;
     private TextView lblScore;
 
@@ -20,7 +24,17 @@ public class ChoferActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chofer);
+        configureNameText();
+        Login.updateFechaFinConexion(this);
         configureStarBar();
+    }
+
+    private void configureNameText(){
+        nameText = (TextView) findViewById(R.id.lblNombreChofer);
+        Usuario user = Login.getUsuario();
+        if (user != null){
+            nameText.setText(user.getNombre());
+        }
     }
 
     private void configureStarBar(){
