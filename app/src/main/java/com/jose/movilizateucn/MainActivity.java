@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,"Debe completar todos los campos",Toast.LENGTH_SHORT).show();
         }
         else{
-            //Login log = new Login();
             Login.conectarse(rutTxt.getText().toString(), passTxt.getText().toString(), this );
         }
     }

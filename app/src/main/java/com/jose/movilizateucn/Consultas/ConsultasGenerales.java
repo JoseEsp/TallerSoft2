@@ -167,18 +167,10 @@ public class ConsultasGenerales {
                     objeto = response.getJSONObject("objeto");
                     break;
                 case "2":
-                    String mensaje2 = response.getString("mensaje");
-                    //Toast.makeText(
-                    //      activity,
-                    //    mensaje2,
-                    //  Toast.LENGTH_LONG).show();
                     break;
                 case "3":
                     String mensaje3 = response.getString("mensaje");
-                    Toast.makeText(
-                            activity,
-                            mensaje3,
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity,mensaje3,Toast.LENGTH_LONG).show();
                     break;
             }
         } catch (JSONException e) {
@@ -203,10 +195,7 @@ public class ConsultasGenerales {
             switch (estado) {
                 case "1":
                     // Mostrar mensaje
-                    Toast.makeText(
-                            activity,
-                            mensaje,
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, mensaje, Toast.LENGTH_LONG).show();
                     // Enviar código de éxito
                     activity.setResult(Activity.RESULT_OK);
                     // Terminar actividad
@@ -215,10 +204,7 @@ public class ConsultasGenerales {
 
                 case "2":
                     // Mostrar mensaje
-                    Toast.makeText(
-                            activity,
-                            mensaje,
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText( activity, mensaje, Toast.LENGTH_LONG).show();
                     // Enviar código de falla
                     activity.setResult(Activity.RESULT_CANCELED);
                     break;

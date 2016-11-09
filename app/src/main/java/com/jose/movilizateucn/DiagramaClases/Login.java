@@ -59,27 +59,27 @@ public class Login {
                 //Si recibió al usuario.
                 if (userObject != null && estadoActual == ESTADO.ESPERANDO){
                     try {
-                        usuario = new Usuario(userObject.getString("rut"),
-                                userObject.getString("nombre"),
-                                userObject.getString("email"),
-                                userObject.getString("contra"));
-                        //Actualiza inicio conexión
-                        Consulta.actualizarFechaInicioConexion(usuario, activity);
+                        if (userObject.getString("enableS_N").equals("S")) {
+                            usuario = new Usuario(userObject.getString("rut"),
+                                    userObject.getString("nombre"),
+                                    userObject.getString("email"),
+                                    userObject.getString("contra"));
+                            //Actualiza inicio conexión
+                            Consulta.actualizarFechaInicioConexion(usuario, activity);
+                            estadoActual = ESTADO.EXITO;
+                            //Cambia al activity del perfil
+                            final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
+                            activity.startActivity(perfilActivity);
+                        }else{
+                            Toast.makeText(activity, "Usuario bloqueado", Toast.LENGTH_SHORT).show();
+                        }
                     }catch(JSONException e){
                         Log.e("ERROR:", "Obtencion de registro Usuario");
                     }
-                    estadoActual = ESTADO.EXITO;
-                    actualTime = 0;
-                    //Cambia al activity del perfil
-                    final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
-                    activity.startActivity(perfilActivity);
                 }else if (actualTime >= max_ms_time && estadoActual == ESTADO.ESPERANDO){ //Si sobrepasó los 3 segundos.
                     estadoActual = ESTADO.NADA;
                     usuario = null;
-                    Toast.makeText(
-                            activity,
-                            "Error conexión",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Error conexión", Toast.LENGTH_SHORT).show();
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;
                     handler.postDelayed(this, ms_time);
@@ -92,7 +92,7 @@ public class Login {
     //Convierte al usuario en un chofer (Cuando presiona el botón chofer)
     public static void transformToChofer(final AppCompatActivity activity){
         final Handler handler = new Handler();
-        final int ms_time = 100;
+        final int ms_time = 10;
         final int max_ms_time = 1000; //queda esperando máximo 1 seg.
         actualTime = 0;
         //Ahora queda esperando.
@@ -122,10 +122,7 @@ public class Login {
                     final Intent choferActivity = new Intent(activity, ChoferActivity.class);
                     activity.startActivity(choferActivity);
                 }else if (actualTime >= max_ms_time ){
-                    Toast.makeText(
-                            activity,
-                            "Error al ser Chofer.",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity,"Error al ser Chofer.",Toast.LENGTH_LONG).show();
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;
                     handler.postDelayed(this, ms_time);
@@ -138,7 +135,7 @@ public class Login {
     //Convierte al usuario en un pasajero
     public static void transformToPasajero(final AppCompatActivity activity){
         final Handler handler = new Handler();
-        final int ms_time = 100;
+        final int ms_time = 10;
         final int max_ms_time = 1000; //queda esperando máximo 1 seg.
         actualTime = 0;
         //Ahora queda esperando.
@@ -166,10 +163,7 @@ public class Login {
                     Intent pasajeroActivity = new Intent(activity, PasajeroActivity.class);
                     activity.startActivity(pasajeroActivity);
                 }else if (actualTime >= max_ms_time ){
-                    Toast.makeText(
-                            activity,
-                            "Error al ser Pasajero.",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity,"Error al ser Pasajero.",Toast.LENGTH_SHORT).show();
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;
                     handler.postDelayed(this, ms_time);
