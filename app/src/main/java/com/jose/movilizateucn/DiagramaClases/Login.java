@@ -46,7 +46,7 @@ public class Login {
     public static void conectarse(String rut, String contra, final AppCompatActivity activity){
         final Handler handler = new Handler();
         final int ms_time = 100;
-        final int max_ms_time = 3000; //queda esperando máximo 3 seg.
+        final int max_ms_time = 1500; //queda esperando máximo 3 seg.
         actualTime = 0;
         //Ahora queda esperando.
         estadoActual = ESTADO.ESPERANDO;
@@ -78,8 +78,8 @@ public class Login {
                     usuario = null;
                     Toast.makeText(
                             activity,
-                            "Logueo Fallido",
-                            Toast.LENGTH_LONG).show();
+                            "Error conexión",
+                            Toast.LENGTH_SHORT).show();
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;
                     handler.postDelayed(this, ms_time);
@@ -163,7 +163,7 @@ public class Login {
                     }
                     actualTime = 0;
                     //Cambia al activity del perfil
-                    final Intent pasajeroActivity = new Intent(activity, PasajeroActivity.class);
+                    Intent pasajeroActivity = new Intent(activity, PasajeroActivity.class);
                     activity.startActivity(pasajeroActivity);
                 }else if (actualTime >= max_ms_time ){
                     Toast.makeText(

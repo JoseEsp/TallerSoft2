@@ -4,17 +4,20 @@
     android:id="@+id/activity_registrarse"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:padding="16dp"
     tools:context="com.jose.movilizateucn.RegistrarseActivity"
     android:orientation="vertical">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
     <TextView
         android:id="@+id/lblRutReg"
         android:text="@string/rut"
         android:textSize="@dimen/medium_size"
         android:textColor="@color/niceBlack"
-        android:layout_width="match_parent"
+        android:layout_width="120dp"
         android:layout_height="wrap_content" />
 
     <EditText
@@ -23,51 +26,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLength="10"/>
+</LinearLayout>
 
-    <TextView
-        android:id="@+id/lblNombreReg"
-        android:text="@string/nombre"
-        android:textSize="@dimen/medium_size"
-        android:textColor="@color/niceBlack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/txtNombreReg"
-        android:hint="@string/nombre_hint"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:maxLength="20"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/lblNombreReg"
+            android:text="@string/nombre"
+            android:textSize="@dimen/medium_size"
+            android:textColor="@color/niceBlack"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/lblEmailReg"
-        android:text="@string/email"
-        android:textSize="@dimen/medium_size"
-        android:textColor="@color/niceBlack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/txtNombreReg"
+            android:hint="@string/nombre_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:maxLength="20"/>
 
-    <EditText
-        android:id="@+id/txtEmailReg"
-        android:hint="ejemplo@alumnos.ucn.cl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/lblContraReg"
-        android:text="@string/contra"
-        android:textSize="@dimen/medium_size"
-        android:textColor="@color/niceBlack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/txtContralReg"
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:maxLength="20" />
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/lblEmailReg"
+            android:text="@string/email"
+            android:textSize="@dimen/medium_size"
+            android:textColor="@color/niceBlack"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/txtEmailReg"
+            android:hint="ejemplo@alumnos.ucn.cl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/lblContraReg"
+            android:text="@string/contra"
+            android:textSize="@dimen/medium_size"
+            android:textColor="@color/niceBlack"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/txtContralReg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLength="20" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btnRegistrarReg"
@@ -77,6 +99,7 @@
         android:textStyle="bold"
         android:textColor="@color/blanco"
         android:backgroundTint="@color/cinnabargreen"
-        android:layout_marginTop="@dimen/login_margin" />
+        android:layout_marginTop="@dimen/login_margin"
+        android:onClick="RegistrarButtonReg"/>
 
 </LinearLayout>

@@ -79,7 +79,8 @@
             android:textStyle="bold"
             android:backgroundTint="@color/cinnabargreen"
             android:layout_marginTop="15dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:onClick="LoginButton"/>
 
         <Button
             android:id = "@+id/btnRegistrar"
@@ -89,7 +90,8 @@
             android:textColor="@color/blanco"
             android:textStyle="bold"
             android:backgroundTint="@android:color/darker_gray"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:onClick="RegistrarButton"/>
 
 
     </LinearLayout>

@@ -20,10 +20,9 @@ public class EscogerPerfilActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
-        Intent main = new Intent(this, MainActivity.class);
+    protected void onDestroy(){
+        super.onDestroy();
         Login.desconectarse();
-        startActivity(main);
     }
 
     private void configureButtons(){

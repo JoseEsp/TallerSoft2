@@ -168,10 +168,10 @@ public class ConsultasGenerales {
                     break;
                 case "2":
                     String mensaje2 = response.getString("mensaje");
-                    Toast.makeText(
-                            activity,
-                            mensaje2,
-                            Toast.LENGTH_LONG).show();
+                    //Toast.makeText(
+                    //      activity,
+                    //    mensaje2,
+                    //  Toast.LENGTH_LONG).show();
                     break;
                 case "3":
                     String mensaje3 = response.getString("mensaje");
@@ -221,8 +221,6 @@ public class ConsultasGenerales {
                             Toast.LENGTH_LONG).show();
                     // Enviar código de falla
                     activity.setResult(Activity.RESULT_CANCELED);
-                    // Terminar actividad
-                    activity.finish();
                     break;
             }
         } catch (JSONException e) {

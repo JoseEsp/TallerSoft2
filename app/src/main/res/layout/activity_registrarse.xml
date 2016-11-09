@@ -80,6 +80,7 @@
         android:textStyle="bold"
         android:textColor="@color/blanco"
         android:backgroundTint="@color/cinnabargreen"
-        android:layout_marginTop="@dimen/login_long_margin"/>
+        android:layout_marginTop="@dimen/login_long_margin"
+        android:onClick="RegistrarButtonReg"/>
 
 </LinearLayout>

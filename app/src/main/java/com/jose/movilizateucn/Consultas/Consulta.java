@@ -67,10 +67,7 @@ public class Consulta {
      * @return Usuario en el sistema.
      */
     public static void obtenerUsuarioLogin(String rut, String contra, final AppCompatActivity activity){
-        Toast.makeText(
-                activity,
-                "Conectando...",
-                Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, "Conectando...", Toast.LENGTH_SHORT).show();
         String url = Constantes.GETLOGIN + "?rut=" + rut + "&contra=" + contra;
         ConsultasGenerales.obtenerDato(url, activity);
     }
