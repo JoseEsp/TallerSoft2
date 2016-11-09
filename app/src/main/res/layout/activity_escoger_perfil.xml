@@ -34,7 +34,8 @@
         android:backgroundTint="@color/niceRed"
         android:layout_margin="@dimen/perfil_margin"
         android:gravity="center"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:onClick="PasajeroButton"/>
 
     <Button
         android:id="@+id/btnChofer"
@@ -47,6 +48,7 @@
         android:backgroundTint="@color/cinnabargreen"
         android:layout_margin="@dimen/perfil_margin"
         android:gravity="center"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:onClick="ChoferButton"/>
 
 </LinearLayout>
