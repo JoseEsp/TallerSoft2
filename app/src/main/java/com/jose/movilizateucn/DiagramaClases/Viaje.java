@@ -9,9 +9,8 @@ public class Viaje {
     private String comPasajero;
     private Solicitud solicitud;
 
-    public Viaje(int codViaje, String fechaViaje, int notaChofer, String comChofer, int notaPasajero, String comPasajero) {
+    public Viaje(int codViaje, int notaChofer, String comChofer, int notaPasajero, String comPasajero) {
         this.codViaje = codViaje;
-        this.fechaViaje = fechaViaje;
         this.notaChofer = notaChofer;
         this.comChofer = comChofer;
         this.notaPasajero = notaPasajero;

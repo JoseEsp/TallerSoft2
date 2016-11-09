@@ -31,6 +31,7 @@ public class Constantes {
     public static final String GETLOGIN = IP + "/consultas/obtenerUsuarioLogueado.php";
     public static final String UPDATEFECHAINICIO = IP + "/consultas/actualizarFechaInicioConexion.php";
     public static final String UPDATEFECHAFIN = IP + "/consultas/actualizarFechaFinConexion.php";
+    public static final String OBTENERVIAJES = IP + "/consultas/obtenerViajes.php";
 
     /**
      * Clave para el valor extra que representa al identificador de una meta
