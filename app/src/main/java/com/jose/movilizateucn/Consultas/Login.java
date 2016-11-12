@@ -1,17 +1,25 @@
-package com.jose.movilizateucn.DiagramaClases;
+package com.jose.movilizateucn.Consultas;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jose.movilizateucn.ChoferActivity;
-import com.jose.movilizateucn.Consultas.Consulta;
-import com.jose.movilizateucn.Consultas.ConsultasGenerales;
+import com.jose.movilizateucn.DiagramaClases.Calificacion;
+import com.jose.movilizateucn.DiagramaClases.Chofer;
+import com.jose.movilizateucn.DiagramaClases.Pasajero;
+import com.jose.movilizateucn.DiagramaClases.Usuario;
+import com.jose.movilizateucn.DiagramaClases.Viaje;
 import com.jose.movilizateucn.EscogerPerfilActivity;
+import com.jose.movilizateucn.HistorialViajesActivity;
 import com.jose.movilizateucn.PasajeroActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,11 +54,15 @@ public class Login {
     public static void conectarse(String rut, String contra, final AppCompatActivity activity){
         final Handler handler = new Handler();
         final int ms_time = 100;
-        final int max_ms_time = 1500; //queda esperando máximo 3 seg.
+        final int max_ms_time = 1500; //queda esperando máximo 1,5 seg.
         actualTime = 0;
         //Ahora queda esperando.
         estadoActual = ESTADO.ESPERANDO;
         Consulta.obtenerUsuarioLogin(rut, contra, activity);
+        final ProgressDialog mProgressDialog = new ProgressDialog(activity);
+        mProgressDialog.setMessage("Conectando...");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -67,6 +79,8 @@ public class Login {
                             //Actualiza inicio conexión
                             Consulta.actualizarFechaInicioConexion(usuario, activity);
                             estadoActual = ESTADO.EXITO;
+                            //Deja de mostrar el mensaje de cargando.
+                            mProgressDialog.cancel();
                             //Cambia al activity del perfil
                             final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
                             activity.startActivity(perfilActivity);
@@ -76,10 +90,15 @@ public class Login {
                     }catch(JSONException e){
                         Log.e("ERROR:", "Obtencion de registro Usuario");
                     }
-                }else if (actualTime >= max_ms_time && estadoActual == ESTADO.ESPERANDO){ //Si sobrepasó los 3 segundos.
+                }else if (actualTime >= max_ms_time && estadoActual == ESTADO.ESPERANDO){
+                    mProgressDialog.cancel();
                     estadoActual = ESTADO.NADA;
                     usuario = null;
-                    Toast.makeText(activity, "Error conexión", Toast.LENGTH_SHORT).show();
+                    if (ConsultasGenerales.isNetworkAvailable(activity)){
+                        Toast.makeText(activity, "Usuario no registrado", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(activity, "Error de conexión", Toast.LENGTH_SHORT).show();
+                    }
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;
                     handler.postDelayed(this, ms_time);
@@ -117,7 +136,6 @@ public class Login {
                     }catch(JSONException e){
                         Log.e("ERROR:", "Obtencion de registro Chofer");
                     }
-                    actualTime = 0;
                     //Cambia al activity del perfil
                     final Intent choferActivity = new Intent(activity, ChoferActivity.class);
                     activity.startActivity(choferActivity);
@@ -158,12 +176,112 @@ public class Login {
                     }catch(JSONException e){
                         Log.e("ERROR:", "Obtencion de registro Pasajero");
                     }
-                    actualTime = 0;
                     //Cambia al activity del perfil
                     Intent pasajeroActivity = new Intent(activity, PasajeroActivity.class);
                     activity.startActivity(pasajeroActivity);
                 }else if (actualTime >= max_ms_time ){
                     Toast.makeText(activity,"Error al ser Pasajero.",Toast.LENGTH_SHORT).show();
+                }else{ //Si no pasa vuelve a checkear
+                    actualTime += ms_time;
+                    handler.postDelayed(this, ms_time);
+                }
+            }
+        };
+        handler.postDelayed(runnable, ms_time);
+    }
+
+    //Muestra la calificación en el Rating Bar del pasajero o del chofer
+    public static void mostrarCalificacion(final RatingBar ratingBar,
+                                           final TextView lblScore,
+                                           final AppCompatActivity activity){
+        final Handler handler = new Handler();
+        final int ms_time = 10;
+        final int max_ms_time = 1000; //queda esperando máximo 1 seg.
+        actualTime = 0;
+        if (usuario == null){
+            return;
+        }
+        Consulta.obtenerCalificacion(usuario, activity);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                //Intenta obtener Calificación
+                JSONObject calObject = ConsultasGenerales.getJSONObject();
+                //Si recibió al usuario.
+                if (calObject != null){
+                    try {
+                        ratingBar.setRating(Float.parseFloat(calObject.getString("prom")));
+                        Calificacion.updateScore(ratingBar, lblScore);
+                    }catch(Exception e){
+                        Log.e("Mostrar Calificacion:", "Error al obtener o convertir");
+                        Toast.makeText(activity,"No has sido calificado aún.",Toast.LENGTH_SHORT).show();
+                    }
+                    return;
+                }else if (actualTime >= max_ms_time ){
+                    Toast.makeText(activity,"Calificación no cargada",Toast.LENGTH_SHORT).show();
+                }else{ //Si no pasa vuelve a checkear
+                    actualTime += ms_time;
+                    handler.postDelayed(this, ms_time);
+                }
+            }
+        };
+        handler.postDelayed(runnable, ms_time);
+    }
+
+    //Carga el historial de viajes
+    public static void obtenerHistorialViajes(final AppCompatActivity activity){
+        final Handler handler = new Handler();
+        final int ms_time = 10;
+        final int max_ms_time = 1000; //queda esperando máximo  1 seg.
+        actualTime = 0;
+        if (usuario == null){
+            return;
+        }
+        Consulta.obtenerHistorialViajes(usuario, activity);
+        final ProgressDialog mProgressDialog = new ProgressDialog(activity);
+        mProgressDialog.setMessage("Cargando...");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                //Intenta obtener el objeto usuario
+                JSONArray arrObj = ConsultasGenerales.getArrayObject();
+                //Si recibió al usuario.
+                if (arrObj != null){
+                    mProgressDialog.cancel();
+                    if(arrObj.length() == 0){
+                        Toast.makeText(activity, "No hay viajes aún", Toast.LENGTH_SHORT).show();
+                    }else{
+                        //Obtiene el arreglo para devolverlo
+                        int n = arrObj.length();
+                        Viaje[] viajes = new Viaje[n];
+                        for(int i = 0; i < n; i++){
+                            JSONObject jo;
+                            try{
+                                jo = arrObj.getJSONObject(i);
+                                viajes[i] = new Viaje(Integer.parseInt(jo.getString("codViaje")),
+                                                      jo.getString("fechaViaje"),
+                                                      Float.parseFloat(jo.getString("nota")),
+                                                      jo.getString("comentario"),
+                                                      jo.getString("nombre")
+                                                     );
+                            }catch(Exception e){
+                                Log.e("Conversion", "Error al obtener objeto de array");
+                            }
+                        }
+                        if (activity instanceof HistorialViajesActivity) {
+                            ((HistorialViajesActivity) activity).mostrarViajes(viajes);
+                        }
+                        return;
+                    }
+                }else if (actualTime >= max_ms_time){
+                    if (ConsultasGenerales.isNetworkAvailable(activity)){
+                        Toast.makeText(activity, "No hay viajes aún", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(activity, "Error conexión", Toast.LENGTH_SHORT).show();
+                    }
+                    mProgressDialog.cancel();
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;
                     handler.postDelayed(this, ms_time);

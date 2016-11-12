@@ -1,12 +1,10 @@
 package com.jose.movilizateucn.Consultas;
 
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.jose.movilizateucn.DiagramaClases.*;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -67,7 +65,6 @@ public class Consulta {
      * @return Usuario en el sistema.
      */
     public static void obtenerUsuarioLogin(String rut, String contra, final AppCompatActivity activity){
-        Toast.makeText(activity, "Conectando...", Toast.LENGTH_SHORT).show();
         String url = Constantes.GETLOGIN + "?rut=" + rut + "&contra=" + contra;
         ConsultasGenerales.obtenerDato(url, activity);
     }
@@ -82,6 +79,11 @@ public class Consulta {
         ConsultasGenerales.actualizarFecha(usuario, url, activity);
     }
 
+    /**
+     * Actualiza la Fecha de Fin de Conexión cada 1 minuto
+     * @param usuario El usuario logueado
+     * @param activity Activity actual
+     */
     public static void actualizarFechaFinConexion(Usuario usuario, final AppCompatActivity activity){
         String url;
         if (usuario instanceof Chofer) {
@@ -94,5 +96,30 @@ public class Consulta {
         ConsultasGenerales.actualizarFecha(usuario, url, activity);
     }
 
+    /**
+     * Obtiene la calificación y la última fecha de viaje
+     *
+     * @param usuario El usuario.
+     * @param activity Activity actual
+     */
+    public static void obtenerCalificacion(Usuario usuario, final AppCompatActivity activity){
+        String url = "";
+        if (usuario instanceof Chofer) {
+            url = Constantes.OBTENERCALIFICACIONVIAJES + "?rut=" + usuario.getRut() + "&tipo=chofer";
+        }else if (usuario instanceof Pasajero){
+            url = Constantes.OBTENERCALIFICACIONVIAJES + "?rut=" + usuario.getRut() + "&tipo=pasajero";
+        }
+        ConsultasGenerales.obtenerDato(url, activity);
+    }
+
+    public static void obtenerHistorialViajes(Usuario usuario, final AppCompatActivity activity){
+        String url = "";
+        if (usuario instanceof Chofer) {
+            url = Constantes.OBTENERVIAJES + "?rut=" + usuario.getRut() + "&tipo=chofer";
+        }else if (usuario instanceof Pasajero){
+            url = Constantes.OBTENERVIAJES + "?rut=" + usuario.getRut() + "&tipo=pasajero";
+        }
+        ConsultasGenerales.obtenerDatos(url, activity);
+    }
 
 }

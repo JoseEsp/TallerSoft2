@@ -1,24 +1,16 @@
 package com.jose.movilizateucn;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.jose.movilizateucn.DiagramaClases.Login;
+import com.jose.movilizateucn.Consultas.Login;
 import com.jose.movilizateucn.DiagramaClases.Usuario;
 
 public class ChoferActivity extends AppCompatActivity {
-
-    private TextView nameText;
-    private RatingBar starBar;
-    private TextView lblScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,54 +18,26 @@ public class ChoferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chofer);
         configureNameText();
         Login.updateFechaFinConexion(this);
-        configureStarBar();
+        mostrarCalificacion();
+    }
+
+    public void HistorialViajesButton(View view){
+        Intent histViajes = new Intent(ChoferActivity.this, HistorialViajesActivity.class);
+        startActivity(histViajes);
     }
 
     private void configureNameText(){
-        nameText = (TextView) findViewById(R.id.lblNombreChofer);
+        TextView nameText = (TextView) findViewById(R.id.lblNombreChofer);
         Usuario user = Login.getUsuario();
         if (user != null){
             nameText.setText(user.getNombre());
         }
     }
 
-    private void configureStarBar(){
-        starBar = (RatingBar) findViewById(R.id.ratingBarChofer);
-        lblScore = (TextView) findViewById(R.id.lblStarScoreChofer);
-        updateScore();
-        test(); //método para probar solamente (modifico el starBar y el lblScore
-    }
-
-    private void updateScore(){
-        float actualScore = starBar.getRating();
-        String strScore = String.format("%.1f/%d", actualScore, starBar.getNumStars());
-        Spannable colorText = new SpannableString(strScore);
-        ForegroundColorSpan color = null;
-        if (actualScore < 2.5f){
-            color = new ForegroundColorSpan(Color.RED);
-        }else if (actualScore >= 2.5f && actualScore < 4f){
-            color = new ForegroundColorSpan(Color.BLACK);
-        }else{
-            color = new ForegroundColorSpan(Color.BLUE);
-        }
-        //Colorea antes del '/'
-        colorText.setSpan(color, 0, strScore.indexOf("/"), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //Colorea después del '/'
-        colorText.setSpan(new ForegroundColorSpan(Color.BLACK), strScore.indexOf("/"),
-                          strScore.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        lblScore.setText(colorText);
-    }
-
-    private void test(){
-        Button btnConfRuta = (Button) findViewById(R.id.btnConfigurarRuta);
-        btnConfRuta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                float actualScore = (float) (Math.random() * (float) starBar.getNumStars());
-                starBar.setRating(actualScore);
-                updateScore();
-            }
-        });
+    private void mostrarCalificacion(){
+        RatingBar starBar = (RatingBar) findViewById(R.id.ratingBarChofer);
+        TextView lblScore = (TextView)  findViewById(R.id.lblStarScoreChofer);
+        Login.mostrarCalificacion(starBar, lblScore, this);
     }
 
 }

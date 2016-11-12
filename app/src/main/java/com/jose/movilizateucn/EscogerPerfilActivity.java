@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jose.movilizateucn.DiagramaClases.Login;
+import com.jose.movilizateucn.Consultas.Login;
 
 public class EscogerPerfilActivity extends AppCompatActivity {
 

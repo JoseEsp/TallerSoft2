@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.jose.movilizateucn.DiagramaClases.Login;
+import com.jose.movilizateucn.Consultas.Login;
 
 public class MainActivity extends AppCompatActivity {
     private EditText rutTxt;

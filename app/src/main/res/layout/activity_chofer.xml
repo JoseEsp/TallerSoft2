@@ -41,7 +41,7 @@
                 android:stepSize=".1"
                 android:focusable="false"
                 android:isIndicator="true"
-                android:rating="4.2"
+                android:rating="2.5"
                 android:numStars="5"
                 android:secondaryProgressTint="@color/niceSilver"
                 android:progressTint="@color/niceYellow"
@@ -52,6 +52,7 @@
                 android:id="@+id/lblStarScoreChofer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textColor="@color/niceBlack"
                 android:text="2.5/5"
                 android:paddingBottom="@dimen/perfil_margin"
                 android:gravity="center"
@@ -89,7 +90,8 @@
         android:backgroundTint="@color/cinnabargreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/perfil_margin" />
+        android:layout_marginBottom="@dimen/perfil_margin"
+        android:onClick="HistorialViajesButton"/>
 
     </LinearLayout>
 </LinearLayout>
