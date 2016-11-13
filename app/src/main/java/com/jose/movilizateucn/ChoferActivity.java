@@ -30,7 +30,7 @@ public class ChoferActivity extends AppCompatActivity {
         TextView nameText = (TextView) findViewById(R.id.lblNombreChofer);
         Usuario user = Login.getUsuario();
         if (user != null){
-            nameText.setText(user.getNombre());
+            nameText.setText(user.getNombre().substring(0, 1).toUpperCase() + user.getNombre().substring(1));
         }
     }
 

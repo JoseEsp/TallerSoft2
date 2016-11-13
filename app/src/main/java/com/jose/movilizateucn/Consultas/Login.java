@@ -2,6 +2,7 @@ package com.jose.movilizateucn.Consultas;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import java.text.NumberFormat;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.jose.movilizateucn.PasajeroActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 
 /**
  * Un login para todos (para saber de conexiones)
@@ -95,7 +98,7 @@ public class Login {
                     estadoActual = ESTADO.NADA;
                     usuario = null;
                     if (ConsultasGenerales.isNetworkAvailable(activity)){
-                        Toast.makeText(activity, "Usuario no registrado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Usuario no registrado o datos inválidos.", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(activity, "Error de conexión", Toast.LENGTH_SHORT).show();
                     }

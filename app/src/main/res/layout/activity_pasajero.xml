@@ -42,6 +42,7 @@
                 android:isIndicator="true"
                 android:rating="2.5"
                 android:numStars="5"
+                android:stepSize="0.1"
                 android:foregroundTint="@color/niceSilver"
                 android:secondaryProgressTint="@color/niceSilver"
                 android:progressTint="@color/niceYellow"
