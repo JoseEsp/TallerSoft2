@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.jose.movilizateucn.DiagramaClases.Usuario;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +29,8 @@ public class ConsultasGenerales {
 
     //Atributo necesario, es el 'objeto' luego de una obtención de algún registro en la BD.
     private static JSONObject objeto = null;
+    //Cuando se obtiene más de un objeto se debe usar este:
+    private static JSONArray arrayObject = null;
 
     /**
      * Función auxiliar para la inserción
@@ -93,6 +96,17 @@ public class ConsultasGenerales {
             @Override
             public void onSuccess(JSONObject result) {
                 ConsultasGenerales.procesarRespuestaDato(result, activity);
+            }
+        });
+    }
+
+    public static void obtenerDatos(String url,
+                                   final AppCompatActivity activity){
+        arrayObject = null;
+        ConsultasGenerales.fetchData(url, activity, new DataCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                ConsultasGenerales.procesarRespuestaDatos(result, activity);
             }
         });
     }
@@ -167,18 +181,36 @@ public class ConsultasGenerales {
                     objeto = response.getJSONObject("objeto");
                     break;
                 case "2":
-                    String mensaje2 = response.getString("mensaje");
-                    //Toast.makeText(
-                    //      activity,
-                    //    mensaje2,
-                    //  Toast.LENGTH_LONG).show();
                     break;
                 case "3":
                     String mensaje3 = response.getString("mensaje");
-                    Toast.makeText(
-                            activity,
-                            mensaje3,
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity,mensaje3,Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Procesa muchos datos
+     * @param response Objeto Array
+     */
+    private static void procesarRespuestaDatos(JSONObject response,
+                                              final AppCompatActivity activity) {
+        try {
+            // Obtener atributo "mensaje"
+            String estado = response.getString("estado");
+            switch (estado) {
+                case "1":
+                    // Obtener objeto
+                    arrayObject = response.getJSONArray("objeto");
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    String mensaje3 = response.getString("mensaje");
+                    Toast.makeText(activity,mensaje3,Toast.LENGTH_SHORT).show();
                     break;
             }
         } catch (JSONException e) {
@@ -203,10 +235,7 @@ public class ConsultasGenerales {
             switch (estado) {
                 case "1":
                     // Mostrar mensaje
-                    Toast.makeText(
-                            activity,
-                            mensaje,
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, mensaje, Toast.LENGTH_LONG).show();
                     // Enviar código de éxito
                     activity.setResult(Activity.RESULT_OK);
                     // Terminar actividad
@@ -215,10 +244,7 @@ public class ConsultasGenerales {
 
                 case "2":
                     // Mostrar mensaje
-                    Toast.makeText(
-                            activity,
-                            mensaje,
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText( activity, mensaje, Toast.LENGTH_LONG).show();
                     // Enviar código de falla
                     activity.setResult(Activity.RESULT_CANCELED);
                     break;
@@ -234,7 +260,7 @@ public class ConsultasGenerales {
      * @return Si hay conexión
      *
      */
-    private static boolean isNetworkAvailable(Activity activity) {
+    public static boolean isNetworkAvailable(Activity activity) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -247,4 +273,6 @@ public class ConsultasGenerales {
     public static JSONObject getJSONObject(){
         return objeto;
     }
+
+    public static JSONArray getArrayObject(){return arrayObject;}
 }

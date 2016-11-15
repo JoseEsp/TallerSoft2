@@ -1,21 +1,20 @@
 package com.jose.movilizateucn.DiagramaClases;
 
+//Clase Viaje pero por un lado.
+//La nota, comentario y nombre son los que otro usuario ha dicho o puesto de ti
 public class Viaje {
     private int codViaje;
     private String fechaViaje;
-    private int notaChofer;
-    private String comChofer;
-    private int notaPasajero;
-    private String comPasajero;
-    private Solicitud solicitud;
+    private float nota; //La nota que alguien más te ha puesto
+    private String comentario; //Comentario que alguien más te ha puesto
+    private String nombre; //El otro usuario que puso la nota
 
-    public Viaje(int codViaje, int notaChofer, String comChofer, int notaPasajero, String comPasajero) {
+    public Viaje(int codViaje, String fechaViaje, float nota, String comentario, String nombre) {
         this.codViaje = codViaje;
-        this.notaChofer = notaChofer;
-        this.comChofer = comChofer;
-        this.notaPasajero = notaPasajero;
-        this.comPasajero = comPasajero;
-        this.solicitud = null;
+        this.fechaViaje = fechaViaje;
+        this.nota = nota;
+        this.comentario = comentario;
+        this.nombre = nombre;
     }
 
     public int getCodViaje() {
@@ -34,43 +33,27 @@ public class Viaje {
         this.fechaViaje = fechaViaje;
     }
 
-    public int getNotaChofer() {
-        return notaChofer;
+    public float getNota() {
+        return nota;
     }
 
-    public void setNotaChofer(int notaChofer) {
-        this.notaChofer = notaChofer;
+    public void setNota(int nota) {
+        this.nota = nota;
     }
 
-    public String getComChofer() {
-        return comChofer;
+    public String getComentario() {
+        return comentario;
     }
 
-    public void setComChofer(String comChofer) {
-        this.comChofer = comChofer;
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 
-    public String getComPasajero() {
-        return comPasajero;
+    public String getNombre(){
+        return nombre;
     }
 
-    public void setComPasajero(String comPasajero) {
-        this.comPasajero = comPasajero;
-    }
-
-    public Solicitud getSolicitud() {
-        return solicitud;
-    }
-
-    public void setSolicitud(Solicitud solicitud) {
-        this.solicitud = solicitud;
-    }
-
-    public int getNotaPasajero() {
-        return notaPasajero;
-    }
-
-    public void setNotaPasajero(int notaPasajero) {
-        this.notaPasajero = notaPasajero;
+    public void setNombre(String nombre){
+        this.nombre = nombre;
     }
 }

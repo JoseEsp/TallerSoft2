@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.jose.movilizateucn.DiagramaClases.Login;
+import com.jose.movilizateucn.Consultas.Login;
 
 public class MainActivity extends AppCompatActivity {
     private EditText rutTxt;
@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,"Debe completar todos los campos",Toast.LENGTH_SHORT).show();
         }
         else{
-            //Login log = new Login();
             Login.conectarse(rutTxt.getText().toString(), passTxt.getText().toString(), this );
         }
     }
