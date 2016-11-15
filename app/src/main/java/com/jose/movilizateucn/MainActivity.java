@@ -37,4 +37,10 @@ public class MainActivity extends AppCompatActivity {
         Intent registrarse = new Intent(MainActivity.this, RegistrarseActivity.class);
         startActivity(registrarse);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.this.setTitle("Login");
+    }
 }

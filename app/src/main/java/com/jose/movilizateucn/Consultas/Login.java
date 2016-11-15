@@ -82,14 +82,14 @@ public class Login {
                             //Actualiza inicio conexión
                             Consulta.actualizarFechaInicioConexion(usuario, activity);
                             estadoActual = ESTADO.EXITO;
-                            //Deja de mostrar el mensaje de cargando.
-                            mProgressDialog.cancel();
                             //Cambia al activity del perfil
                             final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
                             activity.startActivity(perfilActivity);
                         }else{
                             Toast.makeText(activity, "Usuario bloqueado", Toast.LENGTH_SHORT).show();
                         }
+                        //Deja de mostrar el mensaje de cargando.
+                        mProgressDialog.cancel();
                     }catch(JSONException e){
                         Log.e("ERROR:", "Obtencion de registro Usuario");
                     }
@@ -98,7 +98,7 @@ public class Login {
                     estadoActual = ESTADO.NADA;
                     usuario = null;
                     if (ConsultasGenerales.isNetworkAvailable(activity)){
-                        Toast.makeText(activity, "Usuario no registrado o datos inválidos.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Datos inválidos.", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(activity, "Error de conexión", Toast.LENGTH_SHORT).show();
                     }
