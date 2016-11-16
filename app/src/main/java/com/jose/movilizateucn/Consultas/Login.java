@@ -3,9 +3,14 @@ package com.jose.movilizateucn.Consultas;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import java.text.NumberFormat;
+
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +24,7 @@ import com.jose.movilizateucn.DiagramaClases.Viaje;
 import com.jose.movilizateucn.EscogerPerfilActivity;
 import com.jose.movilizateucn.HistorialViajesActivity;
 import com.jose.movilizateucn.PasajeroActivity;
+import com.jose.movilizateucn.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,10 +68,15 @@ public class Login {
         //Ahora queda esperando.
         estadoActual = ESTADO.ESPERANDO;
         Consulta.obtenerUsuarioLogin(rut, contra, activity);
-        final ProgressDialog mProgressDialog = new ProgressDialog(activity);
-        mProgressDialog.setMessage("Conectando...");
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
+        //Muestra el loading:
+        final ProgressBar spinner = (ProgressBar) activity.findViewById(R.id.spinner);
+        spinner.setVisibility(View.VISIBLE);
+        //No funciona en algunos celus en el xml, por eso está acá en código:
+        spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
+        //final ProgressDialog mProgressDialog = new ProgressDialog(activity);
+        //mProgressDialog.setMessage("Conectando...");
+        //mProgressDialog.setCancelable(false);
+        //mProgressDialog.show();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -89,12 +100,14 @@ public class Login {
                             Toast.makeText(activity, "Usuario bloqueado", Toast.LENGTH_SHORT).show();
                         }
                         //Deja de mostrar el mensaje de cargando.
-                        mProgressDialog.cancel();
+                        //mProgressDialog.cancel();
+                        spinner.setVisibility(View.GONE);
                     }catch(JSONException e){
                         Log.e("ERROR:", "Obtencion de registro Usuario");
                     }
                 }else if (actualTime >= max_ms_time && estadoActual == ESTADO.ESPERANDO){
-                    mProgressDialog.cancel();
+                    //mProgressDialog.cancel();
+                    spinner.setVisibility(View.GONE);
                     estadoActual = ESTADO.NADA;
                     usuario = null;
                     if (ConsultasGenerales.isNetworkAvailable(activity)){
@@ -199,11 +212,17 @@ public class Login {
                                            final AppCompatActivity activity){
         final Handler handler = new Handler();
         final int ms_time = 10;
-        final int max_ms_time = 1000; //queda esperando máximo 1 seg.
+        final int max_ms_time = 3000; //queda esperando máximo 1 seg.
         actualTime = 0;
         if (usuario == null){
             return;
         }
+        //Muestra el loading:
+        final ProgressBar spinner = (ProgressBar) activity.findViewById(R.id.spinner);
+        spinner.setVisibility(View.VISIBLE);
+        //No funciona en algunos celus en el xml, por eso está acá en código:
+        spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
+        //Realiza la consulta
         Consulta.obtenerCalificacion(usuario, activity);
         Runnable runnable = new Runnable() {
             @Override
@@ -219,8 +238,10 @@ public class Login {
                         Log.e("Mostrar Calificacion:", "Error al obtener o convertir");
                         Toast.makeText(activity,"No has sido calificado aún.",Toast.LENGTH_SHORT).show();
                     }
+                    spinner.setVisibility(View.GONE);
                     return;
                 }else if (actualTime >= max_ms_time ){
+                    spinner.setVisibility(View.GONE);
                     Toast.makeText(activity,"Calificación no cargada",Toast.LENGTH_SHORT).show();
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;

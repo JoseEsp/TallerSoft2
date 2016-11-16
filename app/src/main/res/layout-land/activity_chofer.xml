@@ -34,7 +34,7 @@
             android:stepSize="0.1"
             android:focusable="false"
             android:isIndicator="true"
-            android:rating="4.2"
+            android:rating="2.5"
             android:numStars="5"
             android:foregroundTint="@color/niceSilver"
             android:secondaryProgressTint="@color/niceSilver"
@@ -84,5 +84,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/perfil_margin"
         android:onClick="HistorialViajesButton"/>
+
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>
