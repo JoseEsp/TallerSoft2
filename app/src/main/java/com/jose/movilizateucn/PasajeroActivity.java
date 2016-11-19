@@ -21,6 +21,11 @@ public class PasajeroActivity extends AppCompatActivity {
         mostrarCalificacion();
     }
 
+    public void GenerarSolicitudButton(View view){
+        Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudMap.class);
+        startActivity(generarSolicitudMap);
+    }
+
     public void HistorialViajesButton(View view){
         Intent histViajes = new Intent(PasajeroActivity.this, HistorialViajesActivity.class);
         startActivity(histViajes);

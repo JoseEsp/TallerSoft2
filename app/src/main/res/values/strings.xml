@@ -14,5 +14,6 @@
     <string name="solicitudAceptada">Solicitud Aceptada</string>
     <string name="registrarse">Registrarse</string>
     <string name="nombre_hint">Juan Perez</string>
+    <string name="title_activity_generar_solicitud_map">GenerarSolicitudMap</string>
 
 </resources>

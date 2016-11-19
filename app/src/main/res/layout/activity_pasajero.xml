@@ -81,7 +81,8 @@
             android:backgroundTint="@color/cinnabargreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/perfil_margin"/>
+            android:layout_marginBottom="@dimen/perfil_margin"
+            android:onClick="GenerarSolicitudButton"/>
 
         <Button
             android:id="@+id/btnHistorialViajes"
