@@ -8,11 +8,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        this.marker = null;
     }
 
 
@@ -37,11 +40,19 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
         LatLng ucn = new LatLng(-29.9659721, -71.3476425);
         mMap.addMarker(new MarkerOptions().position(ucn).title("UCN"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(ucn));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (marker != null) {
+                    marker.remove();
+                }
+                marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Inicio"));
+            }
+        });
     }
 }
