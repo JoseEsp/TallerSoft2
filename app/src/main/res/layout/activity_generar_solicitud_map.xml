@@ -1,9 +1,39 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.jose.movilizateucn.GenerarSolicitudMap"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8">
+
+        <TextView
+            android:id="@+id/info"
+            android:text="@string/info_hint"
+            android:textColor="@color/niceBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="bottom"
+            android:drawableLeft="@mipmap/ic_alert"
+            />
+
+    </android.support.v7.widget.CardView>
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_weight="0.2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
     />
+</LinearLayout>
+
+

@@ -33,6 +33,8 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:hint = "@string/rut_hint"
+            android:textCursorDrawable="@color/colorPrimaryDark"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:maxLength= "10"
             android:gravity="center"
             android:layout_marginLeft="5dp"
@@ -58,11 +60,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:textCursorDrawable="@color/colorPrimaryDark"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:maxLength= "20"
             android:inputType = "textPassword"
             android:gravity="center"/>
         </LinearLayout>
 
+    <CheckBox
+        android:id="@+id/cbRemember"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar usuario y contraseña."
+        android:buttonTint="@color/colorPrimary"
+        android:layout_marginTop="10dp"
+        />
 
 
     <Button
@@ -73,7 +85,7 @@
         android:textColor="@color/blanco"
         android:textStyle="bold"
         android:backgroundTint="@color/cinnabargreen"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:onClick="LoginButton"/>
 
         <Button
@@ -84,7 +96,7 @@
             android:textColor="@color/blanco"
             android:textStyle="bold"
             android:backgroundTint="@android:color/darker_gray"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:onClick="RegistrarButton"/>
 
         <ProgressBar

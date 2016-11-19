@@ -7,7 +7,8 @@
     android:padding="@dimen/login_margin"
     tools:context="com.jose.movilizateucn.HistorialViajesActivity"
     android:layout_margin="@dimen/login_margin"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:backgroundTint="@color/lightGray">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

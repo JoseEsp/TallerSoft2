@@ -1,15 +1,17 @@
 package com.jose.movilizateucn.Consultas;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import java.text.NumberFormat;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -29,8 +31,6 @@ import com.jose.movilizateucn.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DecimalFormat;
 
 /**
  * Un login para todos (para saber de conexiones)
@@ -60,7 +60,9 @@ public class Login {
      * Intenta checkarlo cada 100 ms (ya que la respuesta no es intanstánea
      *
      */
-    public static void conectarse(String rut, String contra, final AppCompatActivity activity){
+    public static void conectarse(final String rut, final String contra,
+                                  final CheckBox cbRemember,
+                                  final AppCompatActivity activity){
         final Handler handler = new Handler();
         final int ms_time = 100;
         final int max_ms_time = 1500; //queda esperando máximo 1,5 seg.
@@ -93,6 +95,19 @@ public class Login {
                             //Actualiza inicio conexión
                             Consulta.actualizarFechaInicioConexion(usuario, activity);
                             estadoActual = ESTADO.EXITO;
+                            //Guarda las preferencias si el checkbox está activado, si no guarda vacío.
+                            SharedPreferences pref = activity.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = pref.edit();
+                            if (cbRemember.isChecked()) {
+                                editor.putString("rut", rut);
+                                editor.putString("pass", contra);
+                                editor.putString("cbRememberChecked", "true");
+                            }else{
+                                editor.putString("rut", "");
+                                editor.putString("pass", "");
+                                editor.putString("cbRememberChecked", "false");
+                            }
+                            editor.commit();
                             //Cambia al activity del perfil
                             final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
                             activity.startActivity(perfilActivity);

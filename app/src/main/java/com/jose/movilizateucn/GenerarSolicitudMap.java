@@ -2,12 +2,15 @@ package com.jose.movilizateucn;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -40,11 +43,8 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        // Add a marker in Sydney and move the camera
-        LatLng ucn = new LatLng(-29.9659721, -71.3476425);
-        mMap.addMarker(new MarkerOptions().position(ucn).title("UCN"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(ucn));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
+
+        final TextView tvInfo = (TextView) findViewById(R.id.info);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -52,7 +52,14 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                     marker.remove();
                 }
                 marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Inicio"));
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                tvInfo.setText(String.format("(%f, %f)", latLng.latitude, latLng.longitude));
             }
         });
+
+        // Marcador en la UCN
+        LatLng ucn = new LatLng(-29.9659721, -71.3476425);
+        mMap.addMarker(new MarkerOptions().position(ucn).title("UCN"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));
     }
 }
