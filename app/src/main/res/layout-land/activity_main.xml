@@ -4,12 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icologin"
-        android:layout_weight="2"
-        android:padding="10dp"/>
+        android:orientation="vertical"
+        android:layout_weight="0.4"
+        android:paddingLeft="10dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icologin"
+            />
+
+        <ProgressBar
+            android:id="@+id/spinner"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,7 +90,7 @@
 
         <CheckBox
             android:id="@+id/cbRemember"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Guardar usuario y contraseña."
@@ -105,15 +119,6 @@
             android:backgroundTint="@android:color/darker_gray"
             android:layout_marginTop="10dp"
             android:onClick="RegistrarButton"/>
-
-        <ProgressBar
-            android:id="@+id/spinner"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/login_margin"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
 
     </LinearLayout>
 

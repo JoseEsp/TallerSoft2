@@ -20,7 +20,7 @@
 
         <TextView
             android:id = "@+id/lblRut"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:text = "@string/rut"
             android:textColor="@color/niceBlack"
@@ -29,9 +29,8 @@
             android:layout_marginTop="@dimen/login_margin" />
         <EditText
             android:id = "@+id/txtRut"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:hint = "@string/rut_hint"
             android:textCursorDrawable="@color/colorPrimaryDark"
             android:backgroundTint="@color/colorPrimaryDark"
@@ -48,7 +47,7 @@
 
         <TextView
             android:id = "@+id/lblPassword"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:text = "@string/pass"
             android:textColor="@color/niceBlack"
@@ -57,13 +56,13 @@
             android:layout_marginTop="@dimen/login_margin"/>
         <EditText
             android:id = "@+id/txtPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:textCursorDrawable="@color/colorPrimaryDark"
             android:backgroundTint="@color/colorPrimaryDark"
             android:maxLength= "20"
             android:inputType = "textPassword"
+            android:layout_marginRight="10dp"
             android:gravity="center"/>
         </LinearLayout>
 
