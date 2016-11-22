@@ -23,6 +23,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadPreferences();
+        //Si se quieren borrar shared preferences: descomentar
+        /*SharedPreferences prefs = getSharedPreferences("UserData", Context.MODE_PRIVATE);;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();*/
     }
 
     public void LoginButton(View view){

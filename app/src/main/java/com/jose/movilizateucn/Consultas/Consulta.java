@@ -1,9 +1,10 @@
 package com.jose.movilizateucn.Consultas;
 
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
+import com.google.android.gms.maps.model.Marker;
 import com.jose.movilizateucn.DiagramaClases.*;
+import com.jose.movilizateucn.R;
 
 import org.json.JSONObject;
 

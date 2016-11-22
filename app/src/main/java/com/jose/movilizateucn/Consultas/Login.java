@@ -75,10 +75,6 @@ public class Login {
         spinner.setVisibility(View.VISIBLE);
         //No funciona en algunos celus en el xml, por eso está acá en código:
         spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
-        //final ProgressDialog mProgressDialog = new ProgressDialog(activity);
-        //mProgressDialog.setMessage("Conectando...");
-        //mProgressDialog.setCancelable(false);
-        //mProgressDialog.show();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -249,9 +245,18 @@ public class Login {
                     try {
                         ratingBar.setRating(Float.parseFloat(calObject.getString("prom")));
                         Calificacion.updateScore(ratingBar, lblScore);
+                        //Guarda la preferencia de calificación
+                        SharedPreferences pref = activity.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        if (usuario instanceof Chofer) {
+                            editor.putString("calificacionChofer", String.valueOf(ratingBar.getRating()));
+                        }else if (usuario instanceof Pasajero){
+                            editor.putString("calificacionPasajero", String.valueOf(ratingBar.getRating()));
+                        }
+                        editor.commit();
                     }catch(Exception e){
                         Log.e("Mostrar Calificacion:", "Error al obtener o convertir");
-                        Toast.makeText(activity,"No has sido calificado aún.",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(activity,"No has sido calificado aún.",Toast.LENGTH_SHORT).show();
                     }
                     spinner.setVisibility(View.GONE);
                     return;
