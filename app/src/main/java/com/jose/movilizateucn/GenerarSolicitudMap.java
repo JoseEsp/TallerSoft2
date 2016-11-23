@@ -20,11 +20,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jose.movilizateucn.Consultas.Constantes;
-import com.jose.movilizateucn.Consultas.ConsultasGenerales;
 import com.jose.movilizateucn.POJO.Example;
 import com.jose.movilizateucn.POJO.RetrofitMaps;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +65,6 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 }
                 origen = mMap.addMarker(new MarkerOptions().position(latLng).title("Inicio"));
                 origen.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                tvInfo.setText(String.format("(%f, %f)", latLng.latitude, latLng.longitude));
                 mostrarInfo();
             }
         });
@@ -99,7 +95,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
 
         call.enqueue(new Callback<Example>() {
             @Override
-            public void onResponse(final Response<Example> response, Retrofit retrofit) {
+            public void onResponse(Response<Example> response, Retrofit retrofit) {
                 if (line != null) {
                     line.remove();
                 }
@@ -112,8 +108,8 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                     List<LatLng> list = decodePoly(encodedString);
                     line = mMap.addPolyline(new PolylineOptions()
                             .addAll(list)
-                            .width(20)
-                            .color(Color.GREEN)
+                            .width(10)
+                            .color(Color.RED)
                             .geodesic(true)
                     );
                 }
