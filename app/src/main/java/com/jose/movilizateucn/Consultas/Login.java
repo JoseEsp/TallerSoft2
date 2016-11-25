@@ -139,7 +139,7 @@ public class Login {
     public static void transformToChofer(final AppCompatActivity activity){
         final Handler handler = new Handler();
         final int ms_time = 10;
-        final int max_ms_time = 1000; //queda esperando máximo 1 seg.
+        final int max_ms_time = 3000; //queda esperando máximo 1 seg.
         actualTime = 0;
         //Ahora queda esperando.
         if (usuario == null){
@@ -179,7 +179,7 @@ public class Login {
     public static void transformToPasajero(final AppCompatActivity activity){
         final Handler handler = new Handler();
         final int ms_time = 10;
-        final int max_ms_time = 1000; //queda esperando máximo 1 seg.
+        final int max_ms_time = 3000; //queda esperando máximo 1 seg.
         actualTime = 0;
         //Ahora queda esperando.
         if (usuario == null){
@@ -247,9 +247,9 @@ public class Login {
                         SharedPreferences pref = activity.getSharedPreferences("UserData", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
                         if (usuario instanceof Chofer) {
-                            editor.putString("calificacionChofer", String.valueOf(ratingBar.getRating()));
+                            editor.putString("calificacionChofer[" + usuario.getRut() +"]", String.valueOf(ratingBar.getRating()));
                         }else if (usuario instanceof Pasajero){
-                            editor.putString("calificacionPasajero", String.valueOf(ratingBar.getRating()));
+                            editor.putString("calificacionPasajero["+ usuario.getRut() +"]", String.valueOf(ratingBar.getRating()));
                         }
                         editor.commit();
                     }catch(Exception e){

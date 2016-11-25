@@ -41,10 +41,12 @@ public class ChoferActivity extends AppCompatActivity {
         RatingBar starBar = (RatingBar) findViewById(R.id.ratingBarChofer);
         TextView lblScore = (TextView)  findViewById(R.id.lblStarScoreChofer);
         //Obtiene prefencia de calificación
-        SharedPreferences pref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        String calChofer = pref.getString("calificacionChofer", "2.5");
-        starBar.setRating(Float.parseFloat(calChofer));
-        Calificacion.updateScore(starBar, lblScore);
+        if (Login.getUsuario() != null) {
+            SharedPreferences pref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            String calChofer = pref.getString("calificacionChofer[" + Login.getUsuario().getRut() + "]", "2.5");
+            starBar.setRating(Float.parseFloat(calChofer));
+            Calificacion.updateScore(starBar, lblScore);
+        }
         Login.mostrarCalificacion(starBar, lblScore, this);
     }
 

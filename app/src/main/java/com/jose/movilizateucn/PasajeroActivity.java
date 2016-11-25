@@ -47,9 +47,11 @@ public class PasajeroActivity extends AppCompatActivity {
         TextView lblScore = (TextView)  findViewById(R.id.lblStarScorePasajero);
         //Obtiene prefencia de calificación
         SharedPreferences pref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        String calPasajero = pref.getString("calificacionPasajero", "2.5");
-        starBar.setRating(Float.parseFloat(calPasajero));
-        Calificacion.updateScore(starBar, lblScore);
+        if (Login.getUsuario() != null) {
+            String calPasajero = pref.getString("calificacionPasajero[" + Login.getUsuario().getRut() + "]", "2.5");
+            starBar.setRating(Float.parseFloat(calPasajero));
+            Calificacion.updateScore(starBar, lblScore);
+        }
         Login.mostrarCalificacion(starBar, lblScore, this);
     }
 }

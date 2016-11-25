@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadPreferences();
-        //Si se quieren borrar shared preferences: descomentar
+        //Si se quieren borrar shared preferences: descomentar y comentar loadPreferences();
         /*SharedPreferences prefs = getSharedPreferences("UserData", Context.MODE_PRIVATE);;
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();

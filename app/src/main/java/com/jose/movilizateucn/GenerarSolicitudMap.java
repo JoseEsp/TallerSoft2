@@ -1,5 +1,7 @@
 package com.jose.movilizateucn;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jose.movilizateucn.Consultas.Constantes;
+import com.jose.movilizateucn.Consultas.Login;
 import com.jose.movilizateucn.POJO.Example;
 import com.jose.movilizateucn.POJO.RetrofitMaps;
 
@@ -57,6 +59,14 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        // Marcador en la UCN
+        LatLng ucn = new LatLng(-29.9659721, -71.3476425);
+        destino = mMap.addMarker(new MarkerOptions().position(ucn).title("UCN").snippet("Universidad Católica del Norte"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));
+
+        //Si ya ingresó una posición anterior, se guarda aquí:
+        cargarOrigenSharedPreference();
+
         final TextView tvInfo = (TextView) findViewById(R.id.info);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -66,14 +76,16 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 }
                 origen = mMap.addMarker(new MarkerOptions().position(latLng).title("Inicio"));
                 origen.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                //Guarda las preferencia de posición.
+                if (Login.getUsuario() != null) {
+                    SharedPreferences pref = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("LatLng["+ Login.getUsuario().getRut()+"]", latLng.latitude + "," + latLng.longitude);
+                    editor.commit();
+                }
                 mostrarInfo();
             }
         });
-
-        // Marcador en la UCN
-        LatLng ucn = new LatLng(-29.9659721, -71.3476425);
-        destino = mMap.addMarker(new MarkerOptions().position(ucn).title("UCN").snippet("Universidad Católica del Norte"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));
     }
 
 
@@ -123,6 +135,21 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 Log.d("onFailure", t.toString());
             }
         });
+    }
+
+    public void cargarOrigenSharedPreference(){
+        if (Login.getUsuario() != null) {
+            SharedPreferences pref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            String strLatLng = pref.getString("LatLng[" + Login.getUsuario().getRut() + "]", "Nada");
+            if (!strLatLng.equals("Nada")){
+                String[] tok = strLatLng.split(",");
+                LatLng latLng = new LatLng(Double.parseDouble(tok[0]), Double.parseDouble(tok[1]));
+                origen = mMap.addMarker(new MarkerOptions().position(latLng).title("Inicio"));
+                origen.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
+                mostrarInfo();
+            }
+        }
     }
 
     //Decodifica el Polyline (No tocar esta función)
