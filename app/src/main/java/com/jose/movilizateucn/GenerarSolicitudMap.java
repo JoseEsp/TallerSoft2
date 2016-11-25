@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jose.movilizateucn.Consultas.Constantes;
+import com.jose.movilizateucn.Consultas.ListenerPosicionActual;
 import com.jose.movilizateucn.Consultas.Login;
 import com.jose.movilizateucn.POJO.Example;
 import com.jose.movilizateucn.POJO.RetrofitMaps;
@@ -41,6 +46,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
     private Marker origen;
     private Marker destino;
     private Polyline line;
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,50 +59,46 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         this.origen = null;
         this.destino = null;
         this.line = null;
+        spinner = (ProgressBar) findViewById(R.id.spinner);
+        spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        //Cargado inicial.
+        spinner.setVisibility(View.VISIBLE);
+
         // Marcador en la UCN
         LatLng ucn = new LatLng(-29.9659721, -71.3476425);
         destino = mMap.addMarker(new MarkerOptions().position(ucn).title("UCN").snippet("Universidad Católica del Norte"));
+        destino.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));
 
-        //Si ya ingresó una posición anterior, se guarda aquí:
-        cargarOrigenSharedPreference();
-
-        final TextView tvInfo = (TextView) findViewById(R.id.info);
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                if (origen != null) {
-                    origen.remove();
-                }
-                origen = mMap.addMarker(new MarkerOptions().position(latLng).title("Inicio"));
-                origen.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                //Guarda las preferencia de posición.
-                if (Login.getUsuario() != null) {
-                    SharedPreferences pref = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("LatLng["+ Login.getUsuario().getRut()+"]", latLng.latitude + "," + latLng.longitude);
-                    editor.commit();
-                }
-                mostrarInfo();
+        //Posicion Actual:
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //Checkear GPS
+        if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
+            //Listener
+            LocationListener locationListener = new ListenerPosicionActual(this);
+            try {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
+            } catch (SecurityException e) {
+                Log.d("Error", "Error de seguridad.");
             }
-        });
+        }else{
+            Snackbar.make(findViewById(R.id.parentLayout), "Encienda el GPS y vuelva a intentarlo.", Snackbar.LENGTH_LONG).show();
+        }
     }
 
 
     public void mostrarInfo(){
         final TextView tvDistancia = (TextView) findViewById(R.id.distancia);
         final TextView tvTiempo = (TextView) findViewById(R.id.tiempo);
-        final ProgressBar spinner = (ProgressBar) findViewById(R.id.spinner);
 
         //Cargando...
         spinner.setVisibility(View.VISIBLE);
-        spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
 
         String url = Constantes.RUTAOPTIMAGENERARSOLICITUD;
 
@@ -116,8 +118,8 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 for (int i = 0; i < response.body().getRoutes().size(); i++) {
                     String distance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
                     String time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
-                    tvDistancia.setText(distance);
-                    tvTiempo.setText(time);
+                    tvDistancia.setText("~" + distance);
+                    tvTiempo.setText("~" + time);
                     String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
                     List<LatLng> list = decodePoly(encodedString);
                     line = mMap.addPolyline(new PolylineOptions()
@@ -135,21 +137,6 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 Log.d("onFailure", t.toString());
             }
         });
-    }
-
-    public void cargarOrigenSharedPreference(){
-        if (Login.getUsuario() != null) {
-            SharedPreferences pref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-            String strLatLng = pref.getString("LatLng[" + Login.getUsuario().getRut() + "]", "Nada");
-            if (!strLatLng.equals("Nada")){
-                String[] tok = strLatLng.split(",");
-                LatLng latLng = new LatLng(Double.parseDouble(tok[0]), Double.parseDouble(tok[1]));
-                origen = mMap.addMarker(new MarkerOptions().position(latLng).title("Inicio"));
-                origen.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
-                mostrarInfo();
-            }
-        }
     }
 
     //Decodifica el Polyline (No tocar esta función)
@@ -184,5 +171,17 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         }
 
         return poly;
+    }
+
+    public void setOrigen(Location loc){
+        if (origen != null){
+            origen.remove();
+        }
+        LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Inicio").snippet("Punto de Partida")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        origen.showInfoWindow();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
+        mostrarInfo();
     }
 }

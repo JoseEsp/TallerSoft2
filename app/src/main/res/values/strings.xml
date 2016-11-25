@@ -15,6 +15,6 @@
     <string name="registrarse">Registrarse</string>
     <string name="nombre_hint">Juan Perez</string>
     <string name="title_activity_generar_solicitud_map">Generar Solicitud</string>
-    <string name="info_hint">Coloque un punto de partida.</string>
+    <string name="info_hint">Recuerda estar atento a futuras notificaciones.</string>
 
 </resources>
