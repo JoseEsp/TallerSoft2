@@ -1,17 +1,17 @@
 package com.jose.movilizateucn.DiagramaClases;
 
-//Clase Viaje pero por un lado.
+//Clase HistViaje pero por un lado.
 //La nota, comentario y nombre son los que otro usuario ha dicho o puesto de ti
-public class Viaje {
+public class HistViaje {
     private int codViaje;
-    private String fechaViaje;
+    private String fechaSubida;
     private float nota; //La nota que alguien más te ha puesto
     private String comentario; //Comentario que alguien más te ha puesto
     private String nombre; //El otro usuario que puso la nota
 
-    public Viaje(int codViaje, String fechaViaje, float nota, String comentario, String nombre) {
+    public HistViaje(int codViaje, String fechaSubida, float nota, String comentario, String nombre) {
         this.codViaje = codViaje;
-        this.fechaViaje = fechaViaje;
+        this.fechaSubida = fechaSubida;
         this.nota = nota;
         this.comentario = comentario;
         this.nombre = nombre;
@@ -25,12 +25,12 @@ public class Viaje {
         this.codViaje = codViaje;
     }
 
-    public String getFechaViaje() {
-        return fechaViaje;
+    public String getFechaSubida() {
+        return fechaSubida;
     }
 
-    public void setFechaViaje(String fechaViaje) {
-        this.fechaViaje = fechaViaje;
+    public void setFechaSubida(String fechaSubida) {
+        this.fechaSubida = fechaSubida;
     }
 
     public float getNota() {

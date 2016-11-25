@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -74,6 +75,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         destino = mMap.addMarker(new MarkerOptions().position(ucn).title("UCN").snippet("Universidad Católica del Norte"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));
     }
+
 
     public void mostrarInfo(){
         final TextView tvDistancia = (TextView) findViewById(R.id.distancia);

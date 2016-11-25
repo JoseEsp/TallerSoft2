@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.jose.movilizateucn.Consultas.Login;
-import com.jose.movilizateucn.DiagramaClases.Viaje;
+import com.jose.movilizateucn.DiagramaClases.HistViaje;
 
 public class HistorialViajesActivity extends AppCompatActivity {
 
@@ -17,9 +17,9 @@ public class HistorialViajesActivity extends AppCompatActivity {
         Login.obtenerHistorialViajes(this);
     }
 
-    //Una vez cargado el historial de viajes, éste método es llamado.
-    public void mostrarViajes(Viaje[] viajes){
-        ViajeAdapter vAdapter = new ViajeAdapter(viajes);
+    //Una vez cargado el historial de histViajes, éste método es llamado.
+    public void mostrarViajes(HistViaje[] histViajes){
+        ViajeAdapter vAdapter = new ViajeAdapter(histViajes);
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);

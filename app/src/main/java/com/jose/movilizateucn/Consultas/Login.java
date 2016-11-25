@@ -22,7 +22,7 @@ import com.jose.movilizateucn.DiagramaClases.Calificacion;
 import com.jose.movilizateucn.DiagramaClases.Chofer;
 import com.jose.movilizateucn.DiagramaClases.Pasajero;
 import com.jose.movilizateucn.DiagramaClases.Usuario;
-import com.jose.movilizateucn.DiagramaClases.Viaje;
+import com.jose.movilizateucn.DiagramaClases.HistViaje;
 import com.jose.movilizateucn.EscogerPerfilActivity;
 import com.jose.movilizateucn.HistorialViajesActivity;
 import com.jose.movilizateucn.PasajeroActivity;
@@ -157,9 +157,7 @@ public class Login {
                         usuario = new Chofer(choferObject.getString("rut"),
                                 choferObject.getString("nombre"),
                                 choferObject.getString("email"),
-                                choferObject.getString("contra"),
-                                Integer.parseInt(choferObject.getString("cantAsientos")),
-                                choferObject.getString("colorAuto"));
+                                choferObject.getString("contra"));
                     }catch(JSONException e){
                         Log.e("ERROR:", "Obtencion de registro Chofer");
                     }
@@ -299,13 +297,13 @@ public class Login {
                     }else{
                         //Obtiene el arreglo para devolverlo
                         int n = arrObj.length();
-                        Viaje[] viajes = new Viaje[n];
+                        HistViaje[] histViajes = new HistViaje[n];
                         for(int i = 0; i < n; i++){
                             JSONObject jo;
                             try{
                                 jo = arrObj.getJSONObject(i);
-                                viajes[i] = new Viaje(Integer.parseInt(jo.getString("codViaje")),
-                                                      jo.getString("fechaViaje"),
+                                histViajes[i] = new HistViaje(Integer.parseInt(jo.getString("codViaje")),
+                                                      jo.getString("fechaSubida"),
                                                       Float.parseFloat(jo.getString("nota")),
                                                       jo.getString("comentario"),
                                                       jo.getString("nombre")
@@ -315,7 +313,7 @@ public class Login {
                             }
                         }
                         if (activity instanceof HistorialViajesActivity) {
-                            ((HistorialViajesActivity) activity).mostrarViajes(viajes);
+                            ((HistorialViajesActivity) activity).mostrarViajes(histViajes);
                         }
                         return;
                     }

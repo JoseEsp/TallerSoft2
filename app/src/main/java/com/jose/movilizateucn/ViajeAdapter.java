@@ -8,17 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jose.movilizateucn.DiagramaClases.Viaje;
+import com.jose.movilizateucn.DiagramaClases.HistViaje;
 
 /**
  * Adaptador del recycler view
  */
 public class ViajeAdapter extends RecyclerView.Adapter<ViajeAdapter.ViajeViewHolder>{
 
-    private Viaje[] viajes;
+    private HistViaje[] histViajes;
 
-    public ViajeAdapter(Viaje[] viajes){
-        this.viajes = viajes;
+    public ViajeAdapter(HistViaje[] histViajes){
+        this.histViajes = histViajes;
     }
 
     public static class ViajeViewHolder extends RecyclerView.ViewHolder{
@@ -51,12 +51,12 @@ public class ViajeAdapter extends RecyclerView.Adapter<ViajeAdapter.ViajeViewHol
 
     @Override
     public void onBindViewHolder(ViajeViewHolder viajeViewHolder, int i) {
-        viajeViewHolder.tvCalificacion.setText(viajes[i].getNota() + "");
-        viajeViewHolder.tvFecha.setText(viajes[i].getFechaViaje());
-        String nombre = viajes[i].getNombre();
+        viajeViewHolder.tvCalificacion.setText(histViajes[i].getNota() + "");
+        viajeViewHolder.tvFecha.setText(histViajes[i].getFechaSubida());
+        String nombre = histViajes[i].getNombre();
         viajeViewHolder.tvComentador.setText(nombre.substring(0, 1).toUpperCase() +
                                              nombre.substring(1) + ":");
-        String comentario = viajes[i].getComentario();
+        String comentario = histViajes[i].getComentario();
         viajeViewHolder.tvComentario.setText('\"' + comentario.substring(0, 1).toUpperCase() +
                                              comentario.substring(1) + '\"');
     }
@@ -68,7 +68,7 @@ public class ViajeAdapter extends RecyclerView.Adapter<ViajeAdapter.ViajeViewHol
 
     @Override
     public int getItemCount(){
-        return viajes.length;
+        return histViajes.length;
     }
 
 }
