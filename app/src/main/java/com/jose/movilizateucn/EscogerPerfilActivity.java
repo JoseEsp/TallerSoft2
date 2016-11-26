@@ -1,5 +1,6 @@
 package com.jose.movilizateucn;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,11 @@ public class EscogerPerfilActivity extends AppCompatActivity {
     }
     public void ChoferButton(View view){
         Login.transformToChofer(EscogerPerfilActivity.this);
+    }
+
+    public void FeedBack(View view){
+        Intent ifeedback = new Intent(EscogerPerfilActivity.this, FeedBack.class);
+        startActivity(ifeedback);
     }
 
 }

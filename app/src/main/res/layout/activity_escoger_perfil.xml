@@ -19,8 +19,8 @@
         android:textColor="@android:color/holo_orange_light"
         android:textSize="20dp"
         android:textStyle="italic"
-        android:layout_weight="1"
-        android:gravity="right"/>
+        android:gravity="right"
+        android:onClick="FeedBack"/>
 
     <TextView
         android:id="@+id/lblEscoger"

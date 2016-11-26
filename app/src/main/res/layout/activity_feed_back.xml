@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_feed_back"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textoFeedBack"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mensaje:"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="left"
+            android:textColor="@color/niceBlack"/>
+        <EditText
+            android:id="@+id/mensajeFeedBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="100dp"
+            android:textSize="18sp"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/FeedBackButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar Mensaje"
+            android:textColor="@color/blanco"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/niceGreen"
+            android:onClick="EnviarFeedBack"
+            />
+
+</LinearLayout>
