@@ -9,25 +9,34 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jose.movilizateucn.EscogerPerfilActivity"
     android:orientation = "vertical"
-    android:weightSum="3"
     android:background="@color/lightGray">
+
+    <TextView
+        android:id="@+id/feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/feedback"
+        android:textColor="@android:color/holo_orange_light"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:layout_weight="1"
+        android:gravity="right"/>
 
     <TextView
         android:id="@+id/lblEscoger"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text = "Escoja Perfil"
         android:textSize="@dimen/really_big_size"
         android:textColor="@color/niceBlack"
-        android:gravity = "center"
-        />
+        android:gravity = "center" />
 
     <Button
         android:id = "@+id/btnPasajero"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text = "Pasajero"
         android:textSize="@dimen/big_size"
         android:textColor="@color/blanco"
@@ -41,7 +50,7 @@
         android:id="@+id/btnChofer"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text = "Chofer"
         android:textSize="@dimen/big_size"
         android:textColor="@color/blanco"
