@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "871444972388",
+    "firebase_url": "https://movilizate-prueba.firebaseio.com",
+    "project_id": "movilizate-prueba",
+    "storage_bucket": "movilizate-prueba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871444972388:android:b063e3c4a24fa617",
+        "android_client_info": {
+          "package_name": "com.jose.movilizateucn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871444972388-n46lh5htjm7p6243adva3dihkmrrtvti.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXqLqayZB3noiUOU2PX1e8KUVElARgqSw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
