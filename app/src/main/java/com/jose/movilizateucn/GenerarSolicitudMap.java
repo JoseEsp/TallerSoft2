@@ -184,4 +184,8 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
         mostrarInfo();
     }
+
+    public void GenerarSolicitudButton(View view){
+        Snackbar.make(view, "Hola", Snackbar.LENGTH_LONG).show();
+    }
 }
