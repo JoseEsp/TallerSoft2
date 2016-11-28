@@ -1,6 +1,9 @@
 package com.jose.movilizateucn.Consultas;
 
+import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.Marker;
 import com.jose.movilizateucn.DiagramaClases.*;
@@ -121,6 +124,21 @@ public class Consulta {
             url = Constantes.OBTENERVIAJES + "?rut=" + usuario.getRut() + "&tipo=pasajero";
         }
         ConsultasGenerales.obtenerDatos(url, activity);
+    }
+
+    public static void insertarSolicitud(Solicitud solicitud, final FragmentActivity activity){
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+
+        map.put("codEstado", solicitud.getEstado() + "");
+        map.put("lat", solicitud.getLatitud() + "");
+        map.put("lon", solicitud.getLongitud() + "");
+        map.put("rutPasajero", solicitud.getPasajero().getRut());
+
+        JSONObject jobject = new JSONObject(map);
+        ConsultasGenerales.insertarDatosMapa(Constantes.INSERTARSOLICITUD,
+                activity,
+                jobject,
+                "Error al generar solicitud!");
     }
 
 }

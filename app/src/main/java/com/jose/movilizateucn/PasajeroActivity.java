@@ -24,6 +24,18 @@ public class PasajeroActivity extends AppCompatActivity {
         mostrarCalificacion();
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        TextView tvGenerarSolicitud = (TextView) findViewById(R.id.btnGenerarSolicitud);
+        if (Login.getSolicitud() != null){
+            tvGenerarSolicitud.setText(R.string.verSolicitud);
+        }else{
+            tvGenerarSolicitud.setText(R.string.generarSolicitud);
+        }
+    }
+
+
     public void GenerarSolicitudButton(View view){
         Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudMap.class);
         startActivity(generarSolicitudMap);

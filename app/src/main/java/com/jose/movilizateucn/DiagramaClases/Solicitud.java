@@ -3,20 +3,18 @@ package com.jose.movilizateucn.DiagramaClases;
 public class Solicitud {
     private int codSolicitud;
     private String fechaSalida;
-    private String estado;
-    private String latitud;
-    private String longitud;
+    private int estado;
+    private double latitud;
+    private double longitud;
     private Pasajero pasajero;
-    private Chofer chofer;
 
-    public Solicitud(int codSolicitud, String fechaSalida, String estado, String latitud, String longitud) {
+    public Solicitud(int codSolicitud, String fechaSalida, int estado, double latitud, double longitud) {
         this.codSolicitud = codSolicitud;
         this.fechaSalida = fechaSalida;
         this.estado = estado;
         this.latitud = latitud;
         this.longitud = longitud;
         this.pasajero = null;
-        this.chofer = null;
     }
 
     public int getCodSolicitud() {
@@ -35,27 +33,27 @@ public class Solicitud {
         this.fechaSalida = fechaSalida;
     }
 
-    public String getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
-    public String getLatitud() {
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 
@@ -67,11 +65,4 @@ public class Solicitud {
         this.pasajero = pasajero;
     }
 
-    public Chofer getChofer() {
-        return chofer;
-    }
-
-    public void setChofer(Chofer chofer) {
-        this.chofer = chofer;
-    }
 }

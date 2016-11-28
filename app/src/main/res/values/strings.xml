@@ -11,6 +11,7 @@
 
     <string name="feedback"><u>FeedBack</u></string>
 
+    <string name="verSolicitud">Ver Solicitud</string>
     <string name="generarSolicitud">Generar Solicitud</string>
     <string name="solicitudEnCurso">Solicitud en Curso</string>
     <string name="solicitudAceptada">Solicitud Aceptada</string>

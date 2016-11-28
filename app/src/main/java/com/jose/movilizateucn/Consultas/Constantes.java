@@ -34,6 +34,7 @@ public class Constantes {
     public static final String OBTENERVIAJES = IP + "/consultas/obtenerViajes.php";
     public static final String OBTENERCALIFICACIONVIAJES = IP + "/consultas/obtenerCalificacionViajes.php";
     public static final String RUTAOPTIMAGENERARSOLICITUD = "https://maps.googleapis.com/maps/";
+    public static final String INSERTARSOLICITUD = IP + "/consultas/insertarSolicitud.php";
 
     /**
      * Clave para el valor extra que representa al identificador de una meta

@@ -1,7 +1,6 @@
 package com.jose.movilizateucn;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
@@ -10,6 +9,7 @@ import android.location.LocationManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -26,8 +26,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jose.movilizateucn.Consultas.Constantes;
+import com.jose.movilizateucn.Consultas.Consulta;
+import com.jose.movilizateucn.Consultas.ConsultasGenerales;
 import com.jose.movilizateucn.Consultas.ListenerPosicionActual;
 import com.jose.movilizateucn.Consultas.Login;
+import com.jose.movilizateucn.DiagramaClases.Pasajero;
+import com.jose.movilizateucn.DiagramaClases.Solicitud;
 import com.jose.movilizateucn.POJO.Example;
 import com.jose.movilizateucn.POJO.RetrofitMaps;
 
@@ -186,6 +190,19 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
     }
 
     public void GenerarSolicitudButton(View view){
-        Snackbar.make(view, "Hola", Snackbar.LENGTH_LONG).show();
+        if (ConsultasGenerales.isNetworkAvailable(this)){
+            if (origen != null){
+                Snackbar.make(view, "Generando...", Snackbar.LENGTH_SHORT).show();
+                LatLng latLng = origen.getPosition();
+                Solicitud solicitud = new Solicitud(0, "", 1, latLng.latitude, latLng.longitude);
+                solicitud.setPasajero((Pasajero) Login.getUsuario());
+                Login.setSolicitud(solicitud);
+                Consulta.insertarSolicitud(solicitud, this);
+            }else{
+                Snackbar.make(view, "No hay punto de origen...", Snackbar.LENGTH_SHORT).show();
+            }
+        }else{
+            Snackbar.make(view, "No hay conexión a Internet", Snackbar.LENGTH_SHORT).show();
+        }
     }
 }
