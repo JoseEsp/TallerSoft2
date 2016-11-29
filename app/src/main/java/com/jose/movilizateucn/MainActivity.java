@@ -3,6 +3,7 @@ package com.jose.movilizateucn;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void LoginButton(View view){
         if (rutTxt.getText().toString().equals("") || passTxt.getText().toString().equals("")) {
-            Toast.makeText(MainActivity.this,"Debe completar todos los campos",Toast.LENGTH_SHORT).show();
+            Snackbar.make(view,"Debe completar todos los campos",Snackbar.LENGTH_SHORT).show();
         }
         else{
             //Se conecta

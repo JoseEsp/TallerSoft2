@@ -20,6 +20,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -51,6 +53,8 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
     private Marker destino;
     private Polyline line;
     private ProgressBar spinner;
+    private final float MAX_RADIUS = 500; //500 a la redonda de la ucn no se puede generar solicitud
+    private boolean zoomUnaVez;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         this.origen = null;
         this.destino = null;
         this.line = null;
+        zoomUnaVez = true;
         spinner = (ProgressBar) findViewById(R.id.spinner);
         spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
     }
@@ -79,6 +84,12 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         destino = mMap.addMarker(new MarkerOptions().position(ucn).title("UCN").snippet("Universidad Católica del Norte"));
         destino.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));
+        //Donde no se puede generar solicitud:
+        Circle circle = mMap.addCircle(new CircleOptions()
+                .center(ucn)
+                .radius(MAX_RADIUS)
+                .strokeColor(Color.RED)
+                .fillColor(Color.argb(128, 255, 0, 0)));
 
         //Posicion Actual:
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -185,7 +196,10 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         origen = mMap.addMarker(new MarkerOptions().position(pos).title("Inicio").snippet("Punto de Partida")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         origen.showInfoWindow();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
+        if (zoomUnaVez) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
+            zoomUnaVez = false;
+        }
         mostrarInfo();
     }
 
@@ -194,10 +208,17 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
             if (origen != null){
                 Snackbar.make(view, "Generando...", Snackbar.LENGTH_SHORT).show();
                 LatLng latLng = origen.getPosition();
-                Solicitud solicitud = new Solicitud(0, "", 1, latLng.latitude, latLng.longitude);
-                solicitud.setPasajero((Pasajero) Login.getUsuario());
-                Login.setSolicitud(solicitud);
-                Consulta.insertarSolicitud(solicitud, this);
+                LatLng ucn = destino.getPosition();
+                float[] distancia = new float[1];
+                Location.distanceBetween(ucn.latitude, ucn.longitude, latLng.latitude, latLng.longitude, distancia);
+                if ( distancia[0] > MAX_RADIUS) {
+                    Solicitud solicitud = new Solicitud(0, "", 1, latLng.latitude, latLng.longitude);
+                    solicitud.setPasajero((Pasajero) Login.getUsuario());
+                    Login.setSolicitud(solicitud);
+                    Consulta.insertarSolicitud(solicitud, this);
+                }else{
+                    Snackbar.make(view, "Estás muy cerca de la UCN!", Snackbar.LENGTH_SHORT).show();
+                }
             }else{
                 Snackbar.make(view, "No hay punto de origen...", Snackbar.LENGTH_SHORT).show();
             }

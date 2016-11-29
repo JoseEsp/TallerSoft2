@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -111,7 +112,7 @@ public class Login {
                             final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
                             activity.startActivity(perfilActivity);
                         }else{
-                            Toast.makeText(activity, "Usuario bloqueado", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(activity.findViewById(R.id.parentLayout), "Usuario bloqueado", Snackbar.LENGTH_SHORT).show();
                         }
                         //Deja de mostrar el mensaje de cargando.
                         //mProgressDialog.cancel();
@@ -125,9 +126,9 @@ public class Login {
                     estadoActual = ESTADO.NADA;
                     usuario = null;
                     if (ConsultasGenerales.isNetworkAvailable(activity)){
-                        Toast.makeText(activity, "Datos inválidos.", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(activity.findViewById(R.id.parentLayout), "Datos Inválidos.", Snackbar.LENGTH_SHORT).show();
                     }else {
-                        Toast.makeText(activity, "Error de conexión", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(activity.findViewById(R.id.parentLayout), "Error de conexión.", Snackbar.LENGTH_SHORT).show();
                     }
                 }else{ //Si no pasa vuelve a checkear
                     actualTime += ms_time;
