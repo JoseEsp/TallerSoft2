@@ -52,7 +52,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
     private Marker destino;
     private Polyline line;
     private ProgressBar spinner;
-    private final float MAX_RADIUS = 500; //500 a la redonda de la ucn no se puede generar solicitud
+    private final float MAX_RADIUS = 400;
     private boolean zoomUnaVez;
 
     @Override
@@ -79,7 +79,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         spinner.setVisibility(View.VISIBLE);
 
         // Marcador en la UCN
-        LatLng ucn = new LatLng(-29.9659721, -71.3476425);
+        LatLng ucn = new LatLng(-29.9655042, -71.3516305);
         destino = mMap.addMarker(new MarkerOptions().position(ucn).title("UCN").snippet("Universidad Católica del Norte"));
         destino.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));

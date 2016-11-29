@@ -21,4 +21,7 @@
     <string name="info_hint">Recuerda estar atento a notificaciones.</string>
     <string name="textoFeedBack">Para mejorar el desarrollo y administración de la aplicación hemos creado esta sección para que puedas comuncarte con nosotros en caso de incidentes, bugs o problemas con la aplicación</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

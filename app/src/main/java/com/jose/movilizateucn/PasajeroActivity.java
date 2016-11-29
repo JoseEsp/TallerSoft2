@@ -1,8 +1,11 @@
 package com.jose.movilizateucn;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,21 +27,26 @@ public class PasajeroActivity extends AppCompatActivity {
         mostrarCalificacion();
     }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        TextView tvGenerarSolicitud = (TextView) findViewById(R.id.btnGenerarSolicitud);
-        if (Login.getSolicitud() != null){
-            tvGenerarSolicitud.setText(R.string.verSolicitud);
+    public void GenerarSolicitudButton(View view){
+        if (Login.getSolicitud() == null){
+            Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudMap.class);
+            startActivity(generarSolicitudMap);
         }else{
-            tvGenerarSolicitud.setText(R.string.generarSolicitud);
+            Snackbar.make(view, "Solicitud ya generada.", Snackbar.LENGTH_SHORT).show();
         }
     }
 
-
-    public void GenerarSolicitudButton(View view){
-        Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudMap.class);
-        startActivity(generarSolicitudMap);
+    public void VerSolicitudButton(View view){
+       /* if (Login.getSolicitud() == null){
+            Snackbar.make(view, "No has generado ninguna solicitud.", Snackbar.LENGTH_SHORT).show();
+        }else{*/
+            //Abrir fragment aquí
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            VerSolicitudFragment verSolicitudFragment = new VerSolicitudFragment();
+            fragmentTransaction.add(R.id.fragVerSolicitud, verSolicitudFragment);
+            fragmentTransaction.commit();
+       //}
     }
 
     public void HistorialViajesButton(View view){

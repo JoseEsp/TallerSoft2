@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
+import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -95,7 +96,7 @@ public class ConsultasGenerales {
         );
     }
 
-    public static void insertarDatosMapa(String insertaDato,
+    public static void insertarSolicitudMapa(String insertaDato,
                                      final FragmentActivity activity,
                                      JSONObject jobject,
                                      final String msjError){
@@ -118,6 +119,7 @@ public class ConsultasGenerales {
                             public void onErrorResponse(VolleyError error) {
                                 if (ConsultasGenerales.isNetworkAvailable(activity)) {
                                     Snackbar.make(activity.findViewById(R.id.parentLayout), msjError, Snackbar.LENGTH_SHORT).show();
+                                    Login.setSolicitud(null);
                                 }else{
                                     Snackbar.make(activity.findViewById(R.id.parentLayout), "Error de conexión.", Snackbar.LENGTH_SHORT).show();
                                 }
@@ -152,8 +154,7 @@ public class ConsultasGenerales {
         });
     }
 
-    public static void obtenerDatos(String url,
-                                   final AppCompatActivity activity){
+    public static void obtenerDatos(String url, final AppCompatActivity activity){
         arrayObject = null;
         ConsultasGenerales.fetchData(url, activity, new DataCallback() {
             @Override
@@ -161,6 +162,54 @@ public class ConsultasGenerales {
                 ConsultasGenerales.procesarRespuestaDatos(result, activity);
             }
         });
+    }
+
+    public static void actualizarDato(String url, final Fragment fragment, JSONObject jobject, final String msjError){
+        final Activity activity = fragment.getActivity();
+        VolleySingleton.getInstance(activity).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        url,
+                        jobject,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // Procesar la respuesta del servidor
+                                ConsultasGenerales.procesarRespuestaActualizacion(response, activity);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                if (ConsultasGenerales.isNetworkAvailable(activity)) {
+                                    Toast.makeText(
+                                            activity,
+                                            msjError,
+                                            Toast.LENGTH_LONG).show();
+                                }else{
+                                    Toast.makeText(
+                                            activity,
+                                            "Error de conexión.",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
     }
 
     /**
@@ -340,6 +389,37 @@ public class ConsultasGenerales {
                     Toast.makeText(activity, mensaje, Toast.LENGTH_SHORT).show();
                     activity.setResult(Activity.RESULT_OK);
                     activity.finish();
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void procesarRespuestaActualizacion(JSONObject response, final Activity activity) {
+
+        try {
+            // Obtener estado
+            String estado = response.getString("estado");
+            // Obtener mensaje
+            String mensaje = response.getString("mensaje");
+            Log.d("RESPONSE", estado + ", " + mensaje);
+            switch (estado) {
+                case "1":
+                    // Mostrar mensaje
+                    Toast.makeText(activity, mensaje, Toast.LENGTH_LONG).show();
+                    // Enviar código de éxito
+                    activity.setResult(Activity.RESULT_OK);
+                    // Terminar actividad
+                    activity.finish();
+                    break;
+
+                case "2":
+                    // Mostrar mensaje
+                    Toast.makeText( activity, mensaje, Toast.LENGTH_LONG).show();
+                    // Enviar código de falla
+                    activity.setResult(Activity.RESULT_CANCELED);
                     break;
             }
         } catch (JSONException e) {

@@ -1,6 +1,7 @@
 package com.jose.movilizateucn.Consultas;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -135,8 +136,19 @@ public class Consulta {
         map.put("rutPasajero", solicitud.getPasajero().getRut());
 
         JSONObject jobject = new JSONObject(map);
-        ConsultasGenerales.insertarDatosMapa(Constantes.INSERTARSOLICITUD,
+        ConsultasGenerales.insertarSolicitudMapa(Constantes.INSERTARSOLICITUD,
                 activity,
+                jobject,
+                "Error al generar solicitud!");
+    }
+
+    public static void desactivarSolicitud(Solicitud solicitud, final Fragment fragment){
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+        map.put("rutPasajero", solicitud.getCodSolicitud() + "");
+        map.put("codSolicitud", solicitud.getPasajero().getRut());
+        JSONObject jobject = new JSONObject(map);
+        ConsultasGenerales.actualizarDato(Constantes.DESACTIVARSOLICITUD,
+                fragment,
                 jobject,
                 "Error al generar solicitud!");
     }
