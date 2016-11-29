@@ -37,16 +37,12 @@ public class PasajeroActivity extends AppCompatActivity {
     }
 
     public void VerSolicitudButton(View view){
-       /* if (Login.getSolicitud() == null){
+       if (Login.getSolicitud() == null){
             Snackbar.make(view, "No has generado ninguna solicitud.", Snackbar.LENGTH_SHORT).show();
-        }else{*/
-            //Abrir fragment aquí
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            VerSolicitudFragment verSolicitudFragment = new VerSolicitudFragment();
-            fragmentTransaction.add(R.id.fragVerSolicitud, verSolicitudFragment);
-            fragmentTransaction.commit();
-       //}
+        }else{
+            //Abrir info aquí
+
+       }
     }
 
     public void HistorialViajesButton(View view){
