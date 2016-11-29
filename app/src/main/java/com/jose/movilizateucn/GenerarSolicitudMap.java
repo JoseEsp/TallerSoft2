@@ -67,7 +67,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         this.origen = null;
         this.destino = null;
         this.line = null;
-        zoomUnaVez = true;
+        zoomUnaVez = false;
         spinner = (ProgressBar) findViewById(R.id.spinner);
         spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
     }
@@ -196,9 +196,9 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         origen = mMap.addMarker(new MarkerOptions().position(pos).title("Inicio").snippet("Punto de Partida")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         origen.showInfoWindow();
-        if (zoomUnaVez) {
+        if (!zoomUnaVez) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
-            zoomUnaVez = false;
+            zoomUnaVez = true;
         }
         mostrarInfo();
     }
