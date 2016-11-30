@@ -1,4 +1,5 @@
 package com.jose.movilizateucn;
+
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
