@@ -6,18 +6,29 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.jose.movilizateucn.GenerarSolicitudMap;
+import com.jose.movilizateucn.IniciarRutaActivity;
 
 public class ListenerPosicionActual implements LocationListener {
 
     GenerarSolicitudMap gsm;
+    IniciarRutaActivity ira;
 
     public ListenerPosicionActual(GenerarSolicitudMap gsm){
         this.gsm = gsm;
+        ira = null;
+    }
+    public ListenerPosicionActual(IniciarRutaActivity ira){
+        this.ira = ira;
+        gsm = null;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        gsm.setOrigen(location);
+        if (gsm != null){
+            gsm.setOrigen(location);
+        }else if (ira != null) {
+            ira.setOrigen(location);
+        }
     }
 
     @Override

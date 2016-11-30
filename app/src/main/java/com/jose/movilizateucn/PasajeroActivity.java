@@ -3,7 +3,6 @@ package com.jose.movilizateucn;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,24 +25,9 @@ public class PasajeroActivity extends AppCompatActivity {
     }
 
     public void GenerarSolicitudButton(View view){
-        if (Login.getSolicitud() == null){
-            Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudMap.class);
-            startActivity(generarSolicitudMap);
-        }else{
-            Snackbar.make(view, "Solicitud ya generada.", Snackbar.LENGTH_SHORT).show();
-        }
+        Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudMap.class);
+        startActivity(generarSolicitudMap);
     }
-
-    public void VerSolicitudButton(View view){
-       /*if (Login.getSolicitud() == null){
-            Snackbar.make(view, "No has generado ninguna solicitud.", Snackbar.LENGTH_SHORT).show();
-        }else{*/
-           //Abrir info aquí
-           VerSolicitudDialog dialog = new VerSolicitudDialog();
-           dialog.show(getFragmentManager(), "Solicitud");
-       //}
-    }
-
     public void HistorialViajesButton(View view){
         Intent histViajes = new Intent(PasajeroActivity.this, HistorialViajesActivity.class);
         startActivity(histViajes);

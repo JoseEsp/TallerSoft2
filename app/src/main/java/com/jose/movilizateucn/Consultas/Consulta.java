@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.Marker;
 import com.jose.movilizateucn.DiagramaClases.*;
+import com.jose.movilizateucn.GenerarSolicitudMap;
 import com.jose.movilizateucn.R;
 
 import org.json.JSONObject;
@@ -139,18 +140,26 @@ public class Consulta {
         ConsultasGenerales.insertarSolicitudMapa(Constantes.INSERTARSOLICITUD,
                 activity,
                 jobject,
-                "Error al generar solicitud!");
+                "Error al generar solicitud!",
+                solicitud);
     }
 
-    public static void desactivarSolicitud(Solicitud solicitud, final Fragment fragment){
+    public static void desactivarSolicitud(Solicitud solicitud, FragmentActivity activity){
         HashMap<String, String> map = new HashMap<>();// Mapeo previo
-        map.put("rutPasajero", solicitud.getCodSolicitud() + "");
-        map.put("codSolicitud", solicitud.getPasajero().getRut());
+        map.put("codSolicitud", solicitud.getCodSolicitud() + "");
         JSONObject jobject = new JSONObject(map);
         ConsultasGenerales.actualizarDato(Constantes.DESACTIVARSOLICITUD,
-                fragment,
-                jobject,
-                "Error al generar solicitud!");
+                activity,
+                jobject);
+    }
+
+    public static void activarSolicitud(Solicitud solicitud, FragmentActivity activity){
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+        map.put("codSolicitud", solicitud.getCodSolicitud() + "");
+        JSONObject jobject = new JSONObject(map);
+        ConsultasGenerales.actualizarDato(Constantes.ACTIVARSOLICITUD,
+                activity,
+                jobject);
     }
 
 }

@@ -41,8 +41,6 @@ import org.json.JSONObject;
 public class Login {
     //Usuario del login, inicialmente no hay nada
     private static Usuario usuario = null;
-    //Última Solicitud Generada:
-    private static Solicitud solicitud = null;
 
     //Como la conexión a la página no es tan rápida. Hay 3 estados
     //NADA: No hay usuario logueado. (o Fallo)
@@ -368,13 +366,5 @@ public class Login {
 
     public static Usuario getUsuario(){
         return usuario;
-    }
-
-    public static void setSolicitud(Solicitud sol){
-        solicitud = sol;
-    }
-
-    public static Solicitud getSolicitud(){
-        return solicitud;
     }
 }

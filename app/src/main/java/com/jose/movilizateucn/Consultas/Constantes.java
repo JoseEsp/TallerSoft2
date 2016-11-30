@@ -36,6 +36,7 @@ public class Constantes {
     public static final String RUTAOPTIMAGENERARSOLICITUD = "https://maps.googleapis.com/maps/";
     public static final String INSERTARSOLICITUD = IP + "/consultas/insertarSolicitud.php";
     public static final String DESACTIVARSOLICITUD = IP + "/consultas/desactivarSolicitud.php";
+    public static final String ACTIVARSOLICITUD = IP + "/consultas/activarSolicitud.php";
 
     /**
      * Clave para el valor extra que representa al identificador de una meta

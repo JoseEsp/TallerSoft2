@@ -19,19 +19,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.jose.movilizateucn.Consultas.Constantes;
-import com.jose.movilizateucn.Consultas.Consulta;
-import com.jose.movilizateucn.Consultas.ConsultasGenerales;
 import com.jose.movilizateucn.Consultas.ListenerPosicionActual;
-import com.jose.movilizateucn.Consultas.Login;
-import com.jose.movilizateucn.DiagramaClases.Pasajero;
-import com.jose.movilizateucn.DiagramaClases.Solicitud;
 import com.jose.movilizateucn.POJO.Example;
 import com.jose.movilizateucn.POJO.RetrofitMaps;
 
@@ -44,21 +38,19 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyCallback {
+public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker origen;
     private Marker destino;
     private Polyline line;
     private ProgressBar spinner;
-    private final float MAX_RADIUS = 400;
-    private Solicitud solicitud;
-    private boolean unaVez;
+    private boolean zoomUnaVez;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generar_solicitud_map);
+        setContentView(R.layout.activity_iniciar_ruta);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -66,8 +58,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         this.origen = null;
         this.destino = null;
         this.line = null;
-        unaVez = false;
-        solicitud = null;
+        zoomUnaVez = false;
         spinner = (ProgressBar) findViewById(R.id.spinner);
         spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
     }
@@ -84,45 +75,19 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         destino = mMap.addMarker(new MarkerOptions().position(ucn).title("UCN").snippet("Universidad Católica del Norte"));
         destino.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucn, 12f));
-        //Donde no se puede generar solicitud:
-        Circle circle = mMap.addCircle(new CircleOptions()
-                .center(ucn)
-                .radius(MAX_RADIUS)
-                .strokeColor(Color.RED)
-                .fillColor(Color.argb(128, 255, 0, 0)));
 
         //Posicion Actual:
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //Checkear GPS
         if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
-            //Listener
             LocationListener locationListener = new ListenerPosicionActual(this);
             try {
-                if (!unaVez) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, locationListener);
-                    unaVez = true;
-                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
             } catch (SecurityException e) {
                 Log.d("Error", "Error de seguridad.");
             }
         }else{
             Snackbar.make(findViewById(R.id.parentLayout), "Encienda el GPS y vuelva a intentarlo.", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        if (solicitud != null) {
-            Consulta.desactivarSolicitud(solicitud, this);
-        }
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        if (solicitud != null) {
-            Consulta.activarSolicitud(solicitud, this);
         }
     }
 
@@ -134,6 +99,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         spinner.setVisibility(View.VISIBLE);
 
         String url = Constantes.RUTAOPTIMAGENERARSOLICITUD;
+
         Retrofit retrofit = new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
         RetrofitMaps service = retrofit.create(RetrofitMaps.class);
 
@@ -152,6 +118,14 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                     String time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
                     tvDistancia.setText("~" + distance);
                     tvTiempo.setText("~" + time);
+                    String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
+                    List<LatLng> list = decodePoly(encodedString);
+                    line = mMap.addPolyline(new PolylineOptions()
+                            .addAll(list)
+                            .width(10)
+                            .color(Color.RED)
+                            .geodesic(true)
+                    );
                 }
                 spinner.setVisibility(View.GONE);
             }
@@ -205,36 +179,10 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         origen = mMap.addMarker(new MarkerOptions().position(pos).title("Inicio").snippet("Punto de Partida")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         origen.showInfoWindow();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
-        mostrarInfo();
-        View view = findViewById(R.id.parentLayout);
-        if (ConsultasGenerales.isNetworkAvailable(this)){
-            if (origen != null){
-                LatLng latLng = origen.getPosition();
-                LatLng ucn = destino.getPosition();
-                float[] distancia = new float[1];
-                Location.distanceBetween(ucn.latitude, ucn.longitude, latLng.latitude, latLng.longitude, distancia);
-                if ( distancia[0] > MAX_RADIUS) {
-                    solicitud = new Solicitud(0, "", 1, latLng.latitude, latLng.longitude);
-                    solicitud.setPasajero((Pasajero) Login.getUsuario());
-                    Consulta.insertarSolicitud(solicitud, this);
-                }else{
-                    Snackbar.make(view, "Estás muy cerca de la UCN!", Snackbar.LENGTH_SHORT).show();
-                }
-            }else{
-                Snackbar.make(view, "No hay punto de origen...", Snackbar.LENGTH_SHORT).show();
-            }
-        }else{
-            Snackbar.make(view, "No hay conexión a Internet", Snackbar.LENGTH_SHORT).show();
+        if (!zoomUnaVez) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
+            zoomUnaVez = true;
         }
+        mostrarInfo();
     }
-
-    public void setSolicitud(Solicitud solicitud){
-        this.solicitud = solicitud;
-    }
-
-    public Solicitud getSolicitud(){
-        return solicitud;
-    }
-
 }

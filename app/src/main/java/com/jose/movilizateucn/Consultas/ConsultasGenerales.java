@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
-import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,7 +14,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.jose.movilizateucn.DiagramaClases.Solicitud;
 import com.jose.movilizateucn.DiagramaClases.Usuario;
+import com.jose.movilizateucn.GenerarSolicitudMap;
+import com.jose.movilizateucn.PasajeroActivity;
 import com.jose.movilizateucn.R;
 
 import org.json.JSONArray;
@@ -99,7 +101,8 @@ public class ConsultasGenerales {
     public static void insertarSolicitudMapa(String insertaDato,
                                      final FragmentActivity activity,
                                      JSONObject jobject,
-                                     final String msjError){
+                                     final String msjError,
+                                     final Solicitud solicitud){
         // inserta datos en el servidor
         ultimoID = -1; //resetea el último ID
         VolleySingleton.getInstance(activity.getApplicationContext()).addToRequestQueue(
@@ -111,7 +114,7 @@ public class ConsultasGenerales {
                             @Override
                             public void onResponse(JSONObject response) {
                                 // Procesar la respuesta del servidor
-                                ConsultasGenerales.procesarRespuestaInsercionMapa(response, activity);
+                                ConsultasGenerales.procesarRespuestaSolicitudMapa(response, solicitud, activity);
                             }
                         },
                         new Response.ErrorListener() {
@@ -119,7 +122,9 @@ public class ConsultasGenerales {
                             public void onErrorResponse(VolleyError error) {
                                 if (ConsultasGenerales.isNetworkAvailable(activity)) {
                                     Snackbar.make(activity.findViewById(R.id.parentLayout), msjError, Snackbar.LENGTH_SHORT).show();
-                                    Login.setSolicitud(null);
+                                    if (activity instanceof GenerarSolicitudMap){
+                                        ((GenerarSolicitudMap)activity).setSolicitud(null);
+                                    }
                                 }else{
                                     Snackbar.make(activity.findViewById(R.id.parentLayout), "Error de conexión.", Snackbar.LENGTH_SHORT).show();
                                 }
@@ -164,8 +169,7 @@ public class ConsultasGenerales {
         });
     }
 
-    public static void actualizarDato(String url, final Fragment fragment, JSONObject jobject, final String msjError){
-        final Activity activity = fragment.getActivity();
+    public static void actualizarDato(String url, final Activity activity, JSONObject jobject){
         VolleySingleton.getInstance(activity).addToRequestQueue(
                 new JsonObjectRequest(
                         Request.Method.POST,
@@ -181,17 +185,7 @@ public class ConsultasGenerales {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                if (ConsultasGenerales.isNetworkAvailable(activity)) {
-                                    Toast.makeText(
-                                            activity,
-                                            msjError,
-                                            Toast.LENGTH_LONG).show();
-                                }else{
-                                    Toast.makeText(
-                                            activity,
-                                            "Error de conexión.",
-                                            Toast.LENGTH_LONG).show();
-                                }
+                                //NADA
                             }
                         }
 
@@ -356,7 +350,7 @@ public class ConsultasGenerales {
 
     }
 
-    private static void procesarRespuestaInsercionMapa(JSONObject response, final FragmentActivity activity) {
+    private static void procesarRespuestaSolicitudMapa(JSONObject response, final Solicitud solicitud, final FragmentActivity activity) {
 
         try {
             // Obtener estado
@@ -385,10 +379,9 @@ public class ConsultasGenerales {
                     //Obtener ultimo ID
                     String lastID = response.getString("lastID");
                     ultimoID = Integer.parseInt(lastID);
-                    Login.getSolicitud().setCodSolicitud(ultimoID);
-                    Toast.makeText(activity, mensaje, Toast.LENGTH_SHORT).show();
+                    solicitud.setCodSolicitud(ultimoID);
+                    Snackbar.make(activity.findViewById(R.id.parentLayout), mensaje, Snackbar.LENGTH_SHORT).show();
                     activity.setResult(Activity.RESULT_OK);
-                    activity.finish();
                     break;
             }
         } catch (JSONException e) {
