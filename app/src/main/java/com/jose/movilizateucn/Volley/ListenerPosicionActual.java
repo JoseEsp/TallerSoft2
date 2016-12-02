@@ -1,9 +1,8 @@
-package com.jose.movilizateucn.Consultas;
+package com.jose.movilizateucn.Volley;
 
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.jose.movilizateucn.GenerarSolicitudMap;
 import com.jose.movilizateucn.IniciarRutaActivity;

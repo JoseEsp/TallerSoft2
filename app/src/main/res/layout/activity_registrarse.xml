@@ -83,4 +83,13 @@
         android:layout_marginTop="@dimen/login_long_margin"
         android:onClick="RegistrarButtonReg"/>
 
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/login_margin"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
 </LinearLayout>

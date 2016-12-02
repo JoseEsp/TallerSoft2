@@ -2,9 +2,9 @@ package com.jose.movilizateucn.POJO;
 
 import com.jose.movilizateucn.R;
 
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface RetrofitMaps {
 

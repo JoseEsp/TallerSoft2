@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,24 +24,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.jose.movilizateucn.Consultas.Constantes;
-import com.jose.movilizateucn.Consultas.Consulta;
-import com.jose.movilizateucn.Consultas.ConsultasGenerales;
-import com.jose.movilizateucn.Consultas.ListenerPosicionActual;
-import com.jose.movilizateucn.Consultas.Login;
-import com.jose.movilizateucn.DiagramaClases.Pasajero;
+import com.jose.movilizateucn.Volley.Consulta;
+import com.jose.movilizateucn.Volley.ConsultasGenerales;
+import com.jose.movilizateucn.Volley.ListenerPosicionActual;
 import com.jose.movilizateucn.DiagramaClases.Solicitud;
-import com.jose.movilizateucn.POJO.Example;
-import com.jose.movilizateucn.POJO.RetrofitMaps;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyCallback {
 
@@ -126,6 +114,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    /*
     public void mostrarInfo(){
         final TextView tvDistancia = (TextView) findViewById(R.id.distancia);
         final TextView tvTiempo = (TextView) findViewById(R.id.tiempo);
@@ -133,7 +122,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
         //Cargando...
         spinner.setVisibility(View.VISIBLE);
 
-        String url = Constantes.RUTAOPTIMAGENERARSOLICITUD;
+        String url = Url.RUTAOPTIMAGENERARSOLICITUD;
         Retrofit retrofit = new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
         RetrofitMaps service = retrofit.create(RetrofitMaps.class);
 
@@ -161,7 +150,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 Log.d("onFailure", t.toString());
             }
         });
-    }
+    }*/
 
     //Decodifica el Polyline (No tocar esta función)
     private List<LatLng> decodePoly(String encoded) {
@@ -206,7 +195,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         origen.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
-        mostrarInfo();
+        //mostrarInfo();
         View view = findViewById(R.id.parentLayout);
         if (ConsultasGenerales.isNetworkAvailable(this)){
             if (origen != null){
@@ -216,7 +205,7 @@ public class GenerarSolicitudMap extends FragmentActivity implements OnMapReadyC
                 Location.distanceBetween(ucn.latitude, ucn.longitude, latLng.latitude, latLng.longitude, distancia);
                 if ( distancia[0] > MAX_RADIUS) {
                     solicitud = new Solicitud(0, "", 1, latLng.latitude, latLng.longitude);
-                    solicitud.setPasajero((Pasajero) Login.getUsuario());
+                    //solicitud.setPasajero((Pasajero) Login.getUsuario());
                     Consulta.insertarSolicitud(solicitud, this);
                 }else{
                     Snackbar.make(view, "Estás muy cerca de la UCN!", Snackbar.LENGTH_SHORT).show();

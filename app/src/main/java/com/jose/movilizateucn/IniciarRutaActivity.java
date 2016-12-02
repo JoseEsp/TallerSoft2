@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,20 +22,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.jose.movilizateucn.Consultas.Constantes;
-import com.jose.movilizateucn.Consultas.ListenerPosicionActual;
-import com.jose.movilizateucn.POJO.Example;
-import com.jose.movilizateucn.POJO.RetrofitMaps;
+import com.jose.movilizateucn.Volley.ListenerPosicionActual;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -90,7 +79,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
             Snackbar.make(findViewById(R.id.parentLayout), "Encienda el GPS y vuelva a intentarlo.", Snackbar.LENGTH_LONG).show();
         }
     }
-
+    /*
     public void mostrarInfo(){
         final TextView tvDistancia = (TextView) findViewById(R.id.distancia);
         final TextView tvTiempo = (TextView) findViewById(R.id.tiempo);
@@ -98,7 +87,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         //Cargando...
         spinner.setVisibility(View.VISIBLE);
 
-        String url = Constantes.RUTAOPTIMAGENERARSOLICITUD;
+        String url = Url.RUTAOPTIMAGENERARSOLICITUD;
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
         RetrofitMaps service = retrofit.create(RetrofitMaps.class);
@@ -135,7 +124,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                 Log.d("onFailure", t.toString());
             }
         });
-    }
+    }*/
 
     //Decodifica el Polyline (No tocar esta función)
     private List<LatLng> decodePoly(String encoded) {
@@ -183,6 +172,6 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f));
             zoomUnaVez = true;
         }
-        mostrarInfo();
+        //mostrarInfo();
     }
 }

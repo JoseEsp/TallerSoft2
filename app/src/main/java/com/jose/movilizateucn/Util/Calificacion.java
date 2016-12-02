@@ -1,4 +1,4 @@
-package com.jose.movilizateucn.DiagramaClases;
+package com.jose.movilizateucn.Util;
 
 import android.graphics.Color;
 import android.text.Spannable;

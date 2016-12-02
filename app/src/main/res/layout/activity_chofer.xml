@@ -41,7 +41,7 @@
                 android:stepSize=".1"
                 android:focusable="false"
                 android:isIndicator="true"
-                android:rating="2.5"
+                android:rating="4.0"
                 android:numStars="5"
                 android:secondaryProgressTint="@color/niceSilver"
                 android:progressTint="@color/niceYellow"
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/niceBlack"
-                android:text="2.5/5"
+                android:text="4.0/5"
                 android:paddingBottom="@dimen/perfil_margin"
                 android:gravity="center"
                 android:textSize="@dimen/medium_size"/>

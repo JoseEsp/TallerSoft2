@@ -1,8 +1,9 @@
 package com.jose.movilizateucn;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,9 +11,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
-import com.jose.movilizateucn.Consultas.Login;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.jose.movilizateucn.Volley.Url;
+import com.jose.movilizateucn.Volley.VolleySingleton;
+import com.jose.movilizateucn.DiagramaClases.Sesion;
+import com.jose.movilizateucn.DiagramaClases.Usuario;
+import com.jose.movilizateucn.Util.Internet;
+import com.jose.movilizateucn.Util.Preferencias;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private EditText rutTxt;
@@ -23,12 +35,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loadPreferences();
-        //Si se quieren borrar shared preferences: descomentar y comentar loadPreferences();
-        /*SharedPreferences prefs = getSharedPreferences("UserData", Context.MODE_PRIVATE);;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.commit();*/
+        //TextViews.
+        rutTxt = (EditText) findViewById(R.id.txtRut);
+        passTxt = (EditText) findViewById(R.id.txtPassword);
+        cbRemember = (CheckBox) findViewById(R.id.cbRemember);
+        Preferencias.cargarPreferenciasLogin(this, rutTxt, passTxt, cbRemember);
     }
 
     public void LoginButton(View view){
@@ -36,8 +47,50 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(view,"Debe completar todos los campos",Snackbar.LENGTH_SHORT).show();
         }
         else{
-            //Se conecta
-            Login.conectarse(rutTxt.getText().toString(), passTxt.getText().toString(), cbRemember, this );
+            final View vista = view;
+            final Activity activity = this;
+            final ProgressBar spinner = (ProgressBar) findViewById(R.id.spinner);
+
+            final String rut = rutTxt.getText().toString();
+            final String contra = passTxt.getText().toString();
+
+            spinner.setVisibility(View.VISIBLE);
+            spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
+
+            String url = String.format("%s?rut=%s&contra=%s", Url.OBTENERUSUARIOLOGUEADO, rut, contra);
+            VolleySingleton.getInstance(this).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        url,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                    Usuario usuario = Usuario.JSonObject_to_Usuario(response);
+                                if (usuario != null){
+                                    if (usuario.getEnableS_N().equals("S")){
+                                        Preferencias.guardarPreferenciasLogin(activity, cbRemember, rut, contra);
+                                        Sesion.setUsuario(usuario);
+                                        final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
+                                        activity.startActivity(perfilActivity);
+                                    }else{
+                                        Snackbar.make(vista, "Usuario Bloqueado.", Snackbar.LENGTH_SHORT).show();
+                                    }
+                                }
+                                spinner.setVisibility(View.GONE);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                if (!Internet.hayConexion(activity)){
+                                    Snackbar.make(vista, "Conéctese a Internet y vuelva a intentarlo.", Snackbar.LENGTH_SHORT).show();
+                                }else{
+                                    Snackbar.make(vista, "Datos inválidos.", Snackbar.LENGTH_SHORT).show();
+                                }
+                                spinner.setVisibility(View.GONE);
+                            }
+                        }
+                ));
         }
     }
 
@@ -45,32 +98,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnRegistrar = (Button) findViewById(R.id.btnRegistrar);
         Intent registrarse = new Intent(MainActivity.this, RegistrarseActivity.class);
         startActivity(registrarse);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MainActivity.this.setTitle("Login");
-    }
-
-    public void loadPreferences(){
-        //TextViews.
-        rutTxt = (EditText) findViewById(R.id.txtRut);
-        passTxt = (EditText) findViewById(R.id.txtPassword);
-        cbRemember = (CheckBox) findViewById(R.id.cbRemember);
-        //Obtiene las preferencia guardada de usuario/contraseña
-        SharedPreferences pref = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        String cbRememberChecked;
-        cbRememberChecked = pref.getString("cbRememberChecked", "false");
-        if (cbRememberChecked.equals("true")){
-            String rut = pref.getString("rut", "");
-            String pass = pref.getString("pass", "");
-            rutTxt.setText(rut);
-            passTxt.setText(pass);
-            cbRemember.setChecked(true);
-        }else{ //Aqui es false
-            cbRemember.setChecked(false);
-        }
     }
 
 }

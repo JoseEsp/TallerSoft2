@@ -1,20 +1,37 @@
 package com.jose.movilizateucn.DiagramaClases;
 
-import java.sql.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Usuario {
     private String rut;
     private String nombre;
     private String email;
     private String contra;
-    private Date fechaInicioConexion;
+    private String enableS_N;
+    private String fechaInicioConexion;
 
-    public Usuario(String rut, String nombre, String email, String contra){
+    public Usuario(String rut, String nombre, String email, String contra, String enableS_N, String fechaInicioConexion){
         this.rut = rut;
         this.nombre = nombre;
         this.email = email;
         this.contra = contra;
-        this.fechaInicioConexion = null;
+        this.enableS_N = enableS_N;
+        this.fechaInicioConexion = fechaInicioConexion;
+    }
+
+    public static Usuario JSonObject_to_Usuario(JSONObject response){
+        if (response != null){
+            try {
+                return new Usuario(response.getString("rut"), response.getString("nombre"),
+                        response.getString("email"), response.getString("contra"),
+                        response.getString("enableS_N"), response.getString("fechaInicioConexion"));
+            }catch(JSONException e){
+                return null;
+            }
+        }else{
+            return null;
+        }
     }
 
     public String getRut() {
@@ -49,11 +66,19 @@ public class Usuario {
         this.contra = contra;
     }
 
-    public Date getFechaInicioConexion() {
+    public String getEnableS_N() {
+        return enableS_N;
+    }
+
+    public void setEnableS_N(String enableS_N) {
+        this.enableS_N = enableS_N;
+    }
+
+    public String getFechaInicioConexion() {
         return fechaInicioConexion;
     }
 
-    public void setFechaInicioConexion(Date fechaInicioConexion) {
+    public void setFechaInicioConexion(String fechaInicioConexion) {
         this.fechaInicioConexion = fechaInicioConexion;
     }
 }

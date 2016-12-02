@@ -1,5 +1,7 @@
 package com.jose.movilizateucn.DiagramaClases;
 
+import org.json.JSONObject;
+
 //Clase HistViaje pero por un lado.
 //La nota, comentario y nombre son los que otro usuario ha dicho o puesto de ti
 public class HistViaje {
@@ -15,6 +17,23 @@ public class HistViaje {
         this.nota = nota;
         this.comentario = comentario;
         this.nombre = nombre;
+    }
+
+    public static HistViaje JSonObject_to_HistViaje(JSONObject jsonHistViaje){
+        if (jsonHistViaje != null){
+            try {
+                return new HistViaje(Integer.parseInt(jsonHistViaje.getString("codViaje")),
+                        jsonHistViaje.getString("fechaSubida"),
+                        Float.parseFloat(jsonHistViaje.getString("nota")),
+                        jsonHistViaje.getString("comentario"),
+                        jsonHistViaje.getString("nombre")
+                );
+            }catch (Exception e){
+                return null;
+            }
+        }else{
+            return null;
+        }
     }
 
     public int getCodViaje() {

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jose.movilizateucn.Consultas.Login;
+import com.jose.movilizateucn.DiagramaClases.Sesion;
 
 public class EscogerPerfilActivity extends AppCompatActivity {
 
@@ -16,16 +16,30 @@ public class EscogerPerfilActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        //Detiene toda actualización de Fecha Fin Conexión.
+        Sesion.stopUpdate();
+    }
+
+    @Override
     protected void onDestroy(){
         super.onDestroy();
-        Login.desconectarse();
+        Sesion.deleteUser();
     }
 
     public void PasajeroButton(View view){
-        Login.transformToPasajero(EscogerPerfilActivity.this);
+        if (Sesion.exists()){
+            Intent pasajeroActivity = new Intent(this, PasajeroActivity.class);
+            this.startActivity(pasajeroActivity);
+        }
     }
+
     public void ChoferButton(View view){
-        Login.transformToChofer(EscogerPerfilActivity.this);
+        if (Sesion.exists()){
+            final Intent choferActivity = new Intent(this, ChoferActivity.class);
+            this.startActivity(choferActivity);
+        }
     }
 
     public void FeedBack(View view){
