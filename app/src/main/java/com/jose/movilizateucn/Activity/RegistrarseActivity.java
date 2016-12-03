@@ -1,4 +1,4 @@
-package com.jose.movilizateucn;
+package com.jose.movilizateucn.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.jose.movilizateucn.R;
 import com.jose.movilizateucn.Volley.Url;
 import com.jose.movilizateucn.Volley.VolleySingleton;
 import com.jose.movilizateucn.Util.Internet;

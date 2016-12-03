@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.jose.movilizateucn.GenerarSolicitudMap"
-    android:orientation="vertical"
-    android:weightSum="1">
+    tools:context="com.jose.movilizateucn.Activity.IniciarRutaActivity"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -53,20 +52,19 @@
             android:layout_gravity="bottom">
             <TextView
                 android:id="@+id/info"
-                android:text="@string/info_hint"
+                android:text="Recuerda mantenerte en esta vista."
                 android:textColor="@color/niceBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:drawableLeft="@mipmap/ic_alert"
                 />
-
             <ProgressBar
                 android:id="@+id/spinner"
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_gravity="center"
                 />
         </LinearLayout>
@@ -77,7 +75,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.jose.movilizateucn.IniciarRutaActivity" />
+        tools:context="com.jose.movilizateucn.Activity.IniciarRutaActivity" />
 
 
 </LinearLayout>

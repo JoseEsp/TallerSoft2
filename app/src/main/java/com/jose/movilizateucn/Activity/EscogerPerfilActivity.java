@@ -1,4 +1,4 @@
-package com.jose.movilizateucn;
+package com.jose.movilizateucn.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.jose.movilizateucn.DiagramaClases.Sesion;
+import com.jose.movilizateucn.R;
 
 public class EscogerPerfilActivity extends AppCompatActivity {
 

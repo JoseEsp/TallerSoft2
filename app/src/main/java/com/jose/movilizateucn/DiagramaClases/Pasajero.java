@@ -6,4 +6,9 @@ public class Pasajero extends Usuario {
         super(rut, nombre, email, contra, enableS_N, fechaInicioConexion);
     }
 
+    //Útil para la solicitud activa:
+    public Pasajero(Usuario u){
+        this(u.getRut(), u.getNombre(), u.getEmail(), u.getContra(), u.getEnableS_N(), u.getFechaInicioConexion());
+    }
+
 }

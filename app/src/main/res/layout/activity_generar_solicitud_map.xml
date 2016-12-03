@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.jose.movilizateucn.GenerarSolicitudMap"
+    tools:context="com.jose.movilizateucn.Activity.GenerarSolicitudActivity"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -53,7 +53,7 @@
             android:layout_gravity="bottom">
             <TextView
                 android:id="@+id/info"
-                android:text="Si sales, perderás la solicitud!\nRecuerda estar atento a notificaciones."
+                android:text="Recuerda estar atento a notificaciones."
                 android:textColor="@color/niceBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        tools:context="com.jose.movilizateucn.GenerarSolicitudMap"/>
+        tools:context="com.jose.movilizateucn.Activity.GenerarSolicitudActivity"/>
 
 
 </LinearLayout>

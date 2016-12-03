@@ -1,4 +1,4 @@
-package com.jose.movilizateucn;
+package com.jose.movilizateucn.Activity;
 
 import android.util.Log;
 

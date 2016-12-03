@@ -1,4 +1,4 @@
-package com.jose.movilizateucn.POJO;
+package com.jose.movilizateucn.ClasesMapa;
 /*
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

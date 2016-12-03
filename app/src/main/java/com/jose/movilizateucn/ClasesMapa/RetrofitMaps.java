@@ -1,6 +1,4 @@
-package com.jose.movilizateucn.POJO;
-
-import com.jose.movilizateucn.R;
+package com.jose.movilizateucn.ClasesMapa;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

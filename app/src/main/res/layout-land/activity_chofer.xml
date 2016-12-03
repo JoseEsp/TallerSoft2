@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.jose.movilizateucn.ChoferActivity"
+    tools:context="com.jose.movilizateucn.Activity.ChoferActivity"
     android:orientation="vertical"
     android:gravity="top">
 
@@ -53,43 +53,37 @@
             android:textSize="@dimen/medium_size"/>
     </LinearLayout>
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="bottom">
-    <Button
-        android:id="@+id/btnBuscarRuta"
-        android:text = "Buscar Ruta"
-        android:textColor="@color/blanco"
-        android:backgroundTint="@color/cinnabargreen"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/perfil_margin"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
 
-    <Button
-        android:id="@+id/btnConfigurarRuta"
-        android:text = "Configurar Ruta"
-        android:textColor="@color/blanco"
-        android:backgroundTint="@color/cinnabargreen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/perfil_margin" />
+        <Button
+            android:id="@+id/btnBuscarRuta"
+            android:text = "Buscar Ruta"
+            android:textColor="@color/blanco"
+            android:backgroundTint="@color/cinnabargreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/perfil_margin"
+            android:onClick="IniciarRutaButton"/>
 
-    <Button
-        android:id="@+id/btnHistorialViajes"
-        android:text = "Historial de Viajes"
-        android:textColor="@color/blanco"
-        android:backgroundTint="@color/cinnabargreen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/perfil_margin"
-        android:onClick="HistorialViajesButton"/>
+        <Button
+            android:id="@+id/btnHistorialViajes"
+            android:text = "Historial de Viajes"
+            android:textColor="@color/blanco"
+            android:backgroundTint="@color/cinnabargreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/perfil_margin"
+            android:onClick="HistorialViajesButton"/>
 
-    <ProgressBar
-        android:id="@+id/spinner"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
+        <ProgressBar
+            android:id="@+id/spinner"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.jose.movilizateucn;
+package com.jose.movilizateucn.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,56 +15,62 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.jose.movilizateucn.R;
 import com.jose.movilizateucn.Volley.Url;
 import com.jose.movilizateucn.Volley.VolleySingleton;
+import com.jose.movilizateucn.Util.Calificacion;
 import com.jose.movilizateucn.DiagramaClases.Sesion;
 import com.jose.movilizateucn.DiagramaClases.Usuario;
-import com.jose.movilizateucn.Util.Calificacion;
 import com.jose.movilizateucn.Util.Preferencias;
 
 import org.json.JSONObject;
 
-public class PasajeroActivity extends AppCompatActivity {
+public class ChoferActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pasajero);
+        setContentView(R.layout.activity_chofer);
         if (Sesion.exists()) {
             configureNameText();
-            Sesion.updateFechaFinConexion(this, "pasajero");
+            Sesion.updateFechaFinConexion(this, "chofer");
             mostrarCalificacion();
         }
     }
 
-    public void GenerarSolicitudButton(View view){
-        Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudMap.class);
-        startActivity(generarSolicitudMap);
+    public void IniciarRutaButton(View view){
+        if (Sesion.exists()) {
+            Intent iniciarRutaActivity = new Intent(ChoferActivity.this, IniciarRutaActivity.class);
+            startActivity(iniciarRutaActivity);
+        }
     }
+
     public void HistorialViajesButton(View view){
-        Intent histViajesActivity = new Intent(PasajeroActivity.this, HistorialViajesActivity.class);
-        histViajesActivity.putExtra("tipo", "pasajero");
-        startActivity(histViajesActivity);
+        if (Sesion.exists()) {
+            Intent histViajesActivity = new Intent(ChoferActivity.this, HistorialViajesActivity.class);
+            histViajesActivity.putExtra("tipo", "chofer");
+            startActivity(histViajesActivity);
+        }
     }
 
     private void configureNameText(){
-        TextView nameText = (TextView) findViewById(R.id.lblNombrePasajero);
+        TextView nameText = (TextView) findViewById(R.id.lblNombreChofer);
         Usuario user = Sesion.getUser();
         nameText.setText(user.getNombre().substring(0, 1).toUpperCase() + user.getNombre().substring(1));
     }
 
     private void mostrarCalificacion(){
-        final RatingBar starBar = (RatingBar) findViewById(R.id.ratingBarPasajero);
-        final TextView lblScore = (TextView)  findViewById(R.id.lblStarScorePasajero);
+        final RatingBar starBar = (RatingBar) findViewById(R.id.ratingBarChofer);
+        final TextView lblScore = (TextView)  findViewById(R.id.lblStarScoreChofer);
 
-        Preferencias.cargarCalificacion(this, starBar, lblScore, "pasajero");
+        Preferencias.cargarCalificacion(this, starBar, lblScore, "chofer");
 
         final ProgressBar spinner = (ProgressBar) findViewById(R.id.spinner);
         spinner.setVisibility(View.VISIBLE);
         spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
 
         final Activity activity = this;
-        String url = Url.OBTENERCALIFICACIONVIAJES + "?rut=" + Sesion.getUser().getRut() + "&tipo=pasajero";
+        String url = Url.OBTENERCALIFICACIONVIAJES + "?rut=" + Sesion.getUser().getRut() + "&tipo=chofer";
         VolleySingleton.getInstance(this).addToRequestQueue(new JsonObjectRequest(
                 Request.Method.GET, url, new Response.Listener<JSONObject>() {
                     @Override
@@ -72,7 +78,7 @@ public class PasajeroActivity extends AppCompatActivity {
                     try {
                         starBar.setRating(Float.parseFloat(response.getString("prom")));
                         Calificacion.updateScore(starBar, lblScore);
-                        Preferencias.guardarCalificacion(activity, starBar, "pasajero");
+                        Preferencias.guardarCalificacion(activity, starBar, "chofer");
                     }catch(Exception e){
                         spinner.setVisibility(View.GONE);
                     }
@@ -87,4 +93,5 @@ public class PasajeroActivity extends AppCompatActivity {
                 }
         ));
     }
+
 }

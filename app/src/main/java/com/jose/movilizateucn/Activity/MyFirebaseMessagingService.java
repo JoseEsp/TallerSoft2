@@ -1,4 +1,4 @@
-package com.jose.movilizateucn;
+package com.jose.movilizateucn.Activity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.jose.movilizateucn.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 

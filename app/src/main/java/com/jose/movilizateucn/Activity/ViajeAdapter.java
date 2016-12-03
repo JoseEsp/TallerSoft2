@@ -1,4 +1,4 @@
-package com.jose.movilizateucn;
+package com.jose.movilizateucn.Activity;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jose.movilizateucn.DiagramaClases.HistViaje;
+import com.jose.movilizateucn.R;
 
 /**
  * Adaptador del recycler view

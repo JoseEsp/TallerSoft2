@@ -30,22 +30,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.jose.movilizateucn.DiagramaClases.Chofer;
+import com.google.firebase.database.ValueEventListener;
+import com.jose.movilizateucn.DiagramaClases.Pasajero;
 import com.jose.movilizateucn.DiagramaClases.Sesion;
-import com.jose.movilizateucn.DiagramaClases.Solicitud;
-import com.jose.movilizateucn.DiagramaClases.SolicitudActiva;
-import com.jose.movilizateucn.DiagramaClases.Viaje;
 import com.jose.movilizateucn.ClasesMapa.Example;
 import com.jose.movilizateucn.ClasesMapa.RetrofitMaps;
 import com.jose.movilizateucn.R;
 import com.jose.movilizateucn.Util.Internet;
-import com.jose.movilizateucn.Volley.SolicitudFireBase;
+import com.jose.movilizateucn.DiagramaClases.Solicitud;
 import com.jose.movilizateucn.Volley.Url;
 import com.jose.movilizateucn.Volley.VolleySingleton;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,23 +52,19 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyCallback {
+public class GenerarSolicitudActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker origen;
     private Marker destino;
     private ProgressBar spinner;
+    private Solicitud solicitud;
     private boolean zoomUnaVez;
-
-    //Un viaje, y una lista de SolicitudesActivas.
-    private Viaje viaje;
-    private ArrayList<SolicitudActiva> solicitudActivas;
-    private ArrayList<Marker> markerPasajeros;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_iniciar_ruta);
+        setContentView(R.layout.activity_generar_solicitud_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -79,11 +72,9 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         this.origen = null;
         this.destino = null;
         zoomUnaVez = false;
+        solicitud = null;
         spinner = (ProgressBar) findViewById(R.id.spinner);
         spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
-        this.viaje = null;
-        this.solicitudActivas = null;
-        this.markerPasajeros = null;
     }
 
     @Override
@@ -108,7 +99,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                     @Override
                     public void onLocationChanged(Location location) {
                         setOrigen(location);
-                        generarViaje();
+                        generarSolicitud();
                     }
 
                     @Override
@@ -131,6 +122,22 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
             }
         }else{
             Snackbar.make(findViewById(R.id.parentLayout), "Encienda el GPS y vuelva a intentarlo.", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if (solicitud != null) {
+            //Consulta.desactivarSolicitud(solicitud, this);
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (solicitud != null) {
+           //Consulta.activarSolicitud(solicitud, this);
         }
     }
 
@@ -165,44 +172,47 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         });
     }
 
-    public void setOrigen(Location loc){
-        if (origen != null){
-            origen.remove();
-        }
-        LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
-        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Tú").snippet("Punto de Partida")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        origen.showInfoWindow();
-        if (!zoomUnaVez) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 16f));
-            zoomUnaVez = true;
-        }
-        mostrarInfo();
-    }
-
-    public void generarViaje(){
+    public void generarSolicitud(){
         HashMap<String, String> map = new HashMap<>();
-        map.put("rutChofer", Sesion.getUser().getRut());
-        final JSONObject jsonViaje = new JSONObject(map);
+        map.put("codEstado", "1");
+        map.put("lat", String.valueOf(origen.getPosition().latitude));
+        map.put("lon", String.valueOf(origen.getPosition().longitude));
+        map.put("rutPasajero", Sesion.getUser().getRut());
+        final JSONObject jsonSolicitud = new JSONObject(map);
 
         final View view = findViewById(R.id.parentLayout);
-        final IniciarRutaActivity activity = this;
+        final GenerarSolicitudActivity activity = this;
 
         spinner.setVisibility(View.VISIBLE);
-        String url = Url.GENERARVIAJE;
+
+        String url = Url.GENERARSOLICITUD;
         VolleySingleton.getInstance(this).addToRequestQueue(
-                new JsonObjectRequest(Request.Method.POST, url, jsonViaje,
+                new JsonObjectRequest(Request.Method.POST, url, jsonSolicitud,
                         new com.android.volley.Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Snackbar.make(view, "Viaje Generado.", Snackbar.LENGTH_SHORT).show();
                                 try{
-                                    activity.setViaje(new Viaje(Integer.parseInt(response.getString("idViaje")), Chofer.usuario_to_Chofer(Sesion.getUser())));
-                                    activity.cargarPasajeros();
+                                    int codSolicitud = Integer.parseInt(response.getString("idSolicitud"));
+                                    String fechaSalida = response.getString("fechaSalida");
+                                    int codEstado = 1;
+                                    double lat = origen.getPosition().latitude;
+                                    double lon = origen.getPosition().longitude;
+                                    Solicitud s = new Solicitud(codSolicitud, fechaSalida, codEstado, lat, lon);
+                                    activity.setSolicitud(s);
+                                    //FireBase
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                    DatabaseReference solicitud = ref.child("solicitud").child(String.valueOf(codSolicitud));
+                                    //Manda Solicitud a Firebase
+                                    solicitud.child("fechaSalida").setValue(fechaSalida);
+                                    solicitud.child("codEstado").setValue(String.valueOf(codEstado));
+                                    solicitud.child("lat").setValue(String.valueOf(lat));
+                                    solicitud.child("lon").setValue(String.valueOf(lon));
+                                    solicitud.child("rut").setValue(Sesion.getUser().getRut());
+                                    Snackbar.make(view, "Solicitud Generada.", Snackbar.LENGTH_SHORT).show();
                                 }catch(Exception e){
-
+                                    spinner.setVisibility(View.GONE);
                                 }
+                                spinner.setVisibility(View.GONE);
                             }
                         },
                         new com.android.volley.Response.ErrorListener() {
@@ -215,75 +225,43 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                                 }
                             }
                         }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("Accept", "application/json");
-                return headers;
-            }
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
 
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8" + getParamsEncoding();
-            }
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
         });
     }
 
-    public void cargarPasajeros(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("solicitud");
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //SolicitudFireBase sfb = dataSnapshot.getValue(SolicitudFireBase.class);
-                //Log.d("sfb", sfb.getRut());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void mostrarSolicitudesActivas(){
-        if (solicitudActivas != null){
-            for(SolicitudActiva sa: solicitudActivas){
-                Solicitud s = sa.getSolicitud();
-                LatLng pos = new LatLng(s.getLatitud(), s.getLongitud());
-                markerPasajeros.add(mMap.addMarker(new MarkerOptions().position(pos)
-                        .title(s.getPasajero().getNombre())
-                        .snippet("Calificación: " + sa.getCalificacion())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))));
-            }
+    public void setOrigen(Location loc){
+        if (origen != null){
+            origen.remove();
         }
+        LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Tú").snippet("Ubicación actual")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        origen.showInfoWindow();
+        if (!zoomUnaVez) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 16f));
+            zoomUnaVez = true;
+        }
+        mostrarInfo();
     }
 
-    public void agregarSolicitudActiva(SolicitudActiva sa){
-        solicitudActivas.add(sa);
+    public void setSolicitud(Solicitud solicitud){
+        this.solicitud = solicitud;
     }
 
-    public void setViaje(Viaje viaje){
-        this.viaje = viaje;
-    }
-
-    public Viaje getViaje(){
-        return this.viaje;
+    public Solicitud getSolicitud(){
+        return solicitud;
     }
 
 }
