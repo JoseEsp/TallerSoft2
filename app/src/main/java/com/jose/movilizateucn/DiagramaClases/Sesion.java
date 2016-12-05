@@ -15,6 +15,7 @@ import com.jose.movilizateucn.Volley.VolleySingleton;
 
 public class Sesion {
     private static Usuario usuario;
+    private static double calificacionPasajero;
     private static boolean stopUpdate;
 
     public static void setUsuario(Usuario user){
@@ -44,22 +45,28 @@ public class Sesion {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                String url;
-                if (tipo.equals("chofer")) {
-                    url = Url.UPDATEFECHAFIN + "?tipo=chofer&rut=" + usuario.getRut();
-                }else if (tipo.equals("pasajero")){
-                    url = Url.UPDATEFECHAFIN + "?tipo=pasajero&rut=" + usuario.getRut();
-                }else{
-                    return;
-                }
-                VolleySingleton.getInstance(activity).addToRequestQueue(
-                        new JsonObjectRequest(Request.Method.GET, url, null, null));
-                if (Sesion.exists() && !stopUpdate){
-                    handler.postDelayed(this, ms_time);
+                if (Sesion.exists()) {
+                    String url;
+                    if (tipo.equals("chofer")) {
+                        url = Url.UPDATEFECHAFIN + "?tipo=chofer&rut=" + usuario.getRut();
+                    } else if (tipo.equals("pasajero")) {
+                        url = Url.UPDATEFECHAFIN + "?tipo=pasajero&rut=" + usuario.getRut();
+                    } else {
+                        return;
+                    }
+                    VolleySingleton.getInstance(activity).addToRequestQueue(
+                            new JsonObjectRequest(Request.Method.GET, url, null, null));
+                    if (!stopUpdate) {
+                        handler.postDelayed(this, ms_time);
+                    }
                 }
             }
         };
         handler.postDelayed(runnable, ms_time);
     }
+
+    public static double getCalificacionPasajero(){return calificacionPasajero;}
+
+    public static void setCalificacionPasajero(double cal){calificacionPasajero = cal;}
 
 }

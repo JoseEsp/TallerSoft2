@@ -74,6 +74,7 @@ public class PasajeroActivity extends AppCompatActivity {
                         starBar.setRating(Float.parseFloat(response.getString("prom")));
                         Calificacion.updateScore(starBar, lblScore);
                         Preferencias.guardarCalificacion(activity, starBar, "pasajero");
+                        Sesion.setCalificacionPasajero(starBar.getRating());
                     }catch(Exception e){
                         spinner.setVisibility(View.GONE);
                     }
@@ -84,6 +85,7 @@ public class PasajeroActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         spinner.setVisibility(View.GONE);
+                        Sesion.setCalificacionPasajero(4.0);
                     }
                 }
         ));

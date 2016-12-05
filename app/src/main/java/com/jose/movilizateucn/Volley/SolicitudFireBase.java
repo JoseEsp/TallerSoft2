@@ -1,25 +1,47 @@
 package com.jose.movilizateucn.Volley;
 
 public class SolicitudFireBase {
-    private String codEstado;
+    private int codSolicitud;
+    private String nombre;
+    private int codEstado;
     private String fechaSalida;
-    private String lat;
-    private String lon;
-    private String rut;
+    private double lat;
+    private double lon;
+    private double calificacion;
+    private String token;
 
-    public SolicitudFireBase(String codEstado, String fechaSalida, String lat, String lon, String rut) {
+    public SolicitudFireBase(int codSolicitud, String nombre, double calificacion, int codEstado, String fechaSalida, double lat, double lon, String token) {
+        this.codSolicitud = codSolicitud;
+        this.nombre = nombre;
+        this.calificacion = calificacion;
         this.codEstado = codEstado;
         this.fechaSalida = fechaSalida;
         this.lat = lat;
         this.lon = lon;
-        this.rut = rut;
+        this.token = token;
     }
 
-    public String getCodEstado() {
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public int getCodSolicitud() {
+        return codSolicitud;
+    }
+
+    public void setCodSolicitud(int codSolicitud) {
+        this.codSolicitud = codSolicitud;
+    }
+
+    public int getCodEstado() {
         return codEstado;
     }
 
-    public void setCodEstado(String codEstado) {
+    public void setCodEstado(int codEstado) {
         this.codEstado = codEstado;
     }
 
@@ -31,27 +53,35 @@ public class SolicitudFireBase {
         this.fechaSalida = fechaSalida;
     }
 
-    public String getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public String getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(String lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 
-    public String getRut() {
-        return rut;
+    public String getToken() {
+        return token;
     }
 
-    public void setRut(String rut) {
-        this.rut = rut;
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public double getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(double calificacion) {
+        this.calificacion = calificacion;
     }
 }

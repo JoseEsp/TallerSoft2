@@ -25,13 +25,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.jose.movilizateucn.DiagramaClases.Pasajero;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.jose.movilizateucn.DiagramaClases.Sesion;
 import com.jose.movilizateucn.ClasesMapa.Example;
 import com.jose.movilizateucn.ClasesMapa.RetrofitMaps;
@@ -83,6 +79,7 @@ public class GenerarSolicitudActivity extends FragmentActivity implements OnMapR
 
         //Cargado inicial.
         spinner.setVisibility(View.VISIBLE);
+        Snackbar.make(findViewById(R.id.parentLayout), "Generando Solicitud...", Snackbar.LENGTH_SHORT).show();
 
         // Marcador en la UCN
         LatLng ucn = new LatLng(-29.9655042, -71.3516305);
@@ -98,7 +95,19 @@ public class GenerarSolicitudActivity extends FragmentActivity implements OnMapR
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-                        setOrigen(location);
+                        if (origen != null){
+                            origen.remove();
+                        }
+                        LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
+                        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Tú").snippet("Ubicación actual")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        origen.showInfoWindow();
+                        if (!zoomUnaVez) {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 16f));
+                            zoomUnaVez = true;
+                        }
+                        mostrarInfo();
                         generarSolicitud();
                     }
 
@@ -201,13 +210,16 @@ public class GenerarSolicitudActivity extends FragmentActivity implements OnMapR
                                     activity.setSolicitud(s);
                                     //FireBase
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                    DatabaseReference solicitud = ref.child("solicitud").child(String.valueOf(codSolicitud));
+                                    DatabaseReference solicitud = ref.child("solicitud").child(Sesion.getUser().getRut());
                                     //Manda Solicitud a Firebase
+                                    solicitud.child("codSolicitud").setValue(String.valueOf(codSolicitud));
+                                    solicitud.child("nombre").setValue(Sesion.getUser().getNombre());
+                                    solicitud.child("calificacion").setValue(String.valueOf(Sesion.getCalificacionPasajero()));
                                     solicitud.child("fechaSalida").setValue(fechaSalida);
                                     solicitud.child("codEstado").setValue(String.valueOf(codEstado));
                                     solicitud.child("lat").setValue(String.valueOf(lat));
                                     solicitud.child("lon").setValue(String.valueOf(lon));
-                                    solicitud.child("rut").setValue(Sesion.getUser().getRut());
+                                    solicitud.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
                                     Snackbar.make(view, "Solicitud Generada.", Snackbar.LENGTH_SHORT).show();
                                 }catch(Exception e){
                                     spinner.setVisibility(View.GONE);
@@ -238,22 +250,6 @@ public class GenerarSolicitudActivity extends FragmentActivity implements OnMapR
                         return "application/json; charset=utf-8" + getParamsEncoding();
                     }
         });
-    }
-
-    public void setOrigen(Location loc){
-        if (origen != null){
-            origen.remove();
-        }
-        LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
-        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Tú").snippet("Ubicación actual")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        origen.showInfoWindow();
-        if (!zoomUnaVez) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 16f));
-            zoomUnaVez = true;
-        }
-        mostrarInfo();
     }
 
     public void setSolicitud(Solicitud solicitud){

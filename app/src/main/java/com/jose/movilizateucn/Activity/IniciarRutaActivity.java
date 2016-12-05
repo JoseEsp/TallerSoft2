@@ -45,7 +45,6 @@ import com.jose.movilizateucn.Volley.VolleySingleton;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,8 +64,8 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
 
     //Un viaje, y una lista de SolicitudesActivas.
     private Viaje viaje;
-    private ArrayList<SolicitudActiva> solicitudActivas;
-    private ArrayList<Marker> markerPasajeros;
+    private HashMap<String, SolicitudFireBase> solicitudes;
+    private HashMap<String, Marker> markers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +81,8 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         spinner = (ProgressBar) findViewById(R.id.spinner);
         spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
         this.viaje = null;
-        this.solicitudActivas = null;
-        this.markerPasajeros = null;
+        this.solicitudes = new HashMap<>();
+        this.markers = new HashMap<>();
     }
 
     @Override
@@ -107,7 +106,19 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-                        setOrigen(location);
+                        if (origen != null){
+                            origen.remove();
+                        }
+                        LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
+                        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Tú").snippet("Punto de Partida")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        origen.showInfoWindow();
+                        if (!zoomUnaVez) {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 16f));
+                            zoomUnaVez = true;
+                        }
+                        mostrarInfo();
                         generarViaje();
                     }
 
@@ -165,22 +176,6 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         });
     }
 
-    public void setOrigen(Location loc){
-        if (origen != null){
-            origen.remove();
-        }
-        LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
-        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Tú").snippet("Punto de Partida")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        origen.showInfoWindow();
-        if (!zoomUnaVez) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 16f));
-            zoomUnaVez = true;
-        }
-        mostrarInfo();
-    }
-
     public void generarViaje(){
         HashMap<String, String> map = new HashMap<>();
         map.put("rutChofer", Sesion.getUser().getRut());
@@ -199,7 +194,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                                 Snackbar.make(view, "Viaje Generado.", Snackbar.LENGTH_SHORT).show();
                                 try{
                                     activity.setViaje(new Viaje(Integer.parseInt(response.getString("idViaje")), Chofer.usuario_to_Chofer(Sesion.getUser())));
-                                    activity.cargarPasajeros();
+                                    activity.escucharSolicitudesFireBase();
                                 }catch(Exception e){
 
                                 }
@@ -230,23 +225,52 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         });
     }
 
-    public void cargarPasajeros(){
+    public void escucharSolicitudesFireBase(){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("solicitud");
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //SolicitudFireBase sfb = dataSnapshot.getValue(SolicitudFireBase.class);
-                //Log.d("sfb", sfb.getRut());
+                String rut = dataSnapshot.getKey();
+                String codEstado = (String) dataSnapshot.child("codEstado").getValue();
+                if (codEstado.equals("1") && !rut.equals(Sesion.getUser().getRut())){
+                    SolicitudFireBase sfb = new SolicitudFireBase(
+                            Integer.parseInt((String) dataSnapshot.child("codSolicitud").getValue()),
+                            (String) dataSnapshot.child("nombre").getValue(),
+                            Double.parseDouble((String) dataSnapshot.child("calificacion").getValue()),
+                            Integer.parseInt((String) dataSnapshot.child("codEstado").getValue()),
+                            (String) dataSnapshot.child("fechaSalida").getValue(),
+                            Double.parseDouble((String) dataSnapshot.child("lat").getValue()),
+                            Double.parseDouble((String) dataSnapshot.child("lon").getValue()),
+                            (String) dataSnapshot.child("token").getValue()
+                    );
+                    solicitudes.put(rut, sfb);
+                    LatLng pos = new LatLng(sfb.getLat(), sfb.getLon());
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(pos)
+                            .title(sfb.getNombre().substring(0, 1).toUpperCase() + sfb.getNombre().substring(1))
+                            .snippet("Calificación: " + sfb.getCalificacion())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    markers.put(rut, marker);
+                }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String rut = dataSnapshot.getKey();
+                String codEstado = (String) dataSnapshot.child("codEstado").getValue();
+                if (codEstado.equals("2")){
+                    solicitudes.remove(rut);
+                    markers.get(rut).remove();
+                    markers.remove(rut);
+                }
 
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                String rut = dataSnapshot.getKey();
+                solicitudes.remove(rut);
+                markers.get(rut).remove();
+                markers.remove(rut);
             }
 
             @Override
@@ -259,23 +283,6 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
 
             }
         });
-    }
-
-    public void mostrarSolicitudesActivas(){
-        if (solicitudActivas != null){
-            for(SolicitudActiva sa: solicitudActivas){
-                Solicitud s = sa.getSolicitud();
-                LatLng pos = new LatLng(s.getLatitud(), s.getLongitud());
-                markerPasajeros.add(mMap.addMarker(new MarkerOptions().position(pos)
-                        .title(s.getPasajero().getNombre())
-                        .snippet("Calificación: " + sa.getCalificacion())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))));
-            }
-        }
-    }
-
-    public void agregarSolicitudActiva(SolicitudActiva sa){
-        solicitudActivas.add(sa);
     }
 
     public void setViaje(Viaje viaje){
