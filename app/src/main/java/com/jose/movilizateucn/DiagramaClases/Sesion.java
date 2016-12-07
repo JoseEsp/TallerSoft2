@@ -15,7 +15,7 @@ import com.jose.movilizateucn.Volley.VolleySingleton;
 
 public class Sesion {
     private static Usuario usuario;
-    private static double calificacionPasajero;
+    private static double calificacionPasajero = -1;
     private static boolean stopUpdate;
 
     public static void setUsuario(Usuario user){

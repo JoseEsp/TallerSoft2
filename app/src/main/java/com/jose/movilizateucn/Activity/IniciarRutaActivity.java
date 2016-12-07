@@ -32,8 +32,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jose.movilizateucn.DiagramaClases.Chofer;
 import com.jose.movilizateucn.DiagramaClases.Sesion;
-import com.jose.movilizateucn.DiagramaClases.Solicitud;
-import com.jose.movilizateucn.DiagramaClases.SolicitudActiva;
 import com.jose.movilizateucn.DiagramaClases.Viaje;
 import com.jose.movilizateucn.ClasesMapa.Example;
 import com.jose.movilizateucn.ClasesMapa.RetrofitMaps;
@@ -232,7 +230,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String rut = dataSnapshot.getKey();
                 String codEstado = (String) dataSnapshot.child("codEstado").getValue();
-                if (codEstado.equals("1") && !rut.equals(Sesion.getUser().getRut())){
+                if (codEstado != null && codEstado.equals("1") && !rut.equals(Sesion.getUser().getRut())){
                     SolicitudFireBase sfb = new SolicitudFireBase(
                             Integer.parseInt((String) dataSnapshot.child("codSolicitud").getValue()),
                             (String) dataSnapshot.child("nombre").getValue(),

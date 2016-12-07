@@ -85,7 +85,6 @@ public class PasajeroActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         spinner.setVisibility(View.GONE);
-                        Sesion.setCalificacionPasajero(4.0);
                     }
                 }
         ));

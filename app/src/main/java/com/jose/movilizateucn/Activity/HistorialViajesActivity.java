@@ -2,6 +2,7 @@ package com.jose.movilizateucn.Activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -83,6 +84,7 @@ public class HistorialViajesActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgressDialog.cancel();
+                        Snackbar.make(activity.findViewById(R.id.activity_historial_viajes), "No hay viajes aún", Snackbar.LENGTH_SHORT).show();
                     }
                 }
         ));

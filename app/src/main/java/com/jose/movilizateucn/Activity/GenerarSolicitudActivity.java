@@ -214,7 +214,11 @@ public class GenerarSolicitudActivity extends FragmentActivity implements OnMapR
                                     //Manda Solicitud a Firebase
                                     solicitud.child("codSolicitud").setValue(String.valueOf(codSolicitud));
                                     solicitud.child("nombre").setValue(Sesion.getUser().getNombre());
-                                    solicitud.child("calificacion").setValue(String.valueOf(Sesion.getCalificacionPasajero()));
+                                    if (Sesion.getCalificacionPasajero() == -1){
+                                        solicitud.child("calificacion").setValue("4.0");
+                                    }else {
+                                        solicitud.child("calificacion").setValue(String.valueOf(Sesion.getCalificacionPasajero()));
+                                    }
                                     solicitud.child("fechaSalida").setValue(fechaSalida);
                                     solicitud.child("codEstado").setValue(String.valueOf(codEstado));
                                     solicitud.child("lat").setValue(String.valueOf(lat));

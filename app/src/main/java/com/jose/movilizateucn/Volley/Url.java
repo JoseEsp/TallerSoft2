@@ -2,8 +2,8 @@ package com.jose.movilizateucn.Volley;
 
 public class Url {
 
-    //private static final String BASEURL = "http://movilizate.webcindario.com/";
-    private static final String BASEURL = "http://170.239.84.252/";
+    private static final String BASEURL = "http://movilizate.webcindario.com/";
+    //private static final String BASEURL = "http://170.239.84.252/";
 
     /**
      * URLs de consultas del Web Service
