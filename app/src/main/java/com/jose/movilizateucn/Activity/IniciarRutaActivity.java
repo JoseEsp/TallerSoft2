@@ -232,17 +232,17 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                 String codEstado = (String) dataSnapshot.child("codEstado").getValue();
                 if (codEstado != null && codEstado.equals("1") && !rut.equals(Sesion.getUser().getRut())){
                     SolicitudFireBase sfb = new SolicitudFireBase(
-                            Integer.parseInt((String) dataSnapshot.child("codSolicitud").getValue()),
+                            (String) dataSnapshot.child("codSolicitud").getValue(),
                             (String) dataSnapshot.child("nombre").getValue(),
-                            Double.parseDouble((String) dataSnapshot.child("calificacion").getValue()),
-                            Integer.parseInt((String) dataSnapshot.child("codEstado").getValue()),
+                            (String) dataSnapshot.child("calificacion").getValue(),
+                            (String) dataSnapshot.child("codEstado").getValue(),
                             (String) dataSnapshot.child("fechaSalida").getValue(),
-                            Double.parseDouble((String) dataSnapshot.child("lat").getValue()),
-                            Double.parseDouble((String) dataSnapshot.child("lon").getValue()),
+                            (String) dataSnapshot.child("lat").getValue(),
+                            (String) dataSnapshot.child("lon").getValue(),
                             (String) dataSnapshot.child("token").getValue()
                     );
                     solicitudes.put(rut, sfb);
-                    LatLng pos = new LatLng(sfb.getLat(), sfb.getLon());
+                    LatLng pos = new LatLng(Double.parseDouble(sfb.getLat()), Double.parseDouble(sfb.getLon()));
                     Marker marker = mMap.addMarker(new MarkerOptions().position(pos)
                             .title(sfb.getNombre().substring(0, 1).toUpperCase() + sfb.getNombre().substring(1))
                             .snippet("Calificación: " + sfb.getCalificacion())
@@ -255,10 +255,30 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String rut = dataSnapshot.getKey();
                 String codEstado = (String) dataSnapshot.child("codEstado").getValue();
-                if (codEstado.equals("2")){
-                    solicitudes.remove(rut);
-                    markers.get(rut).remove();
-                    markers.remove(rut);
+                if (codEstado != null && !rut.equals(Sesion.getUser().getRut())) {
+                    if (codEstado.equals("2")) {
+                        solicitudes.remove(rut);
+                        markers.get(rut).remove();
+                        markers.remove(rut);
+                    }
+                }else{
+                    SolicitudFireBase sfb = new SolicitudFireBase(
+                            (String) dataSnapshot.child("codSolicitud").getValue(),
+                            (String) dataSnapshot.child("nombre").getValue(),
+                            (String) dataSnapshot.child("calificacion").getValue(),
+                            (String) dataSnapshot.child("codEstado").getValue(),
+                            (String) dataSnapshot.child("fechaSalida").getValue(),
+                            (String) dataSnapshot.child("lat").getValue(),
+                            (String) dataSnapshot.child("lon").getValue(),
+                            (String) dataSnapshot.child("token").getValue()
+                    );
+                    solicitudes.put(rut, sfb);
+                    LatLng pos = new LatLng(Double.parseDouble(sfb.getLat()), Double.parseDouble(sfb.getLon()));
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(pos)
+                            .title(sfb.getNombre().substring(0, 1).toUpperCase() + sfb.getNombre().substring(1))
+                            .snippet("Calificación: " + sfb.getCalificacion())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    markers.put(rut, marker);
                 }
 
             }
@@ -289,6 +309,22 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
 
     public Viaje getViaje(){
         return this.viaje;
+    }
+
+    public void test(View view){
+        //FireBase
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference solicitud = ref.child("solicitud").child("17846897-9");
+        //Manda Solicitud a Firebase
+        solicitud.child("codSolicitud").setValue("62");
+        solicitud.child("nombre").setValue("esteban");
+        solicitud.child("calificacion").setValue("4.0");
+        solicitud.child("fechaSalida").setValue("2016-12-07 16:57:47");
+        solicitud.child("codEstado").setValue("1");
+        solicitud.child("lat").setValue("-29.964493004851594");
+        solicitud.child("lon").setValue("-71.34915450590788");
+        solicitud.child("token").setValue("d7vDb51loyY:APA91bHVbkQwjtN_3OLpoH7D09YtDFMOczezQcPrMPIlODJpS1Ny-vTBf6E_YBXi6UdYcVY1k3jkMdf6b0qtnHjZ3sAoCSER1qrd4fVFGP2XkuI78_BVFY3krbgOqXOiraubz-aIFlQV");
+        Snackbar.make(view, "Solicitud Generada.", Snackbar.LENGTH_SHORT).show();
     }
 
 }

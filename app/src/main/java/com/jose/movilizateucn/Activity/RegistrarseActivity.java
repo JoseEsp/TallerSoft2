@@ -77,8 +77,7 @@ public class RegistrarseActivity extends AppCompatActivity {
                                 case "1":
                                     Toast.makeText(activity, response.getString("mensaje"), Toast.LENGTH_SHORT).show();
                                     spinner.setVisibility(View.GONE);
-                                    final Intent loginActivity = new Intent(activity, MainActivity.class);
-                                    activity.startActivity(loginActivity);
+                                    activity.finish();
                                     break;
                                 case "2":
                                     Snackbar.make(vista, response.getString("mensaje"), Snackbar.LENGTH_SHORT).show();

@@ -1,16 +1,16 @@
 package com.jose.movilizateucn.Volley;
 
 public class SolicitudFireBase {
-    private int codSolicitud;
+    private String codSolicitud;
     private String nombre;
-    private int codEstado;
+    private String codEstado;
     private String fechaSalida;
-    private double lat;
-    private double lon;
-    private double calificacion;
+    private String lat;
+    private String lon;
+    private String calificacion;
     private String token;
 
-    public SolicitudFireBase(int codSolicitud, String nombre, double calificacion, int codEstado, String fechaSalida, double lat, double lon, String token) {
+    public SolicitudFireBase(String codSolicitud, String nombre, String calificacion, String codEstado, String fechaSalida, String lat, String lon, String token) {
         this.codSolicitud = codSolicitud;
         this.nombre = nombre;
         this.calificacion = calificacion;
@@ -29,19 +29,19 @@ public class SolicitudFireBase {
         this.nombre = nombre;
     }
 
-    public int getCodSolicitud() {
+    public String getCodSolicitud() {
         return codSolicitud;
     }
 
-    public void setCodSolicitud(int codSolicitud) {
+    public void setCodSolicitud(String codSolicitud) {
         this.codSolicitud = codSolicitud;
     }
 
-    public int getCodEstado() {
+    public String getCodEstado() {
         return codEstado;
     }
 
-    public void setCodEstado(int codEstado) {
+    public void setCodEstado(String codEstado) {
         this.codEstado = codEstado;
     }
 
@@ -53,19 +53,19 @@ public class SolicitudFireBase {
         this.fechaSalida = fechaSalida;
     }
 
-    public double getLat() {
+    public String getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(String lat) {
         this.lat = lat;
     }
 
-    public double getLon() {
+    public String getLon() {
         return lon;
     }
 
-    public void setLon(double lon) {
+    public void setLon(String lon) {
         this.lon = lon;
     }
 
@@ -77,11 +77,11 @@ public class SolicitudFireBase {
         this.token = token;
     }
 
-    public double getCalificacion() {
+    public String getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(double calificacion) {
+    public void setCalificacion(String calificacion) {
         this.calificacion = calificacion;
     }
 }

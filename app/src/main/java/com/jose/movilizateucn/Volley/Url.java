@@ -20,4 +20,5 @@ public class Url {
     public static final String ACTIVARSOLICITUD = BASEURL + "consultas/activarSolicitud.php";
     public static final String GENERARVIAJE = BASEURL + "consultas/generarViaje.php";
     public static final String OBTENERSOLICITUDESACTIVAS = BASEURL + "consultas/obtenerSolicitudesActivas.php";
+    public static final String GENERARFEEDBACK = BASEURL + "consultas/generarFeedback.php";
 }
