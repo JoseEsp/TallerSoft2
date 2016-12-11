@@ -1,15 +1,31 @@
 package com.jose.movilizateucn.Activity;
 
+import android.Manifest;
+import android.Manifest.permission;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,23 +41,86 @@ import com.jose.movilizateucn.Util.Preferencias;
 
 import org.json.JSONObject;
 
-public class PasajeroActivity extends AppCompatActivity {
+import static android.Manifest.permission.READ_CONTACTS;
 
+public class PasajeroActivity extends AppCompatActivity {
+    final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
+    Button boton;
+    LocationManager locationManager;
+    View vista;
+    AlertDialog alert = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pasajero);
+        boton = (Button) findViewById(R.id.btnGenerarSolicitud);
         if (Sesion.exists()) {
             configureNameText();
             Sesion.updateFechaFinConexion(this, "pasajero");
             mostrarCalificacion();
         }
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertNoGps();
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if(alert != null)
+        {
+            alert.dismiss ();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertNoGps();
+        }
     }
 
     public void GenerarSolicitudButton(View view){
-        Intent generarSolicitudMap = new Intent(PasajeroActivity.this, GenerarSolicitudActivity.class);
-        startActivity(generarSolicitudMap);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Intent generarSolicitud = new Intent(PasajeroActivity.this, GenerarSolicitudActivity2.class);
+                startActivity(generarSolicitud);
+            }
+            else{
+                // PEDIR PERMISOS ASINCRONOS
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    Toast.makeText(this, "Se recivieron los permisos", Toast.LENGTH_SHORT).show();
+                    Intent generarSolicitud = new Intent(this, GenerarSolicitudActivity2.class);
+                    startActivity(generarSolicitud);
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        // permission denied, boo! Disable the
+                        Toast.makeText(this, "El permiso de GPS es necesario para usar la App", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(this, "Debe habilitar los permisos en configuración de aplicaciones ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    }
+
+
     public void HistorialViajesButton(View view){
         Intent histViajesActivity = new Intent(PasajeroActivity.this, HistorialViajesActivity.class);
         histViajesActivity.putExtra("tipo", "pasajero");
@@ -88,5 +167,24 @@ public class PasajeroActivity extends AppCompatActivity {
                     }
                 }
         ));
+    }
+
+    private void AlertNoGps() { //PIDE ATIVAR EL GPS
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Debe activar el GPS para que la aplicación funcione correctamente")
+                .setCancelable(false)
+                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+        alert = builder.create();
+        alert.show();
     }
 }

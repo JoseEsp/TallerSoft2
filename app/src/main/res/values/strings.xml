@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Movilizate UCN</string>
-    <string name="rut">Rut</string>
+    <string name="rut">Rut:</string>
     <string name="nombre">Nombre</string>
     <string name="email">Email</string>
-    <string name="contra">Contraseña</string>
-    <string name="rut_hint">11111111-1</string>
+    <string name="contra">Contraseña:</string>
+    <string name="rut_hint">11111111&#8211;1</string>
     <string name="pass_hint">12345678</string>
     <string name="title_activity_escoger_perfil">EscogerPerfilActivity</string>
-    <string name="pass">Contraseña</string>
+    <string name="pass">Contraseña:</string>
 
     <string name="feedback"><u>FeedBack</u></string>
 
@@ -25,5 +25,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_iniciar_ruta">Map</string>
+    <string name="title_activity_generar_solicitud2">GenerarSolicitudActivity2</string>
+    <string name="login">Login</string>
 
 </resources>

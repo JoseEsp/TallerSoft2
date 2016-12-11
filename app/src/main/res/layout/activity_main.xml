@@ -6,64 +6,74 @@
     android:layout_height="match_parent"
     tools:context="com.jose.movilizateucn.Activity.MainActivity"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/cruz">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/icologin"
-        android:padding="10dp"/>
+        android:src="@drawable/logoucn"
+        android:padding="10dp"
+        android:contentDescription="LogoUcn" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
 
         <TextView
             android:id = "@+id/lblRut"
             android:layout_width="130dp"
             android:layout_height="match_parent"
             android:text = "@string/rut"
-            android:textColor="@color/niceBlack"
-            android:textSize = "20dp"
-            android:gravity="left"
-            android:layout_marginTop="@dimen/login_margin" />
+            android:textColor="@color/blanco"
+            android:textSize = "20sp"
+            android:gravity="start"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/login_margin"
+            android:contentDescription="LogoUcn" />
         <EditText
             android:id = "@+id/txtRut"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint = "@string/rut_hint"
-            android:textCursorDrawable="@color/colorPrimaryDark"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:textCursorDrawable="@color/niceRed2"
+            android:textColor="@color/blanco"
             android:maxLength= "10"
             android:gravity="center"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:background="#63ffffff" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
 
         <TextView
             android:id = "@+id/lblPassword"
             android:layout_width="130dp"
             android:layout_height="match_parent"
             android:text = "@string/pass"
-            android:textColor="@color/niceBlack"
-            android:textSize = "20dp"
-            android:gravity="left"
+            android:textStyle="bold"
+            android:textColor="@color/blanco"
+            android:textSize = "20sp"
+            android:gravity="start"
             android:layout_marginTop="@dimen/login_margin"/>
         <EditText
             android:id = "@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textCursorDrawable="@color/colorPrimaryDark"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:textCursorDrawable="@color/niceRed2"
+            android:textColor="@color/blanco"
             android:maxLength= "20"
             android:inputType = "textPassword"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
+            android:background="#63ffffff"
             android:gravity="center"/>
         </LinearLayout>
 
@@ -72,8 +82,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Guardar usuario y contraseña."
-        android:buttonTint="@color/colorPrimary"
+        android:buttonTint="@color/blanco"
+        android:textStyle="bold"
         android:layout_marginTop="10dp"
+        android:textColor="@color/blanco"
         />
 
 
@@ -81,10 +93,10 @@
         android:id = "@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text = "Login"
+        android:text = "@string/login"
         android:textColor="@color/blanco"
         android:textStyle="bold"
-        android:backgroundTint="@color/cinnabargreen"
+        android:backgroundTint="@color/niceAqua"
         android:layout_marginTop="20dp"
         android:onClick="LoginButton"/>
 

@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jose.movilizateucn.Activity.EscogerPerfilActivity"
     android:orientation = "vertical"
-    android:background="@color/lightGray">
+    android:background="@drawable/fondot">
 
     <TextView
         android:id="@+id/feedback"
@@ -40,7 +40,7 @@
         android:text = "Pasajero"
         android:textSize="@dimen/big_size"
         android:textColor="@color/blanco"
-        android:backgroundTint="@color/niceRed"
+        android:backgroundTint="@color/niceRed2"
         android:layout_margin="@dimen/perfil_margin"
         android:gravity="center"
         android:textAlignment="center"
@@ -54,7 +54,7 @@
         android:text = "Chofer"
         android:textSize="@dimen/big_size"
         android:textColor="@color/blanco"
-        android:backgroundTint="@color/cinnabargreen"
+        android:backgroundTint="@color/niceAqua"
         android:layout_margin="@dimen/perfil_margin"
         android:gravity="center"
         android:textAlignment="center"

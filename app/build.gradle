@@ -44,8 +44,4 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }
 
-
-
-
-
 apply plugin: 'com.google.gms.google-services'
