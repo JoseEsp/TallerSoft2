@@ -33,7 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.jose.movilizateucn.DiagramaClases.Chofer;
 import com.jose.movilizateucn.DiagramaClases.Sesion;
 import com.jose.movilizateucn.DiagramaClases.Viaje;
@@ -89,7 +88,6 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         this.solicitudesAceptadas = new HashMap<>();
         this.markers = new HashMap<>();
         this.colocarPosicionActual();
-        Log.d("token", FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override
@@ -366,14 +364,11 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                                 //Envía notificación.
                                 if (Sesion.exists()) {
                                     LatLng l2 = new LatLng(Double.parseDouble(solicitudFB.getLat()), Double.parseDouble(solicitudFB.getLon()));
-                                    String distancia = String.format("%.2f", Distancia.distanciaCoord(origen.getPosition(), l2));
-                                    String msj = "~" + distancia + " km";
-                                    String titulo = "El Chofer " + Sesion.getUser().getNombre() + " va por ti";
-                                    msj = msj.replace(" ", "%20");
-                                    titulo = titulo.replace(" ", "%20");
-                                    String url = Url.ENVIARNOTIFICACION + "?rut=" + rutPasajero +
-                                            "&mensaje=" + msj + "&titulo=" + titulo;
-                                    Log.d("url", url);
+                                    String distancia = String.format("~%.1f km", Distancia.distanciaCoord(origen.getPosition(), l2));
+                                    String cal = String.format("%.1f", Sesion.getCalificacionChofer());
+                                    String mensaje = "El Chofer " + Sesion.getUser().getNombre() + " va por ti-"+ cal + "-" + distancia;
+                                    mensaje = mensaje.replace(" ", "%20");
+                                    String url = Url.ENVIARNOTIFICACION + "?rut=" + rutPasajero + "&mensaje=" + mensaje;
                                     VolleySingleton.getInstance(activity).addToRequestQueue(
                                             new JsonObjectRequest(Request.Method.GET, url, null, null));
                                 }
@@ -416,22 +411,6 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
 
     public Viaje getViaje(){
         return this.viaje;
-    }
-
-    public void test(View view){
-        //FireBase
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference solicitud = ref.child("solicitud").child("17846897-9");
-        //Manda Solicitud a Firebase
-        solicitud.child("codSolicitud").setValue("8");
-        solicitud.child("nombre").setValue("esteban");
-        solicitud.child("calificacion").setValue("4.0");
-        solicitud.child("fechaSalida").setValue("2016-12-07 16:57:47");
-        solicitud.child("codEstado").setValue("1");
-        solicitud.child("lat").setValue("-29.964493004851594");
-        solicitud.child("lon").setValue("-71.34915450590788");
-        solicitud.child("token").setValue("d7vDb51loyY:APA91bHVbkQwjtN_3OLpoH7D09YtDFMOczezQcPrMPIlODJpS1Ny-vTBf6E_YBXi6UdYcVY1k3jkMdf6b0qtnHjZ3sAoCSER1qrd4fVFGP2XkuI78_BVFY3krbgOqXOiraubz-aIFlQV");
-        Snackbar.make(view, "Solicitud Generada.", Snackbar.LENGTH_SHORT).show();
     }
 
 }

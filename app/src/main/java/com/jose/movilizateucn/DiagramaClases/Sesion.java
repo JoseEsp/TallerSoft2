@@ -15,7 +15,8 @@ import com.jose.movilizateucn.Volley.VolleySingleton;
 
 public class Sesion {
     private static Usuario usuario;
-    private static double calificacionPasajero = -1;
+    private static double calificacionPasajero = 4.0;
+    private static double calificacionChofer= 4.0;
     private static boolean stopUpdate;
 
     public static void setUsuario(Usuario user){
@@ -69,4 +70,11 @@ public class Sesion {
 
     public static void setCalificacionPasajero(double cal){calificacionPasajero = cal;}
 
+    public static double getCalificacionChofer() {
+        return calificacionChofer;
+    }
+
+    public static void setCalificacionChofer(double calificacionChofer) {
+        Sesion.calificacionChofer = calificacionChofer;
+    }
 }

@@ -10,9 +10,8 @@ public class SolicitudFireBase {
     private String lat;
     private String lon;
     private String calificacion;
-    private String token;
 
-    public SolicitudFireBase(String codSolicitud, String nombre, String calificacion, String codEstado, String fechaSalida, String lat, String lon, String token) {
+    public SolicitudFireBase(String codSolicitud, String nombre, String calificacion, String codEstado, String fechaSalida, String lat, String lon) {
         this.codSolicitud = codSolicitud;
         this.nombre = nombre;
         this.calificacion = calificacion;
@@ -20,7 +19,6 @@ public class SolicitudFireBase {
         this.fechaSalida = fechaSalida;
         this.lat = lat;
         this.lon = lon;
-        this.token = token;
     }
 
     public SolicitudFireBase(DataSnapshot dataSnapshot, String rut){
@@ -31,8 +29,7 @@ public class SolicitudFireBase {
                 dataSnapshot.child("codEstado").getValue(String.class),
                 dataSnapshot.child("fechaSalida").getValue(String.class),
                 dataSnapshot.child("lat").getValue(String.class),
-                dataSnapshot.child("lon").getValue(String.class),
-                dataSnapshot.child("token").getValue(String.class)
+                dataSnapshot.child("lon").getValue(String.class)
         );
     }
 
@@ -82,14 +79,6 @@ public class SolicitudFireBase {
 
     public void setLon(String lon) {
         this.lon = lon;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getCalificacion() {

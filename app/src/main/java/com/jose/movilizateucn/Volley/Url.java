@@ -4,6 +4,7 @@ public class Url {
 
     //private static final String BASEURL = "http://movilizate.webcindario.com/";
     private static final String BASEURL = "http://movil.hostyweb.cl/";
+    //private static final String BASEURL = "http://170.239.84.252/~hostyweb/movil/";
 
     /**
      * URLs de consultas del Web Service

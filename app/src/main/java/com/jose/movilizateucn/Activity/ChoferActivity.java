@@ -33,7 +33,7 @@ public class ChoferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chofer);
         if (Sesion.exists()) {
             configureNameText();
-            //Sesion.updateFechaFinConexion(this, "chofer");
+            Sesion.updateFechaFinConexion(this, "chofer");
             mostrarCalificacion();
         }
     }
@@ -79,6 +79,7 @@ public class ChoferActivity extends AppCompatActivity {
                         starBar.setRating(Float.parseFloat(response.getString("prom")));
                         Calificacion.updateScore(starBar, lblScore);
                         Preferencias.guardarCalificacion(activity, starBar, "chofer");
+                        Sesion.setCalificacionChofer(starBar.getRating());
                     }catch(Exception e){
                         spinner.setVisibility(View.GONE);
                     }
