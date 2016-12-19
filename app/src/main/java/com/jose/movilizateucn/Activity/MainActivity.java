@@ -17,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.jose.movilizateucn.R;
 import com.jose.movilizateucn.Volley.Url;
 import com.jose.movilizateucn.Volley.VolleySingleton;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             spinner.getIndeterminateDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
 
             String url = String.format("%s?rut=%s&contra=%s", Url.OBTENERUSUARIOLOGUEADO, rut, contra);
-            VolleySingleton.getInstance(this).addToRequestQueue(
+            VolleySingleton.getInstance(activity).addToRequestQueue(
                 new JsonObjectRequest(
                         Request.Method.GET,
                         url,
@@ -71,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
                                     if (usuario.getEnableS_N().equals("S")){
                                         Preferencias.guardarPreferenciasLogin(activity, cbRemember, rut, contra);
                                         Sesion.setUsuario(usuario);
+                                        //Envía el Token
+                                        String url = Url.ENVIARTOKEN + "?rut=" + rut + "&token=" + FirebaseInstanceId.getInstance().getToken();
+                                        VolleySingleton.getInstance(activity).addToRequestQueue(
+                                                new JsonObjectRequest(Request.Method.GET, url, null, null)
+                                        );
                                         final Intent perfilActivity = new Intent(activity, EscogerPerfilActivity.class);
                                         activity.startActivity(perfilActivity);
                                     }else{

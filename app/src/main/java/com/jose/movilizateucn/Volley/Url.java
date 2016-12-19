@@ -2,8 +2,8 @@ package com.jose.movilizateucn.Volley;
 
 public class Url {
 
-    private static final String BASEURL = "http://movilizate.webcindario.com/";
-    //private static final String BASEURL = "http://170.239.84.252/";
+    //private static final String BASEURL = "http://movilizate.webcindario.com/";
+    private static final String BASEURL = "http://movil.hostyweb.cl/";
 
     /**
      * URLs de consultas del Web Service
@@ -21,4 +21,7 @@ public class Url {
     public static final String GENERARVIAJE = BASEURL + "consultas/generarViaje.php";
     public static final String OBTENERSOLICITUDESACTIVAS = BASEURL + "consultas/obtenerSolicitudesActivas.php";
     public static final String GENERARFEEDBACK = BASEURL + "consultas/generarFeedback.php";
+    public static final String GENERARACEPTACION = BASEURL + "consultas/generarAceptacion.php";
+    public static final String ENVIARNOTIFICACION = BASEURL + "consultas/enviarNotificacion.php";
+    public static final String ENVIARTOKEN = BASEURL + "consultas/enviarToken.php";
 }

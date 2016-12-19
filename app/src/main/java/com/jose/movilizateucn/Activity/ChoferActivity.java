@@ -33,7 +33,7 @@ public class ChoferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chofer);
         if (Sesion.exists()) {
             configureNameText();
-            Sesion.updateFechaFinConexion(this, "chofer");
+            //Sesion.updateFechaFinConexion(this, "chofer");
             mostrarCalificacion();
         }
     }

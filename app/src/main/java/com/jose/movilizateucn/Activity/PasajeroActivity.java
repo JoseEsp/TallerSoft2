@@ -86,7 +86,7 @@ public class PasajeroActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                Intent generarSolicitud = new Intent(PasajeroActivity.this, GenerarSolicitudActivity2.class);
+                Intent generarSolicitud = new Intent(PasajeroActivity.this, GenerarSolicitudActivity.class);
                 startActivity(generarSolicitud);
             }
             else{
@@ -104,7 +104,7 @@ public class PasajeroActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     Toast.makeText(this, "Se recivieron los permisos", Toast.LENGTH_SHORT).show();
-                    Intent generarSolicitud = new Intent(this, GenerarSolicitudActivity2.class);
+                    Intent generarSolicitud = new Intent(this, GenerarSolicitudActivity.class);
                     startActivity(generarSolicitud);
                 } else {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this,

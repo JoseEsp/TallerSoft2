@@ -1,5 +1,7 @@
 package com.jose.movilizateucn.Volley;
 
+import com.google.firebase.database.DataSnapshot;
+
 public class SolicitudFireBase {
     private String codSolicitud;
     private String nombre;
@@ -19,6 +21,19 @@ public class SolicitudFireBase {
         this.lat = lat;
         this.lon = lon;
         this.token = token;
+    }
+
+    public SolicitudFireBase(DataSnapshot dataSnapshot, String rut){
+        this(
+                dataSnapshot.child("codSolicitud").getValue(String.class),
+                dataSnapshot.child("nombre").getValue(String.class),
+                dataSnapshot.child("calificacion").getValue(String.class),
+                dataSnapshot.child("codEstado").getValue(String.class),
+                dataSnapshot.child("fechaSalida").getValue(String.class),
+                dataSnapshot.child("lat").getValue(String.class),
+                dataSnapshot.child("lon").getValue(String.class),
+                dataSnapshot.child("token").getValue(String.class)
+        );
     }
 
     public String getNombre() {
