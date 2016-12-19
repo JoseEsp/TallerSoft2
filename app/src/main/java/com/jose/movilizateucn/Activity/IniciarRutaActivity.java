@@ -356,7 +356,6 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         final DatabaseReference solicitud = ref.child("solicitud").child(rutPasajero);
         solicitud.child("codEstado").setValue("2");
         String url = Url.GENERARACEPTACION + "?codViaje=" + viaje.getCodViaje() + "&codSolicitud=" + solicitudFB.getCodSolicitud();
-        Log.d("url", url);
         VolleySingleton.getInstance(activity).addToRequestQueue(
                 new JsonObjectRequest(Request.Method.GET, url,
                         new com.android.volley.Response.Listener<JSONObject>() {
@@ -368,13 +367,13 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                                 if (Sesion.exists()) {
                                     LatLng l2 = new LatLng(Double.parseDouble(solicitudFB.getLat()), Double.parseDouble(solicitudFB.getLon()));
                                     String distancia = String.format("%.2f", Distancia.distanciaCoord(origen.getPosition(), l2));
-                                    String msj = "Está a " + distancia + " km";
-                                    String titulo = "El Chofer " + Sesion.getUser().getNombre() + " te buscará!";
-                                    Log.d("token", solicitudFB.getToken());
-                                    Log.d("msj", msj);
-                                    Log.d("titulo", titulo);
-                                    String url = Url.ENVIARNOTIFICACION + "?token=" + solicitudFB.getToken() +
+                                    String msj = "~" + distancia + " km";
+                                    String titulo = "El Chofer " + Sesion.getUser().getNombre() + " va por ti";
+                                    msj = msj.replace(" ", "%20");
+                                    titulo = titulo.replace(" ", "%20");
+                                    String url = Url.ENVIARNOTIFICACION + "?rut=" + rutPasajero +
                                             "&mensaje=" + msj + "&titulo=" + titulo;
+                                    Log.d("url", url);
                                     VolleySingleton.getInstance(activity).addToRequestQueue(
                                             new JsonObjectRequest(Request.Method.GET, url, null, null));
                                 }

@@ -72,7 +72,7 @@
         <activity
             android:name=".Activity.IniciarRutaActivity"
             android:label="Iniciar Ruta" />
-        <activity android:name=".Activity.GenerarSolicitudActivity2"></activity>
+        <!-- <activity android:name=".Activity.GenerarSolicitudActivity"></activity> -->
     </application>
 
 </manifest>
