@@ -91,6 +91,23 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        //Cancela las aceptaciones.
+        if (viaje != null) {
+            String url = Url.CANCELARACEPTACION + "?codViaje=" + viaje.getCodViaje();
+            VolleySingleton.getInstance(this).addToRequestQueue(new JsonObjectRequest(Request.Method.GET, url, null, null));
+            //Por alguna razón en el navegador funciona la url, pero en android no
+            //Por eso está esto:
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            for(String rut : solicitudesAceptadas.keySet()) {
+                DatabaseReference solicitud = ref.child("solicitud").child(rut);
+                solicitud.child("codEstado").setValue("1");
+            }
+        }
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
@@ -359,16 +376,18 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                         new com.android.volley.Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Snackbar.make(view, "Aceptación exitosa.", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(view, "Pasajero añadido: " + solicitudFB.getNombre(), Snackbar.LENGTH_SHORT).show();
                                 solicitudesAceptadas.put(rutPasajero, solicitudFB);
                                 //Envía notificación.
                                 if (Sesion.exists()) {
                                     LatLng l2 = new LatLng(Double.parseDouble(solicitudFB.getLat()), Double.parseDouble(solicitudFB.getLon()));
                                     String distancia = String.format("~%.1f km", Distancia.distanciaCoord(origen.getPosition(), l2));
                                     String cal = String.format("%.1f", Sesion.getCalificacionChofer());
+                                    String titulo = "1 mensaje nuevo";
                                     String mensaje = "El Chofer " + Sesion.getUser().getNombre() + " va por ti-"+ cal + "-" + distancia;
-                                    mensaje = mensaje.replace(" ", "%20");
-                                    String url = Url.ENVIARNOTIFICACION + "?rut=" + rutPasajero + "&mensaje=" + mensaje;
+                                    //estado: 1 (aceptación), el 2 es de cancelación
+                                    String url = Url.ENVIARNOTIFICACION + "?rut=" + rutPasajero + "&titulo=" + titulo + "&mensaje=" + mensaje + "&estado=1";
+                                    url = url.replace(" ", "%20");
                                     VolleySingleton.getInstance(activity).addToRequestQueue(
                                             new JsonObjectRequest(Request.Method.GET, url, null, null));
                                 }

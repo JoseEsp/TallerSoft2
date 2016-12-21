@@ -103,7 +103,7 @@ public class PasajeroActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
-                    Toast.makeText(this, "Se recivieron los permisos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Se recibieron los permisos", Toast.LENGTH_SHORT).show();
                     Intent generarSolicitud = new Intent(this, GenerarSolicitudActivity.class);
                     startActivity(generarSolicitud);
                 } else {

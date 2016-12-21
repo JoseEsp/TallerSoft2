@@ -23,6 +23,7 @@ public class Url {
     public static final String OBTENERSOLICITUDESACTIVAS = BASEURL + "consultas/obtenerSolicitudesActivas.php";
     public static final String GENERARFEEDBACK = BASEURL + "consultas/generarFeedback.php";
     public static final String GENERARACEPTACION = BASEURL + "consultas/generarAceptacion.php";
+    public static final String CANCELARACEPTACION = BASEURL + "consultas/cancelarAceptacion.php";
     public static final String ENVIARNOTIFICACION = BASEURL + "consultas/enviarNotificacion.php";
     public static final String ENVIARTOKEN = BASEURL + "consultas/enviarToken.php";
 }

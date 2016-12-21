@@ -50,7 +50,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             String titulo = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
-            sendNotification(titulo, body);
+            String estado = remoteMessage.getNotification().getTag();
+            Log.d("estado", estado);
+            switch(estado){
+                case "1":
+                    sendNotificationAceptacion(titulo, body);
+                    break;
+                case "2":
+                    sendNotificationCancelacion(titulo, body);
+                    break;
+            }
+
         }
     }
     // [END receive_message]
@@ -61,12 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param title Título del mensaje
      * @param body Cuerpo del mensaje
      */
-    private void sendNotification(String title, String body) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
+    private void sendNotificationAceptacion(String title, String body) {
         String token[] = body.split("-");
         String contextText = token[0];
         String calificacionChofer = token[1];
@@ -80,9 +85,49 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(contextText)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+                .setPriority(NotificationCompat.PRIORITY_MAX);
         notificationBuilder.addAction(R.drawable.ic_star,calificacionChofer, null);
         notificationBuilder.addAction(R.mipmap.ic_distance,distancia, null);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotificationCancelacion(String title, String body) {
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
+    }
+
+    //Original (casi):
+    private void sendNotification(String title, String body) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

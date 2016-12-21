@@ -61,7 +61,7 @@
 
         <Button
             android:id="@+id/btnBuscarRuta"
-            android:text = "Buscar Ruta"
+            android:text = "Iniciar Ruta"
             android:textColor="@color/blanco"
             android:backgroundTint="@color/cinnabargreen"
             android:layout_width="match_parent"

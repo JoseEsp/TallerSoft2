@@ -223,7 +223,6 @@ public class GenerarSolicitudActivity extends FragmentActivity implements OnMapR
                                     solicitud.child("codEstado").setValue(String.valueOf(codEstado));
                                     solicitud.child("lat").setValue(String.valueOf(lat));
                                     solicitud.child("lon").setValue(String.valueOf(lon));
-                                    solicitud.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
                                     Snackbar.make(view, "Solicitud Generada.", Snackbar.LENGTH_SHORT).show();
                                 }catch(Exception e){
                                     spinner.setVisibility(View.GONE);
