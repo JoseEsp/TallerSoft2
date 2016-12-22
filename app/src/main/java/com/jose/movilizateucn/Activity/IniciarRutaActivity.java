@@ -3,15 +3,21 @@ package com.jose.movilizateucn.Activity;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +28,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -88,6 +96,16 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         this.solicitudesAceptadas = new HashMap<>();
         this.markers = new HashMap<>();
         this.colocarPosicionActual();
+        if (Sesion.exists()){
+            updateFechaViaje();
+        }
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
     }
 
     @Override
@@ -142,16 +160,16 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-                        if (origen != null){
-                            origen.remove();
+                        LatLng newPos = new LatLng(location.getLatitude(), location.getLongitude());
+                        if (origen != null) {
+                            LatLng prevPos = origen.getPosition();
+                            animarOrigen(prevPos, newPos);
                         }
-                        LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
-                        origen = mMap.addMarker(new MarkerOptions().position(pos).title("Tú").snippet("Punto de Partida")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                        origen.showInfoWindow();
                         if (!zoomUnaVez) {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 16f));
+                            origen = mMap.addMarker(new MarkerOptions().position(newPos).title("Tú").snippet("Punto de Partida")
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(newPos));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newPos, 16f));
                             zoomUnaVez = true;
                             mostrarInfo();
                             if (Sesion.exists()) {
@@ -267,7 +285,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         });
     }
 
-    public void escucharSolicitudesFireBase(){
+    private void escucharSolicitudesFireBase(){
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("solicitud");
         ref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -424,12 +442,68 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                 });
     }
 
+    private void updateFechaViaje(){
+        final Activity activity = this;
+        final int ms_time = 1000; //1 segundo
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (Sesion.exists() && viaje != null) {
+                    String url = Url.ACTUALIZARFECHAVIAJE + "?codViaje=" + viaje.getCodViaje();
+                    VolleySingleton.getInstance(activity).addToRequestQueue(new JsonObjectRequest(Request.Method.GET, url, null, null));
+                }
+                if (Internet.hayConexion(activity)) {
+                    handler.postDelayed(this, ms_time);
+                }
+            }
+        };
+        handler.postDelayed(runnable, ms_time);
+    }
+
     public void setViaje(Viaje viaje){
         this.viaje = viaje;
     }
 
     public Viaje getViaje(){
         return this.viaje;
+    }
+
+    public void test(View view){
+        //-29.913695, -71.259943
+        LatLng newPos = new LatLng(-29.913695, -71.259943);
+        LatLng prevPos = origen.getPosition();
+        animarOrigen(prevPos, newPos);
+    }
+
+    private void animarOrigen(final LatLng prevPos, final LatLng newPos) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = mMap.getProjection();
+        Point startPoint = proj.toScreenLocation(prevPos);
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 500;
+        final Interpolator interpolator = new LinearInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed / duration);
+                double lng = t * newPos.longitude+ (1 - t) * startLatLng.longitude;
+                double lat = t * newPos.latitude + (1 - t) * startLatLng.latitude;
+                LatLng tempPosition = new LatLng(lat, lng);
+                origen.setPosition(tempPosition);
+                LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+                if (t < 1.0) {
+                    handler.postDelayed(this, 16);
+                }else{
+                    if(!bounds.contains(tempPosition)){
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(tempPosition));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tempPosition, 16f));
+                    }
+                }
+            }
+        });
     }
 
 }

@@ -31,19 +31,19 @@
         <activity
             android:name=".Activity.ChoferActivity"
             android:label="Chofer"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".Activity.PasajeroActivity"
             android:label="Pasajero"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".Activity.RegistrarseActivity"
             android:label="Registro"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".Activity.HistorialViajesActivity"
             android:label="Historial de Viajes"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -60,11 +60,11 @@
         <activity
             android:name=".Activity.GenerarSolicitudActivity"
             android:label="@string/title_activity_generar_solicitud_map"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".Activity.FeedBack"
             android:label="FeedBack"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
 
         <service android:name=".Activity.MyFirebaseMessagingService">
             <intent-filter>
@@ -81,8 +81,9 @@
             android:name=".Activity.IniciarRutaActivity"
             android:label="Iniciar Ruta"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- <activity android:name=".Activity.GenerarSolicitudActivity"></activity> -->
+        <activity android:name=".Activity.CalificarActivity" android:label="Calificar" android:launchMode="singleTop"></activity>
     </application>
 
 </manifest>

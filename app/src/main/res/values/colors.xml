@@ -15,4 +15,5 @@
     <color name="niceYellow">#FFDC00</color>
     <color name="niceSilver">#DDDDDD</color>
     <color name="niceAqua">#f97da1c3</color>
+    <color name="fbBgColor">#dfe3ee</color>
 </resources>
