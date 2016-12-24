@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.location.LocationManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -38,7 +35,6 @@ public class ChoferActivity extends AppCompatActivity {
         if (Sesion.exists()) {
             configureNameText();
             Sesion.updateFechaFinConexion(this, "chofer");
-            mostrarCalificacion();
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -47,6 +43,14 @@ public class ChoferActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (Sesion.exists()) {
+            mostrarCalificacion();
+        }
     }
 
     public void IniciarRutaButton(View view){
@@ -92,6 +96,10 @@ public class ChoferActivity extends AppCompatActivity {
                         Preferencias.guardarCalificacion(activity, starBar, "chofer");
                         Sesion.setCalificacionChofer(starBar.getRating());
                     }catch(Exception e){
+                        starBar.setRating(4.0f);
+                        Calificacion.updateScore(starBar, lblScore);
+                        Preferencias.guardarCalificacion(activity, starBar, "chofer");
+                        Sesion.setCalificacionChofer(starBar.getRating());
                         spinner.setVisibility(View.GONE);
                     }
                     spinner.setVisibility(View.GONE);

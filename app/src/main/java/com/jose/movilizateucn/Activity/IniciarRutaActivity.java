@@ -2,6 +2,7 @@ package com.jose.movilizateucn.Activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -14,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
@@ -53,6 +53,7 @@ import com.jose.movilizateucn.Volley.SolicitudFireBase;
 import com.jose.movilizateucn.Volley.Url;
 import com.jose.movilizateucn.Volley.VolleySingleton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -78,6 +79,8 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
     private HashMap<String, SolicitudFireBase> solicitudesAceptadas;
     private HashMap<String, Marker> markers;
 
+    private boolean viajeConcretado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,32 +98,55 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         this.solicitudes = new HashMap<>();
         this.solicitudesAceptadas = new HashMap<>();
         this.markers = new HashMap<>();
+        this.viajeConcretado = false;
         this.colocarPosicionActual();
         if (Sesion.exists()){
             updateFechaViaje();
         }
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
-        return true;
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
         //Cancela las aceptaciones.
-        if (viaje != null) {
-            String url = Url.CANCELARACEPTACION + "?codViaje=" + viaje.getCodViaje();
-            VolleySingleton.getInstance(this).addToRequestQueue(new JsonObjectRequest(Request.Method.GET, url, null, null));
-            //Por alguna razón en el navegador funciona la url, pero en android no
-            //Por eso está esto:
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            for(String rut : solicitudesAceptadas.keySet()) {
-                DatabaseReference solicitud = ref.child("solicitud").child(rut);
-                solicitud.child("codEstado").setValue("1");
+        if (!viajeConcretado) {
+            if (viaje != null) {
+                String url = Url.CANCELARACEPTACION + "?codViaje=" + viaje.getCodViaje();
+                VolleySingleton.getInstance(this).addToRequestQueue(new JsonObjectRequest(Request.Method.GET, url, null, null));
+                //Por alguna razón en el navegador funciona la url, pero en android no
+                //Por eso está esto:
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                for (String rut : solicitudesAceptadas.keySet()) {
+                    DatabaseReference solicitud = ref.child("solicitud").child(rut);
+                    solicitud.child("codEstado").setValue("1");
+                }
+            }
+        }else{
+            //Concreta el Viaje
+            final IniciarRutaActivity activity = this;
+            spinner.setVisibility(View.VISIBLE);
+            if (viaje != null) {
+                String url = Url.CONCRETARACEPTACION + "?codViaje=" + viaje.getCodViaje();
+                VolleySingleton.getInstance(activity).addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.GET, url, new com.android.volley.Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                if (response != null){
+                                    try {
+                                        if (!response.getString("estado").equals("1")) {
+                                            Toast.makeText(activity, "No has llevado a ningún pasajero", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }else{
+                                            Intent calificarActivity = new Intent(activity, CalificarPasajerosActivity.class);
+                                            calificarActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            calificarActivity.putExtra("codViaje", viaje.getCodViaje());
+                                            activity.startActivity(calificarActivity);
+                                        }
+                                    }catch(JSONException e){
+                                    }
+                                }
+                            }
+                        }, null));
             }
         }
     }
@@ -197,7 +223,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                 Log.d("Error", "Error de seguridad.");
             }
         }else{
-            Snackbar.make(findViewById(R.id.parentLayout), "Encienda el GPS y vuelva a intentarlo.", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.parentLayout), "Encienda el GPS y vuelva a intentarlo.", Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 
@@ -471,12 +497,13 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
 
     public void test(View view){
         //-29.913695, -71.259943
-        LatLng newPos = new LatLng(-29.913695, -71.259943);
+        LatLng newPos = new LatLng(-29.9655042, -71.3516305);
         LatLng prevPos = origen.getPosition();
         animarOrigen(prevPos, newPos);
     }
 
     private void animarOrigen(final LatLng prevPos, final LatLng newPos) {
+        final IniciarRutaActivity activity = this;
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
         Projection proj = mMap.getProjection();
@@ -501,7 +528,13 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(tempPosition));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tempPosition, 16f));
                     }
+                    //< 100 metros
+                    if (Distancia.distanciaCoord(tempPosition, destino.getPosition()) < 100){
+                        viajeConcretado = true;
+                        finish();
+                    }
                 }
+                mostrarInfo();
             }
         });
     }

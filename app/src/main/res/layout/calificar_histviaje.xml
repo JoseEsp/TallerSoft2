@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/cardview_shadow_end_color"
-        >
+        android:backgroundTint="@color/cardview_light_background"
+        android:layout_marginBottom="8dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,8 +21,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:gravity="right"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="@dimen/login_margin">
 
                 <android.support.v7.widget.AppCompatRatingBar
@@ -27,8 +31,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:stepSize=".1"
-                    android:rating="0.4"
-                    android:numStars="1"
+                    android:rating="4.0"
+                    android:numStars="5"
+                    android:layout_gravity="center_horizontal"
                     android:secondaryProgressTint="@color/niceSilver"
                     android:progressBackgroundTint="@color/niceSilver"
                     android:progressTint="@color/niceYellow"
@@ -37,10 +42,12 @@
 
                 <TextView
                     android:id="@+id/lblCalificacion"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:textAlignment="center"
+                    android:text="4.0"
                     android:textColor="@color/niceBlack"
+                    android:layout_marginBottom="16dp"
                     android:layout_gravity="center_vertical"/>
 
             </LinearLayout>
@@ -52,25 +59,29 @@
                 android:text="Pasajero:"
                 android:textSize="16dp"
                 android:textColor="@color/niceBlack"
-                android:layout_marginBottom="@dimen/login_margin"/>
+                android:layout_marginBottom="@dimen/login_long_margin"/>
 
             <EditText
-                android:id="@+id/lblComentario"
+                android:id="@+id/etComentario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Comentario"
+                android:hint="Escriba su comentario..."
                 android:textSize="14dp"
                 android:layout_marginBottom="@dimen/login_margin"
-                android:textColor="@color/niceBlack"/>
+                android:layout_marginRight="@dimen/login_margin"
+                android:textColor="@color/niceBlack"
+                android:elegantTextHeight="true"
+                />
 
             <Button
                 android:id="@+id/btnEnviar"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Enviar"
                 android:textColor="@color/blanco"
                 android:backgroundTint="@color/niceGreen"
-                android:layout_gravity="right"/>
+                android:layout_gravity="right"
+                android:layout_marginBottom="8dp"/>
 
         </LinearLayout>
 

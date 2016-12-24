@@ -21,10 +21,14 @@ public class Url {
     public static final String ACTIVARSOLICITUD = BASEURL + "consultas/activarSolicitud.php";
     public static final String GENERARVIAJE = BASEURL + "consultas/generarViaje.php";
     public static final String ACTUALIZARFECHAVIAJE = BASEURL + "consultas/actualizarFechaViaje.php";
-    public static final String OBTENERSOLICITUDESACTIVAS = BASEURL + "consultas/obtenerSolicitudesActivas.php";
     public static final String GENERARFEEDBACK = BASEURL + "consultas/generarFeedback.php";
     public static final String GENERARACEPTACION = BASEURL + "consultas/generarAceptacion.php";
     public static final String CANCELARACEPTACION = BASEURL + "consultas/cancelarAceptacion.php";
+    public static final String CONCRETARACEPTACION = BASEURL + "consultas/concretarAceptacion.php";
+    public static final String OBTENERCALIFICACIONESPARACHOFER = BASEURL + "consultas/obtenerCalificacionesParaChofer.php";
     public static final String ENVIARNOTIFICACION = BASEURL + "consultas/enviarNotificacion.php";
     public static final String ENVIARTOKEN = BASEURL + "consultas/enviarToken.php";
+
+    public static final String ACTUALIZARCOMENTARIOPASAJEROACHOFER = BASEURL + "consultas/actualizarComentarioPasajeroAChofer.php";
+    public static final String ACTUALIZARCOMENTARIOCHOFERAPASAJERO = BASEURL + "consultas/actualizarComentarioChoferAPasajero.php";
 }

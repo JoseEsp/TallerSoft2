@@ -9,7 +9,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jose.movilizateucn.Activity.ChoferActivity"
     android:orientation="vertical"
-    android:gravity="top">
+    android:gravity="top"
+    android:background="@drawable/fondot">
 
 
     <TextView
@@ -67,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/perfil_margin"
-            android:onClick="IniciarRutaButton"/>
+            android:onClick="IniciarRutaButton" />
 
         <Button
             android:id="@+id/btnHistorialViajes"

@@ -59,18 +59,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 case "2":
                     sendNotificationCancelacion(titulo, body);
                     break;
+                case "3":
+                    sendNotificationViajeConcretado(titulo, body);
+                    break;
             }
 
         }
     }
     // [END receive_message]
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     * @param title Título del mensaje
-     * @param body Cuerpo del mensaje
-     */
     private void sendNotificationAceptacion(String title, String body) {
         String token[] = body.split("-");
         String contextText = token[0];
@@ -110,6 +107,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotificationViajeConcretado(String title, String body) {
+        String[] tokens = body.split("-");
+        String mensaje = tokens[0];
+        String codViaje = tokens[1];
+        String codSolicitud = tokens[2];
+        String nombreChofer = tokens[3];
+
+        Intent intent = new Intent(this, CalificarAChoferActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("codViaje", Integer.parseInt(codViaje));
+        intent.putExtra("codSolicitud", Integer.parseInt(codSolicitud));
+        intent.putExtra("nombreChofer", nombreChofer);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
+                .setContentTitle(title)
+                .setContentText(mensaje)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(2 /* ID of notification */, notificationBuilder.build());
     }
 
     //Original (casi):
