@@ -54,10 +54,15 @@ public class PasajeroActivity extends AppCompatActivity {
             mostrarCalificacion();
         }
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             AlertNoGps();
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -75,13 +80,6 @@ public class PasajeroActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            AlertNoGps();
-        }
-    }
 
     public void GenerarSolicitudButton(View view){
 
