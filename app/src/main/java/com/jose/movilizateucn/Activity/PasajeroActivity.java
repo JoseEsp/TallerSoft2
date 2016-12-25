@@ -54,10 +54,15 @@ public class PasajeroActivity extends AppCompatActivity {
             mostrarCalificacion();
         }
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             AlertNoGps();
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -75,16 +80,6 @@ public class PasajeroActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (Sesion.exists()) {
-            if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-                AlertNoGps();
-            }
-            mostrarCalificacion();
-        }
-    }
 
     public void GenerarSolicitudButton(View view){
 
@@ -159,10 +154,6 @@ public class PasajeroActivity extends AppCompatActivity {
                         Preferencias.guardarCalificacion(activity, starBar, "pasajero");
                         Sesion.setCalificacionPasajero(starBar.getRating());
                     }catch(Exception e){
-                        starBar.setRating(4.0f);
-                        Calificacion.updateScore(starBar, lblScore);
-                        Preferencias.guardarCalificacion(activity, starBar, "chofer");
-                        Sesion.setCalificacionChofer(starBar.getRating());
                         spinner.setVisibility(View.GONE);
                     }
                     spinner.setVisibility(View.GONE);
