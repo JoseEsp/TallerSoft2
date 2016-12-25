@@ -1,7 +1,6 @@
 package com.jose.movilizateucn.Activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.design.widget.Snackbar;
@@ -70,6 +69,7 @@ public class RegistrarseActivity extends AppCompatActivity {
         map.put("nombre", nombre);
         map.put("contra", contra);
         map.put("email", email);
+        map.put("rutNoGuion", rut.replace("-", ""));
         JSONObject jsonRegistro = new JSONObject(map);
 
         final Activity activity = this;

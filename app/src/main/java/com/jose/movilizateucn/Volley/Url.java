@@ -30,7 +30,6 @@ public class Url {
     public static final String ENVIARNOTIFICACION = BASEURL + "consultas/enviarNotificacion.php";
     public static final String ENVIARTOKEN = BASEURL + "consultas/enviarToken.php";
 
-
     public static final String ACTUALIZARCOMENTARIOPASAJEROACHOFER = BASEURL + "consultas/actualizarComentarioPasajeroAChofer.php";
     public static final String ACTUALIZARCOMENTARIOCHOFERAPASAJERO = BASEURL + "consultas/actualizarComentarioChoferAPasajero.php";
 }
