@@ -25,6 +25,7 @@ public class Url {
     public static final String GENERARACEPTACION = BASEURL + "consultas/generarAceptacion.php";
     public static final String CANCELARACEPTACION = BASEURL + "consultas/cancelarAceptacion.php";
     public static final String CONCRETARACEPTACION = BASEURL + "consultas/concretarAceptacion.php";
+    public static final String NOTIFICARPASAJEROSVIAJECONCRETADO = BASEURL + "consultas/notificarPasajerosViajeConcretado.php";
     public static final String OBTENERCALIFICACIONESPARACHOFER = BASEURL + "consultas/obtenerCalificacionesParaChofer.php";
     public static final String ENVIARNOTIFICACION = BASEURL + "consultas/enviarNotificacion.php";
     public static final String ENVIARTOKEN = BASEURL + "consultas/enviarToken.php";

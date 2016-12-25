@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -16,14 +17,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.jose.movilizateucn.R;
-import com.jose.movilizateucn.Util.Internet;
 import com.jose.movilizateucn.Volley.Url;
 import com.jose.movilizateucn.Volley.VolleySingleton;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 public class CalificarPasajerosActivity extends AppCompatActivity {
 
@@ -39,6 +37,8 @@ public class CalificarPasajerosActivity extends AppCompatActivity {
         //muestra cada cuadrito
         if (codViaje != -1) {
             mostrarCalificaciones();
+            //Notifica a los pasajeros
+            notificarPasajeros();
         }else{
             finish();
         }
@@ -105,6 +105,11 @@ public class CalificarPasajerosActivity extends AppCompatActivity {
 
                 }
         );
+    }
+
+    private void notificarPasajeros(){
+        String url = Url.NOTIFICARPASAJEROSVIAJECONCRETADO + "?codViaje=" + codViaje;
+        VolleySingleton.getInstance(this).addToRequestQueue(new JsonObjectRequest(Request.Method.GET, url, null, null));
     }
 
 }

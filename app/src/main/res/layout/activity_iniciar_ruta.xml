@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.jose.movilizateucn.Activity.IniciarRutaActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    class="com.google.android.gms.maps.SupportMapFragment">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

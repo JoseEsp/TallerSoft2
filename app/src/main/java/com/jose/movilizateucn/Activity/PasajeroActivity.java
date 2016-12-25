@@ -78,8 +78,11 @@ public class PasajeroActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            AlertNoGps();
+        if (Sesion.exists()) {
+            if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                AlertNoGps();
+            }
+            mostrarCalificacion();
         }
     }
 
@@ -156,6 +159,10 @@ public class PasajeroActivity extends AppCompatActivity {
                         Preferencias.guardarCalificacion(activity, starBar, "pasajero");
                         Sesion.setCalificacionPasajero(starBar.getRating());
                     }catch(Exception e){
+                        starBar.setRating(4.0f);
+                        Calificacion.updateScore(starBar, lblScore);
+                        Preferencias.guardarCalificacion(activity, starBar, "chofer");
+                        Sesion.setCalificacionChofer(starBar.getRating());
                         spinner.setVisibility(View.GONE);
                     }
                     spinner.setVisibility(View.GONE);
