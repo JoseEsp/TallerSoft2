@@ -12,6 +12,7 @@
     tools:context="com.jose.movilizateucn.Activity.CalificarPasajerosActivity"
     android:background="@drawable/fondot">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
