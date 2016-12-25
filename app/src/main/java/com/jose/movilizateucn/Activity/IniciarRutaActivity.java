@@ -528,8 +528,8 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(tempPosition));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tempPosition, 16f));
                     }
-                    //< 100 metros
-                    if (Distancia.distanciaCoord(tempPosition, destino.getPosition()) < 100){
+                    //< 200 metros
+                    if (Distancia.distanciaCoord(tempPosition, destino.getPosition()) < 0.2){
                         viajeConcretado = true;
                         finish();
                     }
