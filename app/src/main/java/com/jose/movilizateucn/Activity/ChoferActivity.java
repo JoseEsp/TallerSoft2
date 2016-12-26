@@ -1,9 +1,16 @@
 package com.jose.movilizateucn.Activity;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.location.LocationManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,6 +18,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,7 +35,9 @@ import com.jose.movilizateucn.Util.Preferencias;
 import org.json.JSONObject;
 
 public class ChoferActivity extends AppCompatActivity {
-
+    final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
+    LocationManager locationManager;
+    AlertDialog alert = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +46,7 @@ public class ChoferActivity extends AppCompatActivity {
             configureNameText();
             Sesion.updateFechaFinConexion(this, "chofer");
         }
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -44,20 +55,55 @@ public class ChoferActivity extends AppCompatActivity {
         finish();
         return true;
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    Toast.makeText(this, "Se recibieron los permisos", Toast.LENGTH_SHORT).show();
+                    Intent generarSolicitud = new Intent(this, GenerarSolicitudActivity.class);
+                    startActivity(generarSolicitud);
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        // permission denied, boo! Disable the
+                        Toast.makeText(this, "Es necesario encender el GPS para que funcione correctamente la aplicación", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(this, "Debe habilitar los permisos en configuración de aplicaciones ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     protected void onResume(){
         super.onResume();
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertNoGps();
+        }
         if (Sesion.exists()) {
             mostrarCalificacion();
         }
     }
 
     public void IniciarRutaButton(View view){
-        if (Sesion.exists()) {
-            Intent iniciarRutaActivity = new Intent(ChoferActivity.this, IniciarRutaActivity.class);
-            startActivity(iniciarRutaActivity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (Sesion.exists()) {
+                    Intent iniciarRutaActivity = new Intent(ChoferActivity.this, IniciarRutaActivity.class);
+                    startActivity(iniciarRutaActivity);
+                }
+            }
+            else{
+                // PEDIR PERMISOS ASINCRONOS
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
         }
+
     }
 
     public void HistorialViajesButton(View view){
@@ -114,4 +160,22 @@ public class ChoferActivity extends AppCompatActivity {
         ));
     }
 
+    private void AlertNoGps() { //PIDE ATIVAR EL GPS
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Debe activar el GPS para que la aplicación funcione correctamente")
+                .setCancelable(false)
+                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+        alert = builder.create();
+        alert.show();
+    }
 }

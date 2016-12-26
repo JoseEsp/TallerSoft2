@@ -109,7 +109,7 @@ public class PasajeroActivity extends AppCompatActivity {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)) {
                         // permission denied, boo! Disable the
-                        Toast.makeText(this, "El permiso de GPS es necesario para usar la App", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Es necesario encender el GPS para que funcione correctamente la aplicación", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         Toast.makeText(this, "Debe habilitar los permisos en configuración de aplicaciones ", Toast.LENGTH_SHORT).show();

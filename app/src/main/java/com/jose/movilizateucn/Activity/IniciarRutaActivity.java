@@ -193,7 +193,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
                         }
                         if (!zoomUnaVez) {
                             origen = mMap.addMarker(new MarkerOptions().position(newPos).title("Tú").snippet("Punto de Partida")
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcachofer)));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(newPos));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newPos, 16f));
                             zoomUnaVez = true;

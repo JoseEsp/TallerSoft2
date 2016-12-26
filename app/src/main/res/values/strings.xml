@@ -17,7 +17,7 @@
     <string name="solicitudAceptada">Solicitud Aceptada</string>
     <string name="registrarse">Registrarse</string>
     <string name="nombre_hint">Juan Perez</string>
-    <string name="title_activity_generar_solicitud_map">Generar Solicitud</string>
+    <string name="title_activity_generar_solicitud_map">Solicitud de pasajero</string>
     <string name="info_hint">Recuerda estar atento a notificaciones.</string>
     <string name="textoFeedBack">Para mejorar el desarrollo y administración de la aplicación hemos creado esta sección para que puedas comuncarte con nosotros en caso de incidentes, bugs o problemas con la aplicación</string>
     <string name="nointernet">Conéctese a Internet y vuelva a intentarlo.</string>
