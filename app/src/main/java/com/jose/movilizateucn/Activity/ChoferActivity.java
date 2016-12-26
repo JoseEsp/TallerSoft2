@@ -46,7 +46,7 @@ public class ChoferActivity extends AppCompatActivity {
             configureNameText();
             Sesion.updateFechaFinConexion(this, "chofer");
         }
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -82,6 +82,7 @@ public class ChoferActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             AlertNoGps();
         }
@@ -101,6 +102,11 @@ public class ChoferActivity extends AppCompatActivity {
             else{
                 // PEDIR PERMISOS ASINCRONOS
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }else{
+            if (Sesion.exists()) {
+                Intent iniciarRutaActivity = new Intent(ChoferActivity.this, IniciarRutaActivity.class);
+                startActivity(iniciarRutaActivity);
             }
         }
 

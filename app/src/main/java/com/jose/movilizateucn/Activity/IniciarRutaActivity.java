@@ -183,7 +183,7 @@ public class IniciarRutaActivity extends FragmentActivity implements OnMapReadyC
         //Checkear GPS
         if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
             try {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, new LocationListener() {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 50, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
                         LatLng newPos = new LatLng(location.getLatitude(), location.getLongitude());

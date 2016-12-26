@@ -92,6 +92,11 @@ public class PasajeroActivity extends AppCompatActivity {
                 // PEDIR PERMISOS ASINCRONOS
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
             }
+        }else{
+            if (Sesion.exists()) {
+                Intent generarSolicitud = new Intent(PasajeroActivity.this, GenerarSolicitudActivity.class);
+                startActivity(generarSolicitud);
+            }
         }
     }
 

@@ -22,7 +22,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="test"
+                android:text="Llegar"
+
                 android:onClick="test"
                 android:clickable="true"
                 android:visibility="visible"/>
