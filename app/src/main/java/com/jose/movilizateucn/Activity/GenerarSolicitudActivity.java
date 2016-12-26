@@ -217,7 +217,7 @@ public class GenerarSolicitudActivity extends FragmentActivity implements OnMapR
                                     if (Sesion.getCalificacionPasajero() == -1){
                                         solicitud.child("calificacion").setValue("4.0");
                                     }else {
-                                        solicitud.child("calificacion").setValue(String.valueOf(Sesion.getCalificacionPasajero()));
+                                        solicitud.child("calificacion").setValue(String.format("%.1f",Sesion.getCalificacionPasajero()));
                                     }
                                     solicitud.child("fechaSalida").setValue(fechaSalida);
                                     solicitud.child("codEstado").setValue(String.valueOf(codEstado));

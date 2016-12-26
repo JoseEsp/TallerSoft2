@@ -35,8 +35,6 @@ import com.jose.movilizateucn.Util.Preferencias;
 
 import org.json.JSONObject;
 
-import static android.Manifest.permission.READ_CONTACTS;
-
 public class PasajeroActivity extends AppCompatActivity {
     final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     Button boton;
